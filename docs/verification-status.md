@@ -1,10 +1,11 @@
-﻿# Verification status - 12 November 2026
+ï»¿# Verification status - 12 November 2026
 
 **Hosted status: signup, workspace, owned evidence and fresh Sandbox order readback verified; one exact Sandbox capture and reconciled software receipt verified.**
 
 This sanitized handoff contains no operational credentials or account identities.
-Changes are held locally pending deployed acceptance; public main does not yet
-contain the deployed application changes.
+Deployed acceptance passed as described below. This release includes the signup,
+software approval, payment and receipt source alongside the public copy updates.
+The maintainer authorized source publication and deployment on November 12.
 
 | Scope | Observed result |
 | --- | --- |
@@ -59,4 +60,5 @@ The final native Chrome check passed: owner sign-in, private receipt hydration,
 consumed approval after reload, verified buyer consent, confirmed 119.00 USD
 Sandbox capture and visible repeat-payment refusal. No password-manager save or
 replacement was accepted. Browser-review delivery is complete; the new video,
-Devpost submission and Git publication have not been performed.
+Devpost submission has not been performed. Source publication and deployment
+were subsequently authorized for this release.
