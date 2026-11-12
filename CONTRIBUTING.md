@@ -1,6 +1,8 @@
 # Contributing
 
-Start with README.md and docs/judge-setup.md. Use Node 24 and a disposable PostgreSQL 17 database. Keep credentials in ignored local environment files.
+Start with [the developer guide](docs/developer-guide.md), [verification status](docs/verification-status.md)
+and [release policy](docs/release-policy.md). Use Node 24 and a disposable PostgreSQL 17 database.
+Keep credentials in ignored local environment files.
 
 Before proposing a change, run lint, type checking, integration tests and a production build. Describe the problem, resulting behavior, checks performed and remaining limitations. Security changes need a test for the rejected bypass, not only a successful request.
 

@@ -4,11 +4,12 @@ import {dirname,isAbsolute,relative,resolve,sep} from 'node:path';
 import {fileURLToPath} from 'node:url';
 
 const inside=(root,path)=>{const rel=relative(root,path);return rel!== '..'&&!rel.startsWith('..'+sep)&&!isAbsolute(rel);};
-const privateFile=path=>/(^|\/)(?:node_modules|\.next|data|test-results|\.vercel|\.artifacts)(\/|$)/.test(path)||
+const privateFile=path=>/(^|\/)(?:node_modules|\.next|data|test-results|\.vercel|\.artifacts|\.aws|\.ssh|\.azure|\.gcloud)(\/|$)/.test(path)||
  /(^|\/)\.env(?:\.|$)/.test(path)&&!['.env.example','.env.hosted.example'].includes(path)||
- /\.(?:pem|pfx|p12|key|tsbuildinfo)$/i.test(path);
+ /(?:^|[/.])private(?:[/.]|$)/i.test(path)||
+ /\.(?:pem|pfx|p12|key|tsbuildinfo|log|trx|sqlite|sqlite3|db)$/i.test(path);
 const contentRules=[
- ['WORKSTATION_PATH',/(?:[A-Za-z]:[\\/](?:Users|Source)[\\/]|\/(?:Users|home)\/[^ /]+\/)/],
+ ['WORKSTATION_PATH',/(?<![A-Za-z0-9])(?:[A-Za-z]:[\\/][^\s'"<>]|\\\\(?:[A-Za-z0-9-]+\.)+[A-Za-z0-9-]+\\[A-Za-z0-9._-]+|\/(?:Users|home)\/[^ /]+\/)/],
  ['PRIVATE_KEY',/-----BEGIN (?:RSA |EC |OPENSSH )?PRIVATE KEY-----/],
  ['PROVIDER_TOKEN',/(?:AKIA[0-9A-Z]{16}|gh[pousr]_[A-Za-z0-9]{30,}|sk-(?:ant-|proj-)[A-Za-z0-9_-]{30,}|sk_live_[A-Za-z0-9]{20,})/],
  ['PRIVATE_NETWORK_URL',/https?:\/\/(?:[^\s/'"<>]+\.(?:internal|local)(?=[:/'"\s]|$)|10\.\d+\.\d+\.\d+|192\.168\.\d+\.\d+|172\.(?:1[6-9]|2\d|3[01])\.\d+\.\d+)/i],
@@ -29,6 +30,17 @@ export function auditPublicFiles(root,files){
   const bytes=readFileSync(absolute);if(bytes.subarray(0,8192).includes(0))continue;
   const source=bytes.toString('utf8');
   for(const [rule,pattern] of contentRules)if(!(rule==='PRIVATE_NETWORK_URL'&&path.startsWith('tests/'))&&pattern.test(source))add(path,rule);
+  if(['.env.example','.env.hosted.example'].includes(path)){
+   for(const line of source.split(/\r?\n/)){
+    const setting=/^\s*([A-Z][A-Z0-9_]*)\s*=\s*(.*?)\s*$/.exec(line);if(!setting)continue;
+    const [,key,raw]=setting,value=raw.replace(/^(['"])(.*)\1$/,'$2');
+    if(!value)continue;
+    if(key==='DATABASE_URL'){
+     try{const url=new URL(value);if(!['postgres:','postgresql:'].includes(url.protocol)||!['localhost','127.0.0.1','[::1]'].includes(url.hostname)||!['change-me','local-demo-only','local-only'].includes(decodeURIComponent(url.password))||url.search||url.hash)add(path,'POPULATED_CREDENTIAL_TEMPLATE');}
+     catch{add(path,'POPULATED_CREDENTIAL_TEMPLATE');}
+    }else if(/(?:SECRET|PASSWORD|TOKEN|PRIVATE|API_KEY|KEY_HEX|CLIENT_ID|MERCHANT_ID|TENANT_ID|PRINCIPAL_ID|AGENT_ID|INTENT_ID|SMTP_USER|USER_EMAIL)/.test(key))add(path,'POPULATED_CREDENTIAL_TEMPLATE');
+   }
+  }
   if(/\.(?:[cm]?js|[cm]?ts|tsx|jsx)$/.test(path)){
    const check=(specifier,resource=false)=>{
     if(!specifier.startsWith('.'))return;
@@ -47,6 +59,7 @@ export function auditPublicFiles(root,files){
   }
   if(path.endsWith('package.json')||path.endsWith('package-lock.json')){
    const walk=value=>{if(!value||typeof value!=='object')return;for(const [key,item] of Object.entries(value)){
+    if(typeof item==='string'&&/^(?:git\+ssh:|ssh:|git@)/i.test(item))add(path,'AUTHENTICATED_PACKAGE_DEPENDENCY');
     if(typeof item==='string'&&(item.startsWith('file:')||key==='resolved'&&!/^[a-z]+:/i.test(item)&&!item.startsWith('@'))){
      const local=item.replace(/^file:/,'');const target=resolve(dirname(absolute),local);
      if(!inside(root,target))add(path,'EXTERNAL_PACKAGE_DEPENDENCY');
@@ -54,6 +67,28 @@ export function auditPublicFiles(root,files){
     }else walk(item);
    }};
    try{walk(JSON.parse(source));}catch{add(path,'INVALID_PACKAGE_JSON');}
+  }
+  if(path.endsWith('.md')&&!path.startsWith('third-party-licenses/')){
+   for(const match of source.matchAll(/!?\[[^\]\r\n]*\]\(<?([^\s)>]+)>?(?:\s+[^)]*)?\)/g)){
+    const link=match[1];
+    if(link.startsWith('#')||/^(?:https?:|mailto:)/i.test(link))continue;
+    if(/^[a-z][a-z0-9+.-]*:/i.test(link)){add(path,'NONPUBLIC_DOCUMENT_LINK');continue;}
+    let target;
+    try{target=resolve(dirname(absolute),decodeURIComponent(link.split('#')[0]));}catch{add(path,'INVALID_DOCUMENT_LINK');continue;}
+    if(!inside(root,target))add(path,'EXTERNAL_DOCUMENT_LINK');
+    else if(!existsSync(target))add(path,'MISSING_DOCUMENT_LINK');
+   }
+  }
+  if(path==='AI_CONTEXT.json'){
+   try{
+    const context=JSON.parse(source);
+    for(const link of Object.values(context.entrypoints??{})){
+     if(typeof link!=='string'){add(path,'INVALID_DOCUMENT_INDEX');continue;}
+     const target=resolve(root,link);
+     if(!inside(root,target))add(path,'EXTERNAL_DOCUMENT_LINK');
+     else if(!existsSync(target))add(path,'MISSING_DOCUMENT_LINK');
+    }
+   }catch{add(path,'INVALID_DOCUMENT_INDEX');}
   }
  }
  return findings;

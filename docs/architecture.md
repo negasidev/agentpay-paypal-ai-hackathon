@@ -32,10 +32,9 @@ The complete signed-device/buyer-approved capture path has not been accepted.
 Capture remains disabled. This edition does not claim independent hardware
 attestation, signed receiver conformance, real goods or production payment support.
 
-The application retains tested backend modules that share existing database and
-security contracts; unrelated shopping/enterprise frontend entry points and hosted
-Vault/browser bundles are excluded. Catalog and migration compatibility do not
-make those broader products part of the hackathon demonstration.
+The application retains backend modules needed for schema and security
+compatibility. Their presence does not establish an additional supported product,
+provider integration or accepted deployed workflow.
 
 ## Service boundary
 

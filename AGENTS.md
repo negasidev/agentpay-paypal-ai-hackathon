@@ -1,6 +1,10 @@
 # Coding-agent guide
 
-Read README.md, docs/architecture.md and AI_CONTEXT.json before editing.
+Read README.md, AI_CONTEXT.json, docs/developer-guide.md, docs/architecture.md,
+docs/release-policy.md and docs/verification-status.md before editing.
+
+Current acceptance boundary: the latest hosted check is blocked at transaction
+evidence. Do not describe the deployed journey as passing because local tests pass.
 
 ## Boundaries
 
@@ -12,6 +16,8 @@ Read README.md, docs/architecture.md and AI_CONTEXT.json before editing.
 - Missing configuration and provider/storage failures must fail closed. Do not introduce mock provider success or weaken quota/security tests.
 - Keep credentials, private endpoints, workstation paths and operational reports out of source. Environment examples must contain placeholders only.
 - Maintain this repository independently. Integrate external services through configured APIs; never copy their repositories, history, configuration or operational evidence into a release.
+- Keep documentation links inside this checkout or point to intentionally public sources. Raw deployment logs, cookies and private diagnostic files must stay outside public source.
+- Apply enterprise engineering controls as described in docs/developer-guide.md. This is not a production-readiness or certification claim.
 
 ## Commands and navigation
 

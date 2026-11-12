@@ -7,7 +7,10 @@
     "architecture": "docs/architecture.md",
     "setup": "docs/judge-setup.md",
     "scenario": "docs/problem-demo.md",
-    "security": "SECURITY.md"
+    "security": "SECURITY.md",
+    "developerGuide": "docs/developer-guide.md",
+    "releasePolicy": "docs/release-policy.md",
+    "verificationStatus": "docs/verification-status.md"
   },
   "runtime": {
     "node": "24.x",
@@ -20,7 +23,10 @@
     "lint": "npm run lint",
     "typecheck": "npm run typecheck",
     "test": "npm test",
-    "build": "npm run build"
+    "build": "npm run build",
+    "publicAudit": "npm run check:public",
+    "boundaryTests": "npm run test:boundary",
+    "sdkTests": "npm run test:sdk"
   },
   "testRequirements": [
     "Migrated disposable PostgreSQL database in DATABASE_URL",
@@ -40,5 +46,27 @@
     "production acceptance"
   ],
   "captureEnabled": false,
-  "standalone": true
+  "standalone": true,
+  "verification": {
+    "asOf": "2026-11-12",
+    "localRegression": "passed",
+    "hostedJourney": "blocked",
+    "blocker": "Owned transaction detail returned HTTP 404 despite an existing purchase",
+    "providerReadbackAfterBlocker": "not_run",
+    "paymentExecutedInSanityCheck": false,
+    "details": "docs/verification-status.md",
+    "publicationGuard": {
+      "sourceInputs": 406,
+      "rejectionTestsPassed": 4,
+      "date": "2026-11-12"
+    }
+  },
+  "releaseBoundary": {
+    "sourceDependencies": "repository-local-or-public-registry",
+    "externalAuthority": "optional-server-side-api-client",
+    "sharedProductSessions": false,
+    "independentSourceDownload": true,
+    "privateCheckoutRequired": false
+  },
+  "supportedScopeBoundary": "Implemented application scope; hosted transaction evidence is currently blocked"
 }

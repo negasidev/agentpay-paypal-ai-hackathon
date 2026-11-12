@@ -8,6 +8,10 @@ Find a wireless keyboard within a $150 budget, inspect the AI recommendation, re
 
 **Scope:** this demonstration prepares and verifies sandbox orders. It does not demonstrate a completed payment. Human review, signed authorization, PayPal buyer consent and capture are separate steps; capture stays disabled. No real goods or live payments are supported.
 
+**Current hosted limitation:** the 12 November check found transaction evidence
+returning 404 for an existing owned purchase. Local regression passes; the hosted
+journey remains blocked. See [verification status](docs/verification-status.md).
+
 ## Quick start
 
 Requires Docker Compose, your own supported AI-provider credentials and PayPal Sandbox business credentials. No other repository is required.
@@ -39,7 +43,10 @@ See [setup and troubleshooting](docs/judge-setup.md) for native Node 24/PostgreS
 | `config/staging-authority-plan.json` | Unconfigured optional authority template; grants no permissions |
 | `public/` | Local illustrations, fonts and other browser assets |
 
-Read [architecture](docs/architecture.md), [problem demonstration](docs/problem-demo.md), [AGENTS.md](AGENTS.md) and [AI_CONTEXT.json](AI_CONTEXT.json). The optional authorization integration is not required for the proposal/order/refusal demonstration. Missing authorization must prevent capture.
+Start with the [developer guide](docs/developer-guide.md), [architecture](docs/architecture.md),
+[release policy](docs/release-policy.md), [AGENTS.md](AGENTS.md) and [AI_CONTEXT.json](AI_CONTEXT.json).
+The optional authorization integration is not required for the proposal/order/refusal
+demonstration. Missing authorization must prevent capture.
 
 ## Development checks
 

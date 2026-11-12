@@ -1,6 +1,9 @@
 # Problem demonstration
 
-Entry: `/demo` or `/assistant`, with authentication required. `/judge` redirects to the same scenario. A saved proposal is labeled and reused; generating a fresh proposal is an explicit model request, never a page-load action.
+Entry: `/demo` or `/assistant`, with authentication required. `/judge` provides
+judge entry instructions. A saved proposal is labeled and reused; generating a
+fresh proposal is an explicit model request, never a page-load action. Check
+[verification status](verification-status.md) before describing the hosted flow.
 
 Problem: find an ergonomic wireless keyboard within a $150 budget without turning an AI suggestion into permission to spend.
 
