@@ -69,6 +69,14 @@ test('fixture software approval and separately verified buyer consent admit one 
  await assert.rejects(captureBrowserSandbox(pool,s.actor,s.purchase.id,input,s.provider,{env:s.env}),/SANDBOX_EXECUTION_ALREADY_RESERVED/);assert.equal(s.counts().captures,1);
  }finally{await pool.end();}
 });
+test('a new session sees the consumed payment approval and replay remains blocked',async()=>{
+ const pool=createPool();try{const s=await scenario(pool),approval=await s.approve(await s.challenge());await s.buyer();await captureBrowserSandbox(pool,s.actor,s.purchase.id,{approvalId:approval.approvalId},s.provider,{env:s.env});
+ const nextActor={...s.actor,session_hash:randomBytes(32).toString('hex')};await pool.query("INSERT INTO ap_sessions VALUES($1,$2,$3,now()+interval '8 hours')",[nextActor.session_hash,nextActor.tenant_id,nextActor.user_id]);
+ const status=await browserSandboxStatus(pool,nextActor,s.purchase.id,s.provider,{env:s.env});assert.equal(status.approvalId,approval.approvalId);assert.equal(status.approvalState,'CONSUMED');assert.equal(status.providerVerified,true);assert.equal(status.captureEnabled,false);
+ await assert.rejects(captureBrowserSandbox(pool,nextActor,s.purchase.id,{approvalId:status.approvalId},s.provider,{env:s.env}),/SANDBOX_EXECUTION_ALREADY_RESERVED/);assert.equal(s.counts().captures,1);
+ }finally{await pool.end();}
+});
+
 test('lost capture response reconciles the original order without another dispatch and outage never shows a verified receipt',async()=>{
  const pool=createPool();try{const s=await scenario(pool),approval=await s.approve(await s.challenge());await s.buyer();s.loseResponse();const result=await captureBrowserSandbox(pool,s.actor,s.purchase.id,{approvalId:approval.approvalId},s.provider,{env:s.env});assert.equal(result.state,'UNKNOWN');
  const outage=await browserSandboxStatus(pool,s.actor,s.purchase.id,{getOrder(){throw Error('outage');}},{env:s.env});assert.equal(outage.providerVerified,false);assert.equal(outage.receipt,null);

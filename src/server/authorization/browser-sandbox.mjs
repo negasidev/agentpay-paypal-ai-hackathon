@@ -155,8 +155,11 @@ export async function browserSandboxStatus(pool,actor,id,provider,{env=process.e
    approvalState:'INELIGIBLE',expiresAt:null,buyerApproved:false,captureEnabled:false,
    executionState:null,providerVerified:false,receipt:null};
  }
- const approval=(await pool.query('SELECT * FROM ap_browser_sandbox_approvals'+scope+' AND session_hash=$4 ORDER BY created_at DESC LIMIT 1',[...args(actor,id),actor.session_hash])).rows[0];
+ let approval=(await pool.query('SELECT * FROM ap_browser_sandbox_approvals'+scope+' AND session_hash=$4 ORDER BY created_at DESC LIMIT 1',[...args(actor,id),actor.session_hash])).rows[0];
  const execution=(await pool.query('SELECT * FROM ap_browser_sandbox_executions'+scope,args(actor,id))).rows[0];
+ // A completed payment retains its consumed approval across logins as history,
+ // never as fresh authority. The execution reservation still blocks capture.
+ if(!approval&&execution)approval=(await pool.query('SELECT * FROM ap_browser_sandbox_approvals'+scope+' AND id=$4',[...args(actor,id),execution.approval_id])).rows[0];
  const order=(await pool.query('SELECT * FROM ap_orders'+scope,args(actor,id))).rows[0];
  let providerVerified=false,receipt=null;
  if(execution&&provider){
