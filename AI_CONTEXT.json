@@ -12,7 +12,8 @@
     "releasePolicy": "docs/release-policy.md",
     "verificationStatus": "docs/verification-status.md",
     "selfService": "docs/self-service-boundaries.md",
-    "hackathonRules": "docs/hackathon-rule-review.md"
+    "hackathonRules": "docs/hackathon-rule-review.md",
+    "submission": "docs/submission-package.md"
   },
   "runtime": {
     "node": "24.x",
@@ -58,7 +59,7 @@
     "paymentExecutedInSanityCheck": false,
     "details": "docs/verification-status.md",
     "publicationGuard": {
-      "sourceInputs": 433,
+      "sourceInputs": 434,
       "rejectionTestsPassed": 4,
       "date": "2026-11-12"
     },
