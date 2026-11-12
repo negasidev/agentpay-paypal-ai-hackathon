@@ -76,3 +76,27 @@ purchase ownership, approval verification or single-use capture enforcement.
 
 The original payment acceptance above remains dated evidence. Fresh release
 checks must distinguish recovered completed receipts from newly captured payments.
+
+### Fresh hosted journey verification
+
+A fresh browser journey on November 12 passed real Claude recommendation,
+purchase-specific review and submission, new PayPal Sandbox order creation and
+readback, password-confirmed software-key purchase approval, and altered-amount
+refusal without provider dispatch. The buyer signed into PayPal Sandbox and
+consent was provider verified. An approval that expired during the ceremony kept
+payment blocked; a fresh exact-purchase approval was required.
+
+The approved 119.00 USD payment then completed. The evidence page rendered its
+verified receipt and consumed approval. Independent PayPal readback confirmed
+exactly one matching capture on that order. A new application login recovered
+the same receipt; repeat payment returned 409. This was a fresh capture, separate
+from the earlier acceptance payment. Purchase approval in this test was automated
+through the browser software key; no human-presence or hardware proof is claimed.
+
+The consent callback exposed a duplicate checkout panel caused by remounting the
+active PayPal widget while refreshing approval status. The final repair keeps
+those refreshes separate; the final deployed checkout rendered one buyer panel.
+Both repair revisions passed the complete CI suite: 151 application, 66 SDK and
+four publication tests, with no failures or skips, plus lint, typecheck and build.
+Shared judge write refusal and cross-account evidence isolation remained intact.
+The earlier linked video still does not show this completed-payment journey.
