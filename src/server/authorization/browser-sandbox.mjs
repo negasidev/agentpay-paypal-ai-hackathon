@@ -104,8 +104,9 @@ export async function revokeBrowserApproval(pool,actor,id,approvalId,{env=proces
 }
 function receiptFor(execution,row,capture){return {format:'agentpay.browser-software-sandbox.receipt.v1',assurance:'software',purchaseId:row.purchase_id,approvalId:row.id,approverName:row.approver_name,identityKind:JSON.parse(row.statement).identityKind,approvedAt:row.approved_at,signatureVerified:true,termsHash:row.terms_hash,keyThumbprint:row.key_thumbprint,executionId:execution.id,providerOrderId:capture.orderId,providerCaptureId:capture.captureId,amount:capture.amount,currency:capture.currency,merchantId:capture.merchantId,providerVerifiedAt:new Date().toISOString(),hardwareAttested:false};}
 export async function captureBrowserSandbox(pool,actor,id,input,provider,{env=process.env}={}){
- const policy=requirePolicy(actor,env);if(!policy.captureEnabled)refuse('BROWSER_SANDBOX_CAPTURE_DISABLED',503);
+ const policy=requirePolicy(actor,env);
  if(!exactKeys(input,['approvalId']))refuse('UNEXPECTED_CAPTURE_TERMS',400);
+ if(!policy.captureEnabled)refuse('BROWSER_SANDBOX_CAPTURE_DISABLED',503);
  const reserved=await transaction(pool,async db=>{
   const identity=await eligibleApprover(db,actor,env);
   const {purchase,order,terms}=await purchaseAndOrder(db,actor,id,policy);

@@ -57,6 +57,11 @@ test('expired, revoked and changed-term approvals cannot dispatch even when Sand
 test('fixture software approval and separately verified buyer consent admit one exact capture; tampering and replay refuse',async()=>{
  const pool=createPool();try{const s=await scenario(pool),challenge=await s.challenge(),approval=await s.approve(challenge),input={approvalId:approval.approvalId};
  await assert.rejects(captureBrowserSandbox(pool,s.actor,s.purchase.id,input,s.provider,{env:s.env}),/PAYPAL_BUYER_CONSENT_REQUIRED/);
+ // Malformed capture terms must be rejected specifically even while the deployment gate is closed.
+ const disabled={...s.env,AGENTPAY_BROWSER_SANDBOX_CAPTURE_ENABLED:'false'};
+ await assert.rejects(captureBrowserSandbox(pool,s.actor,s.purchase.id,{...input,amount:'1190.00'},s.provider,{env:disabled}),/UNEXPECTED_CAPTURE_TERMS/);
+ await assert.rejects(captureBrowserSandbox(pool,s.actor,s.purchase.id,input,s.provider,{env:disabled}),/BROWSER_SANDBOX_CAPTURE_DISABLED/);
+ assert.equal(s.counts().captures,0);
  await s.buyer();await assert.rejects(captureBrowserSandbox(pool,s.actor,s.purchase.id,{...input,amount:'1190.00'},s.provider,{env:s.env}),/UNEXPECTED_CAPTURE_TERMS/);
  const outcomes=await Promise.allSettled(Array.from({length:12},()=>captureBrowserSandbox(pool,s.actor,s.purchase.id,input,s.provider,{env:s.env})));
  assert.equal(outcomes.filter(r=>r.status==='fulfilled').length,1);assert.equal(s.counts().captures,1);
