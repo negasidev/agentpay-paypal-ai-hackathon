@@ -1,16 +1,19 @@
 'use client';
 import {useEffect,useState} from 'react';
 import Link from 'next/link';
-import {purchaseOutcome} from '../shared/purchase-outcome.mjs';
+import {purchaseOutcome,browserSoftwareOutcome} from '../shared/purchase-outcome.mjs';
 
 export default function PurchaseOutcome({purchaseId}:{purchaseId:string}){
  const [result,setResult]=useState<ReturnType<typeof purchaseOutcome>|null>(null);
  const [revision,setRevision]=useState(0),[loading,setLoading]=useState(true);
  useEffect(()=>{
   const controller=new AbortController();setLoading(true);setResult(null);
-  void fetch(`/api/transactions/${purchaseId}`,{cache:'no-store',signal:controller.signal}).then(async response=>{
+  void fetch('/api/sandbox/config',{cache:'no-store',signal:controller.signal}).then(async configResponse=>{
+   if(!configResponse.ok)throw Error('unavailable');const config=await configResponse.json();
+   const browserMode=config.approvalMode==='sandbox-browser-software';
+   const response=await fetch(browserMode?`/api/browser-sandbox/${purchaseId}/status`:`/api/transactions/${purchaseId}`,{cache:'no-store',signal:controller.signal});
    if(!response.ok)throw Error('unavailable');
-   const detail=await response.json();if(!controller.signal.aborted)setResult(purchaseOutcome(detail));
+   const detail=await response.json();if(!controller.signal.aborted)setResult(browserMode?browserSoftwareOutcome(detail,purchaseId):purchaseOutcome(detail));
   }).catch(error=>{if(error.name!=='AbortError')setResult(purchaseOutcome(null));}).finally(()=>{if(!controller.signal.aborted)setLoading(false);});
   return()=>controller.abort();
  },[purchaseId,revision]);

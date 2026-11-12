@@ -2,10 +2,9 @@
 import Link from 'next/link';
 import {useCallback,useEffect,useState} from 'react';
 import PurchasingAssistant from './PurchasingAssistant';
-import AuthorityStatus from './AuthorityStatus';
+import ApprovalControls from './ApprovalControls';
 import SandboxCheckout from './SandboxCheckout';
 import EvaluationSignIn from './EvaluationSignIn';
-import ProtectedCapture from './ProtectedCapture';
 import OrderEvidence from './OrderEvidence';
 type Purchase={id:string;state:string;amount:string;currency:string;item_id:string;version:number;merchant_id:string;item_name:string;quantity:number};
 const descriptions:Record<string,string>={Assistant:'Describe your needs and budget, or start with a catalog purchase.', 'Purchase Review':'Review the merchant, product, quantity and exact payment terms.',Approval:'Request signed authority for the reviewed purchase. A pending request grants no authority.',Checkout:'Buyer consent and signed authorization are independent checks before execution.',Transactions:'Inspect purchase states, provider observations and execution evidence.'};
@@ -26,8 +25,8 @@ export default function Workspace({view}:{view:string}){
  {row.state==='REVIEWED'&&<button disabled={busy} onClick={()=>void act(`purchases/${row.id}/submit`)}>Submit for authorization</button>}
  {row.state==='AUTHORIZATION_PENDING'&&<><p>Awaiting verified external authority; no approval has been issued.</p><button className="secondary" disabled={busy} onClick={()=>void act(`purchases/${row.id}/reject`)}>Reject</button></>}
  {['DRAFT','REVIEWED','AUTHORIZATION_PENDING'].includes(row.state)&&<button className="secondary" disabled={busy} onClick={()=>void act(`purchases/${row.id}/cancel`)}>Cancel</button>}
- {view==='Checkout'&&<ProtectedCapture purchaseId={row.id}/>}
- </div>{view==='Checkout'&&['REVIEWED','AUTHORIZATION_PENDING'].includes(row.state)&&<><OrderEvidence purchaseId={row.id}/><SandboxCheckout purchaseId={row.id}/></>}{row.state==='AUTHORIZATION_PENDING'&&['Approval','Checkout'].includes(view)&&<AuthorityStatus purchaseId={row.id}/>}</article>)}</div>
+
+ </div>{view==='Checkout'&&['REVIEWED','AUTHORIZATION_PENDING'].includes(row.state)&&<><OrderEvidence purchaseId={row.id}/><SandboxCheckout purchaseId={row.id}/></>}{['Approval','Checkout'].includes(view)&&<ApprovalControls purchaseId={row.id} canonicalAvailable={row.state==='AUTHORIZATION_PENDING'}/>}</article>)}</div>
  {rows.length===0&&<section className="empty-state"><h2>No purchases yet</h2><p>Create a draft in the Assistant, then review its exact terms before requesting authorization.</p><Link className="button secondary" href="/assistant">Open Assistant</Link></section>}</>}
  {message&&<p role={failed?'alert':'status'} aria-live="polite" className={failed?'error-note mt-5':'context-note'}>{message}</p>}
  </>;

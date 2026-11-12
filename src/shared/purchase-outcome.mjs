@@ -1,5 +1,13 @@
 import {verifiedCapture} from './trust-presentation.mjs';
 
+export function browserSoftwareOutcome(detail,purchaseId){
+ const receipt=detail?.receipt;
+ if(detail?.mode==='sandbox-browser-software'&&detail.providerVerified===true&&detail.executionState==='COMPLETED'&&receipt?.format==='agentpay.browser-software-sandbox.receipt.v1'&&receipt.purchaseId===purchaseId&&receipt.assurance==='software'&&receipt.hardwareAttested===false&&typeof receipt.providerCaptureId==='string'&&receipt.providerCaptureId.length>0)
+  return {title:'PayPal Sandbox payment confirmed',message:'PayPal confirmed the exact payment and the backend matched its browser software-key approval. This is Sandbox only, without a hardware-attestation claim.'};
+ if(detail?.executionState)return {title:'Check the existing Sandbox payment',message:'An execution attempt exists. Refresh its provider evidence before continuing; do not create or dispatch another payment.'};
+ return {title:'Sandbox purchase awaiting approval',message:'Confirm sign-in, sign only the exact Sandbox terms and complete separate PayPal buyer consent. Capture rechecks both before any payment.'};
+}
+
 export function purchaseOutcome(detail){
  if(!detail)return {title:'Purchase status unavailable',message:'Refresh the evidence before continuing. No payment success can be confirmed.'};
  if(verifiedCapture(detail))return {title:'Purchase paid and verified',message:'PayPal capture and the matching signed authorization receipt have been verified. Open the evidence for the recorded result.'};

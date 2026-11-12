@@ -1,5 +1,13 @@
 # AgentPay - PayPal AI Hackathon Edition
 
+**AI proposes. You decide.**
+
+[Live demo](https://hackathon.agentpay.twoaye.com/hackathon) | [94-second video](https://youtu.be/MG2dcnJwfhY)
+
+Judges: the evaluation login is in the private Devpost testing instructions. Start with the saved real recommendation and PayPal Sandbox order; no local setup or personal payment account is needed for that demonstrated path.
+
+For small-business buyers, the prototype compares a clearly labelled evaluation catalog, preserves the reviewed terms and makes the actual provider outcome visible. It does not search a live marketplace.
+
 AI proposes a useful purchase. A human reviews the exact terms. The backend checks a real PayPal Sandbox order and refuses payment when authority is missing.
 
 ## What you can run

@@ -8,4 +8,18 @@ export async function login(pool,email,password){if(process.env.AGENTPAY_CANONIC
 export async function authenticate(pool,token,dependencies){if(typeof token!=='string'||!/^[a-f0-9]{64}$/.test(token))throw new Error('UNAUTHENTICATED');const result=await pool.query('SELECT tenant_id,user_id FROM ap_sessions WHERE token_hash=$1 AND expires_at>now()',[hashToken(token)]);if(!result.rows[0])throw new Error('UNAUTHENTICATED');try{return await requireCanonicalSession(pool,token,result.rows[0],dependencies);}catch(error){if(error.message==='CANONICAL_REAUTH_REQUIRED')throw new Error('UNAUTHENTICATED');throw error;}}
 
 export function sessionCookieName(){return new URL(process.env.APP_ORIGIN||'http://localhost:3006').protocol==='https:'?'__Host-agentpay_session':'agentpay_session';}
+// Fresh confirmation uses the same durable lockout counters as account login.
+// Returning failure from the transaction commits those counters before refusal.
+export async function reauthenticateActor(pool,actor,password){
+ if(typeof password!=='string'||password.length<12||password.length>128)throw new Error('INVALID_LOGIN');
+ const valid=await transaction(pool,async db=>{
+  const user=(await db.query('SELECT * FROM ap_users WHERE id=$1 AND tenant_id=$2 FOR UPDATE',[actor.user_id,actor.tenant_id])).rows[0];
+  const [salt,hash]=(/^[a-f0-9]{32}:[a-f0-9]{64}$/.test(user?.password_hash??'')?user.password_hash:('0'.repeat(32)+':'+'0'.repeat(64))).split(':');
+  const matches=timingSafeEqual(scryptSync(password,salt,32),Buffer.from(hash,'hex'));
+  if(!user||user.locked_until&&new Date(user.locked_until)>new Date())return false;
+  if(!matches){await db.query("UPDATE ap_users SET failed_logins=failed_logins+1,locked_until=CASE WHEN failed_logins>=4 THEN now()+interval '15 minutes' ELSE locked_until END WHERE id=$1",[actor.user_id]);return false;}
+  await db.query('UPDATE ap_users SET failed_logins=0,locked_until=NULL WHERE id=$1',[actor.user_id]);return true;
+ });
+ if(!valid)throw new Error('INVALID_LOGIN');
+}
 export async function logout(pool,token){return canonicalLogout(pool,token);}
