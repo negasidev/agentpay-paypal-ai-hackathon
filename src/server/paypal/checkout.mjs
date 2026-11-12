@@ -5,6 +5,19 @@ import {ProviderError,validatePurchase} from './client.mjs';
 import {verifySandboxOrder} from './order-probe.mjs';
 import {assertReferenceQuote} from '../shopping/reference-merchant.mjs';
 const scoped='SELECT * FROM ap_purchases WHERE id=$1 AND tenant_id=$2 AND user_id=$3';
+export async function verifyRecordedOrder(pool,actor,id,merchantId,provider){
+ const values=[id,actor.tenant_id,actor.user_id];
+ const purchase=(await pool.query(scoped,values)).rows[0];
+ if(!purchase)throw new ProviderError('NOT_FOUND');
+ const order=(await pool.query('SELECT * FROM ap_orders WHERE purchase_id=$1 AND tenant_id=$2 AND user_id=$3',values)).rows[0];
+ if(!order)throw new ProviderError('RECORDED_PROVIDER_ORDER_REQUIRED');
+ if(order.purchase_version!==purchase.version||order.amount!==purchase.amount||order.currency!==purchase.currency||order.merchant_id!==purchase.merchant_id||purchase.merchant_id!==merchantId)throw new ProviderError('INTENT_CHANGED');
+ const actual=await provider.getOrder(order.provider_order_id);
+ verifySandboxOrder(actual,order.provider_order_id,{amount:purchase.amount,currency:purchase.currency,merchantId});
+ // This read must never create an order, record buyer consent or reserve an
+ // execution. Read-only evaluators can inspect terms without spending rights.
+ return {orderId:order.provider_order_id,providerStatus:actual.status,buyerStatus:order.buyer_status,amount:purchase.amount,currency:purchase.currency,retrievalVerified:true,captureEnabled:false};
+}
 async function atomic(db,work){await db.query('BEGIN');try{const result=await work(db);await db.query('COMMIT');return result;}catch(error){await db.query('ROLLBACK');throw error;}}
 async function audit(db,a,id,event){await db.query('INSERT INTO ap_audit(tenant_id,user_id,purchase_id,event) VALUES($1,$2,$3,$4)',[a.tenant_id,a.user_id,id,event]);}
 export async function createCheckout(pool,actor,id,merchantId,provider){

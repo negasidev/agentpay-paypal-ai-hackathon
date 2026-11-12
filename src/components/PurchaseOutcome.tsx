@@ -10,7 +10,7 @@ export default function PurchaseOutcome({purchaseId}:{purchaseId:string}){
   const controller=new AbortController();setLoading(true);setResult(null);
   void fetch('/api/sandbox/config',{cache:'no-store',signal:controller.signal}).then(async configResponse=>{
    if(!configResponse.ok)throw Error('unavailable');const config=await configResponse.json();
-   const browserMode=config.approvalMode==='sandbox-browser-software';
+   const browserMode=config.approvalMode==='sandbox-browser-software'&&config.browserApprovalAvailable===true;
    const response=await fetch(browserMode?`/api/browser-sandbox/${purchaseId}/status`:`/api/transactions/${purchaseId}`,{cache:'no-store',signal:controller.signal});
    if(!response.ok)throw Error('unavailable');
    const detail=await response.json();if(!controller.signal.aborted)setResult(browserMode?browserSoftwareOutcome(detail,purchaseId):purchaseOutcome(detail));

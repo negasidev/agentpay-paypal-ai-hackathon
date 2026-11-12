@@ -1,9 +1,22 @@
 import {cookies} from 'next/headers';
 import {authenticate,sessionCookieName} from '../../../../../server/auth.mjs';
 import {database} from '../../../../../server/persistence/db.mjs';
-import {createCheckout,checkoutOutcome,checkoutStatus} from '../../../../../server/paypal/checkout.mjs';
+import {createCheckout,checkoutOutcome,checkoutStatus,verifyRecordedOrder} from '../../../../../server/paypal/checkout.mjs';
 import {sandboxProvider} from '../../../../../server/paypal/buyer.mjs';
 export const dynamic='force-dynamic';
+export async function GET(request:Request,context:{params:Promise<{purchaseId:string;action:string}>}){
+ try{
+  const {purchaseId,action}=await context.params;
+  if(action!=='status'||!/^[a-f0-9-]{36}$/.test(purchaseId))return Response.json({error:'NOT_FOUND'},{status:404});
+  const pool=database(),actor=await authenticate(pool,(await cookies()).get(sessionCookieName())?.value);
+  const result=await verifyRecordedOrder(pool,actor,purchaseId,process.env.PAYPAL_SANDBOX_MERCHANT_ID,sandboxProvider());
+  return Response.json(result,{headers:{'Cache-Control':'no-store'}});
+ }catch(error:any){
+  const code=error.code??error.message;
+  const exposed=['NOT_FOUND','UNAUTHENTICATED','RECORDED_PROVIDER_ORDER_REQUIRED','INTENT_CHANGED','PROVIDER_BINDING_MISMATCH'];
+  return Response.json({error:exposed.includes(code)?code:'SANDBOX_UNAVAILABLE'},{status:code==='UNAUTHENTICATED'?401:code==='NOT_FOUND'?404:['RECORDED_PROVIDER_ORDER_REQUIRED','INTENT_CHANGED','PROVIDER_BINDING_MISMATCH'].includes(code)?409:503,headers:{'Cache-Control':'no-store'}});
+ }
+}
 export async function POST(request:Request,context:{params:Promise<{purchaseId:string;action:string}>}){
   if(request.headers.get('origin')!==new URL(process.env.APP_ORIGIN??'http://localhost:3006').origin)return Response.json({error:'ORIGIN_REFUSED'},{status:403});
   try{

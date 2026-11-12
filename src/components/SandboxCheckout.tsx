@@ -17,6 +17,7 @@ export default function SandboxCheckout({purchaseId}:{purchaseId:string}){
   useEffect(()=>{let disposed=false;
     async function load(){try{
       const r=await fetch('/api/sandbox/config',{cache:'no-store'});const config=await r.json();
+      if(r.ok&&config.readOnly===true){if(!disposed)setMessage('Read-only evaluation. Buyer checkout and payment actions are unavailable for this account.');return;}
       if(!r.ok||!config.enabled){if(!disposed)setMessage('Sandbox checkout unavailable. Capture disabled.');return;}
       const stored=await request('status');lastOrder.current=stored.orderId;
       if(stored.buyerStatus==='APPROVED'){if(!disposed){setApproved(true);setMessage('Buyer approved - waiting for 2AYE. No payment captured.');}return;}
