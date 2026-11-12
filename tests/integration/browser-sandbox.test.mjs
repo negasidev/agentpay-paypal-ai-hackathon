@@ -136,6 +136,6 @@ test('non-exportable Web Crypto key signs the reviewed transaction and server ve
  await assert.rejects(webcrypto.subtle.exportKey('jwk',keys.privateKey));const jwk=await webcrypto.subtle.exportKey('jwk',keys.publicKey),publicKey={kty:jwk.kty,crv:jwk.crv,x:jwk.x,y:jwk.y};
  const challenge=await browserApprovalChallenge(pool,s.actor,s.purchase.id,{password,publicKey},s.provider,{env:s.env});const signature=Buffer.from(await webcrypto.subtle.sign({name:'ECDSA',hash:'SHA-256'},keys.privateKey,Buffer.from(challenge.statement))).toString('base64url');
  const approved=await approveBrowserChallenge(pool,s.actor,s.purchase.id,{challengeId:challenge.challengeId,signature},{env:s.env});assert.equal(approved.assurance,'software');
- await s.buyer();await transition(pool,s.actor,s.purchase.id,'reject');await assert.rejects(captureBrowserSandbox(pool,s.actor,s.purchase.id,{approvalId:approved.approvalId},s.provider,{env:s.env}));assert.equal(s.counts().captures,0);
+ await s.buyer();await transition(pool,s.actor,s.purchase.id,'reject');const rejected=await browserSandboxStatus(pool,s.actor,s.purchase.id,s.provider,{env:s.env});assert.equal(rejected.captureEnabled,false);assert.equal(rejected.approvalState,'INVALIDATED');await assert.rejects(captureBrowserSandbox(pool,s.actor,s.purchase.id,{approvalId:approved.approvalId},s.provider,{env:s.env}));assert.equal(s.counts().captures,0);
  }finally{await pool.end();}
 });

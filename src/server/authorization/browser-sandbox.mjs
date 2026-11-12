@@ -143,7 +143,7 @@ export async function browserSandboxStatus(pool,actor,id,provider,{env=process.e
  const policy=requirePolicy(actor,env);
  const identity=await transaction(pool,db=>eligibleApprover(db,actor,env));
  const purchase=(await pool.query('SELECT * FROM ap_purchases WHERE id=$1 AND tenant_id=$2 AND user_id=$3',args(actor,id))).rows[0];if(!purchase)refuse('NOT_FOUND',404);
- const approval=(await pool.query('SELECT id,approved_at,approval_expires_at,revoked_at,consumed_at FROM ap_browser_sandbox_approvals'+scope+' AND session_hash=$4 ORDER BY created_at DESC LIMIT 1',[...args(actor,id),actor.session_hash])).rows[0];
+ const approval=(await pool.query('SELECT * FROM ap_browser_sandbox_approvals'+scope+' AND session_hash=$4 ORDER BY created_at DESC LIMIT 1',[...args(actor,id),actor.session_hash])).rows[0];
  const execution=(await pool.query('SELECT * FROM ap_browser_sandbox_executions'+scope,args(actor,id))).rows[0];
  const order=(await pool.query('SELECT * FROM ap_orders'+scope,args(actor,id))).rows[0];
  let providerVerified=false,receipt=null;
@@ -159,8 +159,9 @@ export async function browserSandboxStatus(pool,actor,id,provider,{env=process.e
    }
   }catch{providerVerified=false;receipt=null;}
  }
- const state=approval?.revoked_at?'REVOKED':approval?.consumed_at?'CONSUMED':approval&&new Date(approval.approval_expires_at)<=new Date()?'EXPIRED':approval?.approved_at?'APPROVED':'REQUIRED';
- return {approverName:identity.name,identityKind:identity.identityKind,mode:'sandbox-browser-software',assurance:'software',hardwareAttested:false,purchaseState:providerVerified?'COMPLETED':purchase.state,approvalId:approval?.id??null,approvalState:state,expiresAt:approval?.approval_expires_at??null,buyerApproved:order?.buyer_status==='APPROVED',captureEnabled:policy.captureEnabled&&state==='APPROVED'&&order?.buyer_status==='APPROVED'&&!execution,executionState:providerVerified?'COMPLETED':execution?.state??null,providerVerified,receipt};
+ const invalidated=approval&&(!equal(approval.credential_fingerprint,identity.credentialFingerprint)||approval.approver_version!==identity.version||!order||!equal(approval.terms_hash,termsHash(purchase,order,policy))||purchase.state!=='AUTHORIZATION_PENDING');
+ const state=approval?.revoked_at?'REVOKED':approval?.consumed_at?'CONSUMED':invalidated?'INVALIDATED':approval&&new Date(approval.approval_expires_at)<=new Date()?'EXPIRED':approval?.approved_at?'APPROVED':'REQUIRED';
+ return {approverName:identity.name,identityKind:identity.identityKind,mode:'sandbox-browser-software',assurance:'software',hardwareAttested:false,purchaseState:providerVerified?'COMPLETED':purchase.state,approvalId:approval?.id??null,approvalState:state,expiresAt:approval?.approval_expires_at??null,buyerApproved:order?.buyer_status==='APPROVED',captureEnabled:policy.captureEnabled&&purchase.state==='AUTHORIZATION_PENDING'&&state==='APPROVED'&&order?.buyer_status==='APPROVED'&&!execution,executionState:providerVerified?'COMPLETED':execution?.state??null,providerVerified,receipt};
 }
 
 export async function recordBrowserRefusal(pool,actor,id,action,code){
