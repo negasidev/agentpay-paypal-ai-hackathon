@@ -1,0 +1,291 @@
+{
+  "schema": "https://schemas.verid.com/predicate-envelope/v1.json",
+  "schemaVersion": "1.0",
+  "note": "Canonicalization and hashing vectors for the frozen predicate envelope (specification section 10.3). An implementation conforms when it produces the same canonical bytes and the same SHA-256 for every acceptance case, and refuses every rejection case. Rejection cases are as normative as acceptance cases: a permissive implementation is not a conforming one. A rejection vector states why the envelope must be refused, not the wording any implementation uses while refusing; message text is not normative.",
+  "hash": "SHA-256 over the canonical UTF-8 bytes, uppercase hex.",
+  "vectors": [
+    {
+      "name": "no-predicates",
+      "why": "An action with no magnitude, counterparty, data class, region, or volume.",
+      "envelope": {
+        "tenantId": "00000000-0000-0000-0000-000000000000",
+        "intentId": "00000000-0000-0000-0000-000000000000",
+        "schemaVersion": "1.0",
+        "agentId": "agent-1",
+        "tool": "datadog-billing",
+        "action": "renew",
+        "environment": "development",
+        "requestedAt": "2026-07-27T10:15:30.000Z",
+        "predicates": []
+      },
+      "canonical": "{\"action\":\"renew\",\"agent_id\":\"agent-1\",\"environment\":\"development\",\"schema_version\":\"1.0\",\"tool\":\"datadog-billing\"}",
+      "hash": "420F66311F10068C0DB62DA09782D9CADCA7273D894AE8675D0134689D5E68FD"
+    },
+    {
+      "name": "all-predicate-types",
+      "why": "Every registered predicate type in one envelope.",
+      "envelope": {
+        "tenantId": "00000000-0000-0000-0000-000000000000",
+        "intentId": "00000000-0000-0000-0000-000000000000",
+        "schemaVersion": "1.0",
+        "agentId": "agent-1",
+        "tool": "datadog-billing",
+        "action": "renew",
+        "environment": "development",
+        "requestedAt": "2026-07-27T10:15:30.000Z",
+        "predicates": [
+          {
+            "type": "amount",
+            "currency": "USD",
+            "value": "1200.00"
+          },
+          {
+            "type": "counterparty_reference",
+            "value": "datadog"
+          },
+          {
+            "type": "data_class",
+            "value": "pii",
+            "access": "read"
+          },
+          {
+            "type": "region",
+            "value": "IE"
+          },
+          {
+            "type": "record_count",
+            "value": "250"
+          },
+          {
+            "type": "model_provenance",
+            "value": "llama-3.3-70b",
+            "hosting": "self_hosted"
+          }
+        ]
+      },
+      "canonical": "{\"action\":\"renew\",\"agent_id\":\"agent-1\",\"environment\":\"development\",\"predicates\":[{\"access\":\"read\",\"type\":\"data_class\",\"value\":\"pii\"},{\"currency\":\"USD\",\"type\":\"amount\",\"value\":\"1200.00\"},{\"hosting\":\"self_hosted\",\"model\":\"llama-3.3-70b\",\"type\":\"model_provenance\"},{\"type\":\"counterparty_reference\",\"value\":\"datadog\"},{\"type\":\"record_count\",\"value\":250},{\"type\":\"region\",\"value\":\"IE\"}],\"schema_version\":\"1.0\",\"tool\":\"datadog-billing\"}",
+      "hash": "FDBE4EE70BA04C1862AD724F9ADA8054ECEF84079A308416D6B224DBE17F32F3"
+    },
+    {
+      "name": "predicate-order-a",
+      "why": "Predicate order is not semantically meaningful; pairs with order-b.",
+      "envelope": {
+        "tenantId": "00000000-0000-0000-0000-000000000000",
+        "intentId": "00000000-0000-0000-0000-000000000000",
+        "schemaVersion": "1.0",
+        "agentId": "agent-1",
+        "tool": "datadog-billing",
+        "action": "renew",
+        "environment": "development",
+        "requestedAt": "2026-07-27T10:15:30.000Z",
+        "predicates": [
+          {
+            "type": "amount",
+            "currency": "USD",
+            "value": "1200.00"
+          },
+          {
+            "type": "counterparty_reference",
+            "value": "datadog"
+          }
+        ]
+      },
+      "canonical": "{\"action\":\"renew\",\"agent_id\":\"agent-1\",\"environment\":\"development\",\"predicates\":[{\"currency\":\"USD\",\"type\":\"amount\",\"value\":\"1200.00\"},{\"type\":\"counterparty_reference\",\"value\":\"datadog\"}],\"schema_version\":\"1.0\",\"tool\":\"datadog-billing\"}",
+      "hash": "EFD5172AF036A84D416672188C5F60CAC640DA78D92DFCD60008F9999EAC7C65"
+    },
+    {
+      "name": "predicate-order-b",
+      "why": "Same predicates, reversed. MUST hash identically to order-a.",
+      "envelope": {
+        "tenantId": "00000000-0000-0000-0000-000000000000",
+        "intentId": "00000000-0000-0000-0000-000000000000",
+        "schemaVersion": "1.0",
+        "agentId": "agent-1",
+        "tool": "datadog-billing",
+        "action": "renew",
+        "environment": "development",
+        "requestedAt": "2026-07-27T10:15:30.000Z",
+        "predicates": [
+          {
+            "type": "counterparty_reference",
+            "value": "datadog"
+          },
+          {
+            "type": "amount",
+            "currency": "USD",
+            "value": "1200.00"
+          }
+        ]
+      },
+      "canonical": "{\"action\":\"renew\",\"agent_id\":\"agent-1\",\"environment\":\"development\",\"predicates\":[{\"currency\":\"USD\",\"type\":\"amount\",\"value\":\"1200.00\"},{\"type\":\"counterparty_reference\",\"value\":\"datadog\"}],\"schema_version\":\"1.0\",\"tool\":\"datadog-billing\"}",
+      "hash": "EFD5172AF036A84D416672188C5F60CAC640DA78D92DFCD60008F9999EAC7C65"
+    },
+    {
+      "name": "decimal-scale-trailing-zeros",
+      "why": "Scale is preserved; pairs with decimal-scale-bare.",
+      "envelope": {
+        "tenantId": "00000000-0000-0000-0000-000000000000",
+        "intentId": "00000000-0000-0000-0000-000000000000",
+        "schemaVersion": "1.0",
+        "agentId": "agent-1",
+        "tool": "datadog-billing",
+        "action": "renew",
+        "environment": "development",
+        "requestedAt": "2026-07-27T10:15:30.000Z",
+        "predicates": [
+          {
+            "type": "amount",
+            "currency": "USD",
+            "value": "1200.00"
+          }
+        ]
+      },
+      "canonical": "{\"action\":\"renew\",\"agent_id\":\"agent-1\",\"environment\":\"development\",\"predicates\":[{\"currency\":\"USD\",\"type\":\"amount\",\"value\":\"1200.00\"}],\"schema_version\":\"1.0\",\"tool\":\"datadog-billing\"}",
+      "hash": "098304E939A91D114BFABEFAC667045CF512F2367B3C95B0912168EF75717DDC"
+    },
+    {
+      "name": "decimal-scale-bare",
+      "why": "Same number, no scale. MUST hash differently from the scaled form.",
+      "envelope": {
+        "tenantId": "00000000-0000-0000-0000-000000000000",
+        "intentId": "00000000-0000-0000-0000-000000000000",
+        "schemaVersion": "1.0",
+        "agentId": "agent-1",
+        "tool": "datadog-billing",
+        "action": "renew",
+        "environment": "development",
+        "requestedAt": "2026-07-27T10:15:30.000Z",
+        "predicates": [
+          {
+            "type": "amount",
+            "currency": "USD",
+            "value": "1200"
+          }
+        ]
+      },
+      "canonical": "{\"action\":\"renew\",\"agent_id\":\"agent-1\",\"environment\":\"development\",\"predicates\":[{\"currency\":\"USD\",\"type\":\"amount\",\"value\":\"1200\"}],\"schema_version\":\"1.0\",\"tool\":\"datadog-billing\"}",
+      "hash": "9EDE7E5F294D6E09F2E931E7E7AF18F3FAC66B2850799970D9544E3F42E89C1B"
+    },
+    {
+      "name": "requested-at-differs-a",
+      "why": "requested_at is evidence, not a parameter; pairs with differs-b.",
+      "envelope": {
+        "tenantId": "00000000-0000-0000-0000-000000000000",
+        "intentId": "00000000-0000-0000-0000-000000000000",
+        "schemaVersion": "1.0",
+        "agentId": "agent-1",
+        "tool": "datadog-billing",
+        "action": "renew",
+        "environment": "development",
+        "requestedAt": "2026-07-27T10:15:30.000Z",
+        "predicates": [
+          {
+            "type": "amount",
+            "currency": "USD",
+            "value": "1200.00"
+          }
+        ]
+      },
+      "canonical": "{\"action\":\"renew\",\"agent_id\":\"agent-1\",\"environment\":\"development\",\"predicates\":[{\"currency\":\"USD\",\"type\":\"amount\",\"value\":\"1200.00\"}],\"schema_version\":\"1.0\",\"tool\":\"datadog-billing\"}",
+      "hash": "098304E939A91D114BFABEFAC667045CF512F2367B3C95B0912168EF75717DDC"
+    },
+    {
+      "name": "requested-at-differs-b",
+      "why": "Same action, later clock. MUST hash identically to differs-a.",
+      "envelope": {
+        "tenantId": "00000000-0000-0000-0000-000000000000",
+        "intentId": "00000000-0000-0000-0000-000000000000",
+        "schemaVersion": "1.0",
+        "agentId": "agent-1",
+        "tool": "datadog-billing",
+        "action": "renew",
+        "environment": "development",
+        "requestedAt": "2026-07-27T18:44:01.000Z",
+        "predicates": [
+          {
+            "type": "amount",
+            "currency": "USD",
+            "value": "1200.00"
+          }
+        ]
+      },
+      "canonical": "{\"action\":\"renew\",\"agent_id\":\"agent-1\",\"environment\":\"development\",\"predicates\":[{\"currency\":\"USD\",\"type\":\"amount\",\"value\":\"1200.00\"}],\"schema_version\":\"1.0\",\"tool\":\"datadog-billing\"}",
+      "hash": "098304E939A91D114BFABEFAC667045CF512F2367B3C95B0912168EF75717DDC"
+    },
+    {
+      "name": "reject-unregistered-predicate",
+      "why": "An unregistered type is refused, never ignored.",
+      "envelope": {
+        "tenantId": "00000000-0000-0000-0000-000000000000",
+        "intentId": "00000000-0000-0000-0000-000000000000",
+        "schemaVersion": "1.0",
+        "agentId": "agent-1",
+        "tool": "datadog-billing",
+        "action": "renew",
+        "environment": "development",
+        "requestedAt": "2026-07-27T10:15:30.000Z",
+        "predicates": [
+          {
+            "type": "telepathy",
+            "value": "whatever"
+          }
+        ]
+      },
+      "rejects": "The predicate type is not registered. It MUST be refused, never ignored: silently dropping it evaluates the action against fewer constraints than its author intended."
+    },
+    {
+      "name": "reject-decimal-as-json-number",
+      "why": "Decimals cross the wire as strings. A JSON number cannot be hashed reliably.",
+      "envelope": {
+        "tenantId": "00000000-0000-0000-0000-000000000000",
+        "intentId": "00000000-0000-0000-0000-000000000000",
+        "schemaVersion": "1.0",
+        "agentId": "agent-1",
+        "tool": "datadog-billing",
+        "action": "renew",
+        "environment": "development",
+        "requestedAt": "2026-07-27T10:15:30.000Z",
+        "predicates": [
+          {
+            "type": "amount",
+            "currency": "USD",
+            "value": 1200.5
+          }
+        ]
+      },
+      "rejects": "The amount is a JSON number rather than a decimal string. It MUST be refused at whichever layer sees it first - binary floating point cannot represent 0.1 exactly, and a value that changes on round trip cannot be hashed reliably."
+    },
+    {
+      "name": "reject-free-text-identifier",
+      "why": "The identifier character class is what keeps prose out of the evaluator.",
+      "envelope": {
+        "tenantId": "00000000-0000-0000-0000-000000000000",
+        "intentId": "00000000-0000-0000-0000-000000000000",
+        "schemaVersion": "1.0",
+        "agentId": "agent-1",
+        "tool": "please summarise the attached customer record",
+        "action": "renew",
+        "environment": "development",
+        "requestedAt": "2026-07-27T10:15:30.000Z",
+        "predicates": []
+      },
+      "rejects": "The tool is prose rather than an identifier. It MUST be refused: the identifier character class is what keeps free text out of the evaluator."
+    },
+    {
+      "name": "reject-local-time-offset",
+      "why": "One representation only, or the canonical form is not canonical.",
+      "envelope": {
+        "tenantId": "00000000-0000-0000-0000-000000000000",
+        "intentId": "00000000-0000-0000-0000-000000000000",
+        "schemaVersion": "1.0",
+        "agentId": "agent-1",
+        "tool": "datadog-billing",
+        "action": "renew",
+        "environment": "development",
+        "requestedAt": "2026-07-27T10:15:30.000+01:00",
+        "predicates": []
+      },
+      "rejects": "requested_at carries a local offset. It MUST be refused - one representation only, or the canonical form is not canonical."
+    }
+  ]
+}

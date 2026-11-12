@@ -45,6 +45,9 @@ Read [architecture](docs/architecture.md), [problem demonstration](docs/problem-
 
 ```sh
 npm ci
+npm run check:public
+npm run test:boundary
+npm run test:sdk
 npm run lint
 npm run typecheck
 npm test

@@ -3,6 +3,7 @@ import {mkdirSync,writeFileSync,readFileSync,readdirSync,lstatSync,existsSync,un
 import {resolve,join,dirname} from 'node:path';
 import {fileURLToPath} from 'node:url';
 import {createHash} from 'node:crypto';
+import {auditPublicFiles} from './public-boundary.mjs';
 
 // Committed bytes exclude concurrent working-tree edits and local credentials.
 const args=process.argv.slice(2),[commit,destination]=args;
@@ -22,6 +23,8 @@ function scan(directory){for(const name of readdirSync(directory).sort()){
  sources.push({path:path.slice(output.length+1).replaceAll('\\','/'),sha256:createHash('sha256').update(readFileSync(path)).digest('hex')});
 }}
 scan(output);
+const boundary=auditPublicFiles(output,sources.map(source=>source.path));
+if(boundary.length){console.error(JSON.stringify({passed:false,findings:boundary}));throw Error('PUBLIC_SOURCE_BOUNDARY_REFUSED');}
 for(const required of ['Dockerfile','compose.yaml','package.json','vendor/agent-sdk/package.json','migrations/015_reference_merchant_orders.sql','scripts/verify-acceptance.mjs'])
  if(!existsSync(join(output,required)))throw Error('COMMITTED_ACCEPTANCE_INPUTS_MISSING');
 writeFileSync(join(output,'release-inputs.json'),JSON.stringify({scope:'standalone_committed_source_not_deployed',commit,sources},null,2)+'\n',{flag:'wx'});

@@ -15,14 +15,14 @@ docker compose up -d --build app
 ```
 
 Open http://localhost:3006. This stack has its own database and volume, exposes
-the app on loopback only, and does not connect to private 2AYE services. The tools
+the app on loopback only, and runs independently of external authorization services. The tools
 profile can also run `node scripts/verify-hackathon.mjs --providers` and `npm test`.
 Tests should use a separate disposable Compose project/database, not retained
 demo purchases. `docker compose down` stops this local stack and retains data.
 
 ## Native Node setup
 
-Use Node 24, npm and PostgreSQL 17. No private 2AYE repository is required.
+Use Node 24, npm and PostgreSQL 17. No additional repository is required.
 
 1. `npm ci`
 2. Create a disposable database named `agentpay_hackathon_judges`. For example:
