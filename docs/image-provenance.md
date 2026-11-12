@@ -1,0 +1,5 @@
+# Home page image
+
+Asset: `public/images/payment-review.webp`. Created with the built-in image generation tool on 2026-11-11; converted to a 1200-pixel WebP for the home page. This is conceptual artwork, not a real customer, transaction or product screenshot. No third-party photograph or logo is included.
+
+Prompt: Create a premium editorial photographic website hero image, wide landscape composition. A real human hand holding a matte deep navy generic bank card with a small metallic chip, no numbers or logos, next to an open silver laptop on a clean cream desk. Laptop screen shows a subtle abstract electric blue AI orb and minimal blank white interface panels, no readable text, no checkmarks or successful payment claims. Human in light blue shirt partially in frame, face not visible. Soft daylight, sophisticated PayPal-inspired navy and bright blue accents, off-white background, realistic materials, calm trustworthy fintech aesthetic. No logos, no watermark, no text. This is a conceptual AI-assisted human-reviewed payment image, not a screenshot.

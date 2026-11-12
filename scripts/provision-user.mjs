@@ -1,0 +1,1 @@
+import{createPool}from'../src/server/persistence/db.mjs';import{provision}from'../src/server/auth.mjs';const pool=createPool();try{await provision(pool,process.env.AGENTPAY_USER_EMAIL,process.env.AGENTPAY_USER_PASSWORD);console.log('Evaluation user provisioned');}finally{await pool.end();}

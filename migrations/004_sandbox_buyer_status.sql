@@ -1,0 +1,1 @@
+ALTER TABLE ap_sandbox_order_probes ADD COLUMN IF NOT EXISTS buyer_status text NOT NULL DEFAULT 'NOT_APPROVED' CHECK(buyer_status IN ('NOT_APPROVED','CANCELED','APPROVED'));

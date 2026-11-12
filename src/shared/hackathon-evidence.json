@@ -1,0 +1,18 @@
+{
+  "verifiedAt": "2026-11-12T00:24:39.350Z",
+  "provider": "anthropic",
+  "model": "claude-haiku-5-5",
+  "tools": [
+    "compareProducts"
+  ],
+  "amount": "119.00",
+  "currency": "USD",
+  "paypalEnvironment": "sandbox",
+  "paypalStatus": "CREATED",
+  "retrievalVerified": true,
+  "amountTamperingRejected": true,
+  "unapprovedCaptureRejected": true,
+  "recoveredAfterPoolRestart": true,
+  "paymentExecuted": false,
+  "hardwareAttested": false
+}

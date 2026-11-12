@@ -1,0 +1,44 @@
+{
+  "schemaVersion": 1,
+  "name": "AgentPay PayPal AI Hackathon Edition",
+  "entrypoints": {
+    "overview": "README.md",
+    "agentInstructions": "AGENTS.md",
+    "architecture": "docs/architecture.md",
+    "setup": "docs/judge-setup.md",
+    "scenario": "docs/problem-demo.md",
+    "security": "SECURITY.md"
+  },
+  "runtime": {
+    "node": "24.x",
+    "database": "PostgreSQL 17",
+    "application": "Next.js",
+    "localOrigin": "http://localhost:3006"
+  },
+  "commands": {
+    "install": "npm ci",
+    "lint": "npm run lint",
+    "typecheck": "npm run typecheck",
+    "test": "npm test",
+    "build": "npm run build"
+  },
+  "testRequirements": [
+    "Migrated disposable PostgreSQL database in DATABASE_URL",
+    "No live provider credentials needed for fixture regression"
+  ],
+  "supportedScope": [
+    "catalog-backed AI proposal",
+    "human exact-term review",
+    "PayPal Sandbox order creation and verification",
+    "changed-terms refusal",
+    "actor-scoped transaction evidence"
+  ],
+  "notEstablished": [
+    "completed payment",
+    "physical-device approval",
+    "hardware attestation",
+    "production acceptance"
+  ],
+  "captureEnabled": false,
+  "standalone": true
+}

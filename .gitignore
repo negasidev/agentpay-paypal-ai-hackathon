@@ -1,0 +1,16 @@
+.env
+.env.*
+!.env.example
+!.env.hosted.example
+node_modules/
+.next/
+data/
+coverage/
+# Private integration review belongs to the workspace, not public source.
+docs/integration-audit.md
+
+*.tsbuildinfo
+test-results/
+playwright-report/
+
+.vercel/

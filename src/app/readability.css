@@ -1,0 +1,79 @@
+body{font-size:17px;line-height:1.65}
+.public-nav{font-size:15px;gap:20px}
+.workflow-nav a{font-size:14px}
+.site-footer{font-size:14px}
+.ap-design .hero-lead{font-size:20px;line-height:1.65}
+.ap-design .hero-disclaimer{font-size:14px;line-height:1.65}
+.ap-design .eyebrow,.ap-design .section-label,.ap-design .role-label{font-size:14px;line-height:1.5}
+.ap-design .section-intro>p,.ap-design .step-copy p,.ap-design .security-copy>p,.ap-design .evidence-copy p,.ap-design .evidence-source,.ap-design .evidence-hero-copy>p:not(.section-label),.ap-design .evidence-list article p,.ap-design .outstanding-copy>p,.ap-design .evidence-notes p{font-size:17px;line-height:1.7}
+.ap-design .step-copy h3{font-size:24px}
+.ap-design .step-card{min-height:230px}
+.ap-design .security-copy li{font-size:16px;line-height:1.6}
+.ap-design .auth-title strong{font-size:17px}
+.ap-design .live-badge{font-size:14px}
+.ap-design .product-heading strong{font-size:15px;line-height:1.4}
+.ap-design .product-heading>strong{font-size:18px}
+.ap-design .product-heading small{font-size:14px;line-height:1.5}
+.ap-design .status-grid span{font-size:14px;line-height:1.5;text-align:center;overflow-wrap:anywhere}
+.ap-design .status-grid strong{font-size:13px;text-align:center}
+.ap-design .locked-message,.ap-design .details-toggle{font-size:14px;line-height:1.5}
+.ap-design .authorization-details>div,.ap-design .authorization-details p{font-size:14px;line-height:1.65}
+.ap-design .floating-note{display:none}
+.ap-design .code-card dl>div{font-size:14px;gap:16px}
+.ap-design .code-card dd{overflow-wrap:anywhere;text-align:right}
+.ap-design .code-header,.ap-design .signature,.ap-design .blocked-card small,.ap-design .blocked-card b{font-size:14px;line-height:1.5}
+.ap-design .evidence-list article h3,.ap-design .outstanding-list strong{font-size:18px}
+.ap-design .evidence-list article>strong,.ap-design .outstanding-list small,.ap-design .record-chip{font-size:14px;line-height:1.5}
+.ap-design .signin-intro>p,.ap-design .signin-panel p,.ap-design .signin-panel label{font-size:17px;line-height:1.65}
+.ap-design .signin-panel input,.ap-design .signin-panel select,.ap-design .signin-panel button{font-size:17px;min-height:48px}
+.ap-shopping p,.ap-shopping label,.ap-shopping input,.ap-shopping textarea,.ap-shopping button,.ap-demo p,.ap-demo li{font-size:17px;line-height:1.65}
+.demo-steps button{font-size:15px;min-height:48px}
+.wo-eyebrow,.wo-catalog-version{font-size:13px}
+.wo-heading p,.wo-scope p,.wo-task-row p,.wo-inspector p,.wo-card p{font-size:16px;line-height:1.65}
+.wo-metrics small,.wo-metrics span{font-size:14px}
+.commerce-journey,.commerce-imagery{max-width:1240px;margin:auto;padding:80px 30px}
+.journey-heading,.imagery-heading{max-width:850px;margin-bottom:36px}
+.journey-heading h2,.imagery-heading h2{font-size:clamp(32px,3.4vw,46px);line-height:1.15;letter-spacing:-1.5px}
+.journey-heading em,.imagery-heading em{font-style:normal;color:#137b52}
+.journey-heading>p:last-child{font-size:18px;line-height:1.7;color:#607069}
+.journey-stages{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:24px}
+.journey-stages li{position:relative;padding:28px;background:white;border:1px solid #d9e4db;border-radius:22px;box-shadow:0 16px 40px #0d342708}
+.journey-stages li::after{content:'→';position:absolute;right:-21px;top:50%;z-index:1;font-size:25px;color:#137b52;background:#f4f7f1;border-radius:50%;width:20px;text-align:center}
+.journey-stages li:nth-child(3n)::after,.journey-stages li:last-child::after{display:none}
+.journey-stages svg{width:70px;height:70px;color:#137b52;margin-bottom:16px}
+.journey-stages h3{font-size:22px;margin-bottom:10px}
+.journey-stages p{font-size:17px;line-height:1.65;color:#607069;margin:0}
+.journey-stage-number{position:absolute;right:25px;top:28px;color:#60806b;font-size:14px;letter-spacing:.08em}
+.journey-caption{font-size:14px;line-height:1.6;color:#607069;margin-top:25px;max-width:800px}
+.commerce-imagery{padding-top:55px}
+.imagery-grid{display:grid;grid-template-columns:1fr 1fr;gap:28px}
+.imagery-grid figure{margin:0;border:1px solid #d9e4db;border-radius:26px;background:white;overflow:hidden}
+.imagery-grid img{display:block;width:100%;height:320px;object-fit:cover}
+.imagery-grid .illustration img{object-fit:contain;background:#e0ebdc}
+.imagery-grid figcaption{padding:28px}
+.imagery-grid figcaption>span{font-size:13px;letter-spacing:.08em;color:#137b52;font-weight:700}
+.imagery-grid h3{font-size:26px;margin:12px 0}
+.imagery-grid p{font-size:17px;line-height:1.7;color:#607069;margin:0}
+.enterprise-visual{max-width:1180px;margin:0 auto 60px;padding:0 30px;display:grid;grid-template-columns:1.25fr 1fr;align-items:center;gap:40px}
+.enterprise-visual img{display:block;width:100%;border-radius:26px}
+.enterprise-visual figcaption{font-size:18px;line-height:1.75;color:#607069}
+.enterprise-visual h2{font-size:32px;line-height:1.2;color:#12271f;margin-bottom:18px}
+@media(min-width:1450px){.journey-stages{grid-template-columns:repeat(6,minmax(0,1fr));gap:18px}.journey-stages li{padding:24px 20px}.journey-stages li:nth-child(3n)::after{display:block}.journey-stages li:last-child::after{display:none}.journey-stages h3{font-size:20px}.journey-stage-number{right:20px}}
+@media(max-width:1000px){.public-nav{gap:14px;font-size:14px}.imagery-grid img{height:260px}.enterprise-visual{grid-template-columns:1fr}.ap-design .hero-lead{font-size:19px}}
+@media(max-width:700px){
+ .public-nav a{font-size:16px;padding:14px;min-height:48px}.workflow-nav a{font-size:14px}.site-footer{font-size:14px}
+ .ap-design .hero h1{font-size:44px}.ap-design .hero-lead{font-size:18px}.ap-design .hero-disclaimer{font-size:14px}
+ .ap-design .auth-card{padding:20px;width:100%;transform:none}.ap-design .auth-title strong{font-size:16px}.ap-design .live-badge{font-size:14px}
+ .ap-design .product{grid-template-columns:64px 1fr}.ap-design .product-heading strong{font-size:14px}.ap-design .product-heading small{font-size:14px}
+ .ap-design .status-grid{grid-template-columns:1fr}.ap-design .status-grid>div{flex-direction:row;align-items:center;gap:12px;border-right:0;border-bottom:1px solid #e4e9e5}.ap-design .status-grid span{font-size:14px;text-align:left}.ap-design .status-grid strong{font-size:15px}
+ .ap-design .section-intro h2{font-size:34px}.ap-design .step-card{min-height:0}.ap-design .step-copy h3{font-size:24px}
+ .ap-design .code-card{padding:20px;max-width:100%}.ap-design .code-card dl>div{font-size:13px}.ap-design .code-header{flex-wrap:wrap;gap:10px}
+ .commerce-journey,.commerce-imagery{padding:50px 20px}.journey-stages{grid-template-columns:1fr;gap:24px}.journey-stages li{padding:25px}.journey-stages li::after,.journey-stages li:nth-child(3n)::after{display:block;content:'↓';right:calc(50% - 12px);top:auto;bottom:-25px;width:24px}.journey-stages li:last-child::after{display:none}
+ .imagery-grid{grid-template-columns:1fr;gap:24px}.imagery-grid img{height:250px}.imagery-grid figcaption{padding:24px}.imagery-grid h3{font-size:25px}
+ .enterprise-visual{padding:0 20px;gap:24px;margin-bottom:40px}.enterprise-visual h2{font-size:28px}.enterprise-visual figcaption{font-size:17px}
+}
+
+.ap-design .auth-topline,.ap-design .blocked-card{flex-wrap:wrap;gap:12px}.ap-design .product-heading{flex-wrap:wrap}.ap-design .product-heading strong{font-size:16px}.ap-design .code-header,.ap-design .signature{gap:12px;flex-wrap:wrap}
+.site-main .card{min-width:0}.site-main .card :is(p,dd,code){overflow-wrap:anywhere}
+.ap-design .blocked-card{position:relative;left:auto;bottom:auto;width:100%;max-width:450px;margin:24px auto 0;transform:none}.ap-design .blocked-card strong{font-size:16px}.ap-design .blocked-card small{font-size:14px;color:#52675a}.ap-design .status-grid span,.ap-design .product-heading small{color:#52675a}.ap-design .code-card dt{color:#b8d0c1}
+@media(max-width:1200px){.header-inner,.workspace-header .header-inner{position:relative;min-height:76px;flex-direction:row;align-items:center}.ap-menu-toggle{display:flex;align-items:center;gap:8px;padding:10px 12px;background:transparent;color:var(--forest)}.ap-menu-toggle span{font-size:15px}.public-nav,.workspace-header .public-nav{display:none;position:absolute;top:76px;left:20px;right:20px;background:white;border:1px solid #d9e4db;border-radius:14px;padding:12px;box-shadow:0 18px 40px #0d342729;flex-direction:column;align-items:stretch;gap:0}.public-nav.is-open,.workspace-header .public-nav.is-open{display:flex}.public-nav a,.workspace-header .public-nav a{font-size:16px;padding:13px;min-height:48px}.workspace-header .public-nav a:first-child{display:block}.public-nav .nav-signin{margin-top:8px;text-align:center}}

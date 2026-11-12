@@ -1,0 +1,107 @@
+[
+  {
+    "name": "github",
+    "envelope": {
+      "schemaVersion": "1.0",
+      "agentId": " Coding-Agent-7 ",
+      "tool": " GitHub ",
+      "action": " Source_Control.Pull_Request.Merge ",
+      "environment": " Production ",
+      "predicates": [
+        {
+          "type": "resource_reference",
+          "resource_type": " Source_Control.Pull_Request ",
+          "namespace": " github/acme/platform ",
+          "resource_id": " 381 "
+        }
+      ]
+    },
+    "predicates": [
+      "{\"namespace\":\"github/acme/platform\",\"resource_id\":\"381\",\"resource_type\":\"source_control.pull_request\",\"type\":\"resource_reference\"}"
+    ]
+  },
+  {
+    "name": "aws",
+    "envelope": {
+      "schemaVersion": "1.0",
+      "agentId": "ops-agent-2",
+      "tool": " AWS ",
+      "action": "Infrastructure.Compute.Stop",
+      "environment": "Development",
+      "predicates": [
+        {
+          "type": "resource_reference",
+          "resource_type": "Infrastructure.Compute.Instance",
+          "namespace": "aws/account-123/us-east-1",
+          "resource_id": "i-dev-001"
+        }
+      ]
+    },
+    "predicates": [
+      "{\"namespace\":\"aws/account-123/us-east-1\",\"resource_id\":\"i-dev-001\",\"resource_type\":\"infrastructure.compute.instance\",\"type\":\"resource_reference\"}"
+    ]
+  },
+  {
+    "name": "microsoft",
+    "envelope": {
+      "schemaVersion": "1.0",
+      "agentId": "comms-agent-1",
+      "tool": "Microsoft-Graph",
+      "action": "Communication.Email.Send",
+      "environment": "Production",
+      "predicates": [
+        {
+          "type": "resource_reference",
+          "resource_type": "communication.mailbox",
+          "namespace": "microsoft/tenant-1",
+          "resource_id": "security@example.com"
+        }
+      ]
+    },
+    "predicates": [
+      "{\"namespace\":\"microsoft/tenant-1\",\"resource_id\":\"security@example.com\",\"resource_type\":\"communication.mailbox\",\"type\":\"resource_reference\"}"
+    ]
+  },
+  {
+    "name": "salesforce",
+    "envelope": {
+      "schemaVersion": "1.0",
+      "agentId": "sales-agent-9",
+      "tool": "Salesforce",
+      "action": "CRM.Opportunity.Commercial_Terms.Update",
+      "environment": "production",
+      "predicates": [
+        {
+          "type": "resource_reference",
+          "resource_type": "CRM.Opportunity",
+          "namespace": "salesforce/org-1",
+          "resource_id": "006123"
+        }
+      ]
+    },
+    "predicates": [
+      "{\"namespace\":\"salesforce/org-1\",\"resource_id\":\"006123\",\"resource_type\":\"crm.opportunity\",\"type\":\"resource_reference\"}"
+    ]
+  },
+  {
+    "name": "payment",
+    "envelope": {
+      "schemaVersion": "1.0",
+      "agentId": "treasury-agent-3",
+      "tool": "Treasury",
+      "action": "Financial.Payment.Transfer",
+      "environment": "Production",
+      "predicates": [
+        {
+          "type": "resource_reference",
+          "resource_type": "financial.account",
+          "namespace": "institution-1",
+          "resource_id": "operating-account"
+        }
+      ]
+    },
+    "predicates": [
+      "{\"namespace\":\"institution-1\",\"resource_id\":\"operating-account\",\"resource_type\":\"financial.account\",\"type\":\"resource_reference\"}"
+    ]
+  }
+]

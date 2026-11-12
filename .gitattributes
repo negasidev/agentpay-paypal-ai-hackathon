@@ -1,0 +1,8 @@
+# Generated workflow copies must retain the canonical catalog bytes on Windows.
+src/shared/** text eol=lf
+*.mjs text eol=lf
+*.tsx text eol=lf
+*.css text eol=lf
+# Retain upstream license notices verbatim, including intentional whitespace.
+third-party-licenses/** -text -whitespace
+public/fonts/** -text -whitespace

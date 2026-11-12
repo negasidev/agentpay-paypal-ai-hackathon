@@ -1,0 +1,18 @@
+{
+  "status": "PROPOSED_NOT_PROVISIONED",
+  "deploymentEnvironment": "staging",
+  "proposedNames": {"tenant":"agentpay-hackathon-staging","application":"agentpay-paypal-ai-hackathon","agent":"agentpay-demo-agent","approverFunction":"PaymentApprover"},
+  "canonicalOrigin": null,
+  "ids": {"tenantId":null,"organizationId":null,"applicationId":null,"clientId":null,"agentId":null,"intentId":null,"principalId":null,"deviceId":null,"localTenantId":null,"localUserId":null},
+  "intentVersion": null,
+  "registrationOperationId": null,
+  "approver": {"tenantRole":"Member","agentAdministratorRequired":true,"builtInPaymentApproverRoleExists":false,"protocol":null,"deviceEnrollmentRequired":true},
+  "constraints": {"maximumAmount":"150.00","currency":"USD","allowedTools":["paypal"],"allowedActions":["capture"],"approvedCounterparties":[],"allowedEnvironments":["development"],"notBefore":null,"expiresAt":null,"delegationDepth":0,"requireHumanApproval":true,"approvalThreshold":"0.00"},
+  "wireBoundary": "Current purchaseEnvelope uses development with paypal/sandbox resource namespace. Hosting remains staging. Do not rewrite frozen binding fields without compatible protocol review.",
+  "requiredPermissions": {"provisioner":["identity:manage","agent:manage","authorize:manage"],"runtime":["authorize:evaluate","authorize:execute"],"humanDecision":["approve:decide"]},
+  "resourceNamespaces": ["paypal/sandbox","agentpay/purchase","agentpay/execution","agentpay/owner","agentpay/tenant","agentpay/quote"],
+  "captureEnabled": false,
+  "payerConsentVerified": false,
+  "canonicalApprovalVerified": false,
+  "mutationsAuthorizedByThisFile": false
+}

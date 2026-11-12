@@ -1,0 +1,43 @@
+{
+  "note": "A grant signed by the reference implementation, with the key that verifies it. Frozen so the JavaScript SDK proves interoperability against bytes this implementation produced, rather than against its own output. Regenerate only if the canonical grant form changes, which is a breaking change for every tool already verifying grants.",
+  "canonical": "{\"action_hash\":\"2AD99A00C85346A9D7F192BD9D94C36833DECD8113B64EC2A359270867BFD073\",\"agent_id\":\"960bee77-1617-46a0-b6b1-725f40bd564f\",\"expires_at\":\"2026-08-06T01:58:20.752Z\",\"grant_id\":\"2b63c467-f3a6-43ca-a9fe-c0775fb7ce26\",\"intent_id\":\"11ab04e9-a099-417f-a667-af83d788b434\",\"intent_version\":\"1\",\"single_use\":\"true\",\"tenant_id\":\"50abb691-f819-4d80-89d0-3624d0f41143\"}",
+  "grant": {
+    "id": "2b63c467-f3a6-43ca-a9fe-c0775fb7ce26",
+    "tenantId": "50abb691-f819-4d80-89d0-3624d0f41143",
+    "intentId": "11ab04e9-a099-417f-a667-af83d788b434",
+    "intentVersion": 1,
+    "agentId": "960bee77-1617-46a0-b6b1-725f40bd564f",
+    "actionHash": "2AD99A00C85346A9D7F192BD9D94C36833DECD8113B64EC2A359270867BFD073",
+    "expiresAt": "2026-08-06T01:58:20.752Z",
+    "consumed": false,
+    "revoked": false,
+    "createdAt": "2026-08-06T01:57:20.7524123+00:00",
+    "amount": 1200,
+    "envelope": {
+      "agentId": "960bee77-1617-46a0-b6b1-725f40bd564f",
+      "tool": "datadog",
+      "action": "renew",
+      "environment": "development",
+      "requestedAt": "2026-08-06T01:57:20.7381053+00:00",
+      "predicates": [
+        {
+          "type": "amount"
+        },
+        {
+          "type": "counterparty_reference"
+        }
+      ]
+    },
+    "signature": "bAwSlSDzkTvHzzgq3SsEH-3GkgvGOxp8sMJPriZw3XM-G10IrTqPUoHqVsGepGQH961ueGC_NmsU9pesTlmn6A",
+    "signingKeyId": "KW8UDYym6gks_hUc"
+  },
+  "jwk": {
+    "kty": "EC",
+    "crv": "P-256",
+    "alg": "ES256",
+    "kid": "KW8UDYym6gks_hUc",
+    "x": "ySbsPSP2Ypjwwel0aL6ny_AQ27O5437k6sun9YqC03k",
+    "y": "lu0Y2P_5GMlQKyJpDwSmrlaVG0l2OsIWgKoxarIFpkg",
+    "use": "sig"
+  }
+}

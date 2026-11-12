@@ -1,0 +1,34 @@
+'use client';
+import Link from 'next/link';
+import {useCallback,useEffect,useState} from 'react';
+import PurchasingAssistant from './PurchasingAssistant';
+import AuthorityStatus from './AuthorityStatus';
+import SandboxCheckout from './SandboxCheckout';
+import EvaluationSignIn from './EvaluationSignIn';
+import ProtectedCapture from './ProtectedCapture';
+import OrderEvidence from './OrderEvidence';
+type Purchase={id:string;state:string;amount:string;currency:string;item_id:string;version:number;merchant_id:string;item_name:string;quantity:number};
+const descriptions:Record<string,string>={Assistant:'Describe your needs and budget, or start with a catalog purchase.', 'Purchase Review':'Review the merchant, product, quantity and exact payment terms.',Approval:'Request signed authority for the reviewed purchase. A pending request grants no authority.',Checkout:'Buyer consent and signed authorization are independent checks before execution.',Transactions:'Inspect purchase states, provider observations and execution evidence.'};
+const errors:Record<string,string>={VERIFIED_EXTERNAL_AUTHORITY_REQUIRED:'Capture blocked: verified external authorization is required. No payment was initiated.',INVALID_TRANSITION:'This purchase has moved to another stage. Refresh and review its current state.',NOT_FOUND:'The purchase was not found in your account.',SERVICE_UNAVAILABLE:'The service is temporarily unavailable. Try again shortly.'};
+async function api(path:string,body?:unknown,signal?:AbortSignal){const response=await fetch('/api/'+path,{method:body===undefined?'GET':'POST',headers:{'content-type':'application/json'},body:body===undefined?undefined:JSON.stringify(body),cache:'no-store',signal});const data=await response.json();if(!response.ok)throw new Error(data.error);return data;}
+export default function Workspace({view}:{view:string}){
+ const[rows,setRows]=useState<Purchase[]>([]);const[authenticated,setAuthenticated]=useState(false);const[loading,setLoading]=useState(true);const[message,setMessage]=useState('');const[failed,setFailed]=useState(false);const[busy,setBusy]=useState(false);
+ const refresh=useCallback(async(signal?:AbortSignal)=>{try{await api('session',undefined,signal);const purchases=await api('purchases',undefined,signal);if(!signal?.aborted){setAuthenticated(true);setRows(purchases);}}catch(error){if(signal?.aborted)return;if(error instanceof Error&&error.message==='UNAUTHENTICATED'){setAuthenticated(false);setRows([]);}else{setFailed(true);setMessage('Unable to load your workspace. Refresh to try again.');}}finally{if(!signal?.aborted)setLoading(false);}},[]);
+ useEffect(()=>{const controller=new AbortController();void refresh(controller.signal);return()=>controller.abort();},[refresh]);
+ async function act(path:string,body:unknown={}){if(busy)return;setBusy(true);setFailed(false);setMessage('');try{await api(path,body);setMessage(path==='logout'?'Signed out.':'Purchase updated.');await refresh();}catch(error){setFailed(true);const code=error instanceof Error?error.message:'';setMessage(errors[code]??'Unable to complete this action. Check the purchase state and try again.');}finally{setBusy(false);}}
+ return <><div className="page-heading"><p className="eyebrow">Evaluation workspace</p><h1>{view}</h1><p>{descriptions[view]}</p></div>{loading?<p role="status">Loading your workspace…</p>:!authenticated?<EvaluationSignIn onSuccess={()=>{void refresh();}}/>:<>
+ <div className="section-heading mb-6"><div className="capability-strip"><Link href="/hackathon">Capability status &amp; recorded evidence →</Link></div><button className="secondary" disabled={busy} onClick={()=>void act('logout')}>Sign out</button></div>
+ {view==='Assistant'&&<><PurchasingAssistant onCreated={()=>{void refresh();}}/><section className="card mb-6"><h2>Start from the evaluation catalog</h2><p>Create a draft without calling an AI provider. No payment authority is issued.</p><button disabled={busy} onClick={()=>void act('purchases',{itemId:'keyboard'})}>Create keyboard purchase - 119.00 USD</button></section></>}
+ {view==='Checkout'&&<p className="context-note">PayPal buyer approval alone cannot authorize payment execution. Protected capture requires verified signed authority, exact terms and an enabled sandbox deployment.</p>}
+ <div className="grid gap-4">{rows.map(row=><article key={row.id} className="card purchase-card" data-state={row.state}><div className="section-heading"><h2>{row.item_name??row.item_id}</h2><strong>{row.amount} {row.currency}</strong></div><p className="workflow-progress">{row.state.replaceAll('_',' ')} · Version {row.version}</p><dl className="terms-grid"><div><dt>Quantity</dt><dd>{row.quantity??1}</dd></div><div><dt>Merchant identifier</dt><dd className="redacted-id">{row.merchant_id}</dd></div></dl><details><summary className="text-sm cursor-pointer">Purchase reference</summary><p className="redacted-id">{row.id.slice(0,8)}…{row.id.slice(-4)} (redacted)</p></details><div className="actions">
+ {view==='Transactions'&&<Link className="button secondary" href={`/transactions/${row.id}`}>View transaction evidence</Link>}
+ {row.state==='DRAFT'&&<><button disabled={busy} onClick={()=>void act(`purchases/${row.id}/review`)}>Mark reviewed</button>{view==='Assistant'&&<Link className="button secondary" href={`/review?purchase=${row.id}`}>Open purchase review</Link>}</>}
+ {row.state==='REVIEWED'&&<button disabled={busy} onClick={()=>void act(`purchases/${row.id}/submit`)}>Submit for authorization</button>}
+ {row.state==='AUTHORIZATION_PENDING'&&<><p>Awaiting verified external authority; no approval has been issued.</p><button className="secondary" disabled={busy} onClick={()=>void act(`purchases/${row.id}/reject`)}>Reject</button></>}
+ {['DRAFT','REVIEWED','AUTHORIZATION_PENDING'].includes(row.state)&&<button className="secondary" disabled={busy} onClick={()=>void act(`purchases/${row.id}/cancel`)}>Cancel</button>}
+ {view==='Checkout'&&<ProtectedCapture purchaseId={row.id}/>}
+ </div>{view==='Checkout'&&['REVIEWED','AUTHORIZATION_PENDING'].includes(row.state)&&<><OrderEvidence purchaseId={row.id}/><SandboxCheckout purchaseId={row.id}/></>}{row.state==='AUTHORIZATION_PENDING'&&['Approval','Checkout'].includes(view)&&<AuthorityStatus purchaseId={row.id}/>}</article>)}</div>
+ {rows.length===0&&<section className="empty-state"><h2>No purchases yet</h2><p>Create a draft in the Assistant, then review its exact terms before requesting authorization.</p><Link className="button secondary" href="/assistant">Open Assistant</Link></section>}</>}
+ {message&&<p role={failed?'alert':'status'} aria-live="polite" className={failed?'error-note mt-5':'context-note'}>{message}</p>}
+ </>;
+}

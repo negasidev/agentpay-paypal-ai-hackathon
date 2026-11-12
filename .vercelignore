@@ -1,0 +1,11 @@
+.git/
+.env*
+*.pem
+*.pfx
+*.key
+.artifacts/
+.next/
+node_modules/
+data/
+test-results/
+*.tsbuildinfo

@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 560" fill="none">
+ <rect width="900" height="560" rx="32" fill="#0d3427"/><circle cx="450" cy="280" r="215" stroke="#86b99a" stroke-opacity=".2"/><circle cx="450" cy="280" r="150" stroke="#86b99a" stroke-opacity=".2" stroke-dasharray="5 12"/>
+ <path d="m228 167 153 79m138 0 153-79M228 393l153-79m138 0 153 79" stroke="#76ad8c" stroke-width="4"/>
+ <rect x="352" y="182" width="196" height="196" rx="38" fill="#c8f55a"/><path d="m450 219 53 22v43c0 43-53 76-53 76s-53-33-53-76v-43Z" stroke="#0d3427" stroke-width="8"/><path d="m426 282 18 18 32-40" stroke="#0d3427" stroke-width="8" stroke-linecap="round" stroke-linejoin="round"/>
+ <g fill="#f4f7f1"><rect x="112" y="104" width="150" height="110" rx="20"/><rect x="638" y="104" width="150" height="110" rx="20"/><rect x="112" y="346" width="150" height="110" rx="20"/><rect x="638" y="346" width="150" height="110" rx="20"/></g>
+ <g stroke="#137b52" stroke-width="6" stroke-linecap="round"><circle cx="187" cy="144" r="14"/><path d="M160 184c0-29 54-29 54 0M674 140h78m-78 24h55m-55 24h33M150 378h74m-74 24h74m-74 24h44"/><rect x="686" y="372" width="54" height="44" rx="8"/><path d="M696 372v-10a17 17 0 0 1 34 0v10"/></g>
+</svg>

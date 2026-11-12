@@ -1,0 +1,4574 @@
+{
+  "schemaVersion": "1.0",
+  "catalogVersion": "1.0.0",
+  "categories": [
+    {
+      "id": "shopping-commerce",
+      "name": "Shopping & Commerce"
+    },
+    {
+      "id": "travel-events",
+      "name": "Travel & Events"
+    },
+    {
+      "id": "personal-productivity",
+      "name": "Personal Productivity"
+    },
+    {
+      "id": "financial-operations",
+      "name": "Financial Operations"
+    },
+    {
+      "id": "enterprise-automation",
+      "name": "Enterprise Automation"
+    },
+    {
+      "id": "security-it",
+      "name": "Security & IT"
+    }
+  ],
+  "families": [
+    "agentpay",
+    "finance",
+    "banking",
+    "procurement",
+    "security",
+    "it_operations",
+    "sales_support"
+  ],
+  "lifecycle": [
+    "task_created",
+    "understand_request",
+    "gather_details",
+    "retrieve_options",
+    "prepare_action",
+    "check_consent_and_authority",
+    "approval_if_required",
+    "execute_supported_operation",
+    "reconcile_outcome",
+    "record_evidence",
+    "notify_user"
+  ],
+  "boundary": "Templates are planning and discovery metadata, never execution authority. Existing acceptance journeys remain authoritative.",
+  "workflows": [
+    {
+      "id": "social-shopping",
+      "version": "1.0.0",
+      "name": "Social product comparison",
+      "owner": {
+        "kind": "individual",
+        "binding": "authenticated_principal"
+      },
+      "audience": "consumer",
+      "family": "personal_assistant",
+      "category": "shopping-commerce",
+      "example": "Find this shared product within my budget.",
+      "inputs": {
+        "required": [
+          "product description",
+          "source link",
+          "USD budget"
+        ],
+        "accepted": [
+          "text",
+          "link"
+        ],
+        "planned": [
+          "image"
+        ]
+      },
+      "agentRoles": [
+        {
+          "role": "personal_assistant",
+          "permittedTools": [
+            "shopping.search"
+          ]
+        }
+      ],
+      "providers": [
+        "ebay_browse"
+      ],
+      "resources": [
+        "item identity",
+        "seller",
+        "quantity",
+        "currency",
+        "item price",
+        "shipping",
+        "tax",
+        "returns"
+      ],
+      "consent": "Review exact selection; merchant confirms final costs",
+      "composition": [],
+      "authority": {
+        "mode": "merchant_checkout",
+        "approval": "exact_selection_review",
+        "runtime": null,
+        "delegation": "none",
+        "executionBoundary": "official_merchant"
+      },
+      "operations": [
+        {
+          "id": "prepare",
+          "effect": "read_only",
+          "implementation": "local_reference"
+        },
+        {
+          "id": "handoff",
+          "effect": "assisted_handoff",
+          "implementation": "local_reference"
+        }
+      ],
+      "recovery": "Do not infer a purchase from a checkout link",
+      "evidence": [
+        "Scoped source observations",
+        "Exact material action and applicable authority",
+        "Provider-confirmed operation outcome",
+        "Canonical receipt for executed protected actions"
+      ],
+      "maturity": {
+        "implementation": "local_assisted",
+        "local": "tested",
+        "deployed": "not_verified",
+        "provider": "not_verified",
+        "acceptanceJourney": null
+      }
+    },
+    {
+      "id": "integrated-checkout",
+      "version": "1.0.0",
+      "name": "Secure integrated checkout",
+      "owner": {
+        "kind": "individual",
+        "binding": "authenticated_principal"
+      },
+      "audience": "consumer",
+      "family": "personal_assistant",
+      "category": "shopping-commerce",
+      "example": "Buy the exact order I approve.",
+      "inputs": {
+        "required": [
+          "merchant cart",
+          "owner",
+          "delivery choice",
+          "final total"
+        ],
+        "accepted": [],
+        "planned": [
+          "text",
+          "link"
+        ]
+      },
+      "agentRoles": [
+        {
+          "role": "personal_assistant",
+          "permittedTools": []
+        }
+      ],
+      "providers": [
+        "merchant_orders",
+        "payment_provider"
+      ],
+      "resources": [
+        "cart version",
+        "merchant",
+        "items",
+        "quantities",
+        "final total",
+        "currency"
+      ],
+      "consent": "Approve exact final order",
+      "composition": [],
+      "authority": {
+        "mode": "canonical_signed_intent",
+        "approval": "policy_required",
+        "runtime": "/v1/runtime/evaluations",
+        "delegation": "monotonic_signed_child_intents",
+        "executionBoundary": "protected_destination"
+      },
+      "operations": [
+        {
+          "id": "prepare",
+          "effect": "read_only",
+          "implementation": "planned"
+        },
+        {
+          "id": "execute",
+          "effect": "protected_action",
+          "implementation": "planned"
+        }
+      ],
+      "recovery": "Read back original provider operation; never recapture an uncertain payment",
+      "evidence": [
+        "Scoped source observations",
+        "Exact material action and applicable authority",
+        "Provider-confirmed operation outcome",
+        "Canonical receipt for executed protected actions"
+      ],
+      "maturity": {
+        "implementation": "planned",
+        "local": "not_verified",
+        "deployed": "not_verified",
+        "provider": "not_verified",
+        "acceptanceJourney": null
+      }
+    },
+    {
+      "id": "returns",
+      "version": "1.0.0",
+      "name": "Returns",
+      "owner": {
+        "kind": "individual",
+        "binding": "authenticated_principal"
+      },
+      "audience": "consumer",
+      "family": "personal_assistant",
+      "category": "shopping-commerce",
+      "example": "Return the chair from my order.",
+      "inputs": {
+        "required": [
+          "order ID",
+          "item",
+          "return reason"
+        ],
+        "accepted": [],
+        "planned": [
+          "text",
+          "link"
+        ]
+      },
+      "agentRoles": [
+        {
+          "role": "personal_assistant",
+          "permittedTools": []
+        }
+      ],
+      "providers": [
+        "merchant_orders"
+      ],
+      "resources": [
+        "order owner",
+        "item",
+        "return window",
+        "fees",
+        "refund destination"
+      ],
+      "consent": "Approve the exact return request and costs",
+      "composition": [],
+      "authority": {
+        "mode": "canonical_signed_intent",
+        "approval": "policy_required",
+        "runtime": "/v1/runtime/evaluations",
+        "delegation": "monotonic_signed_child_intents",
+        "executionBoundary": "protected_destination"
+      },
+      "operations": [
+        {
+          "id": "prepare",
+          "effect": "read_only",
+          "implementation": "planned"
+        },
+        {
+          "id": "execute",
+          "effect": "protected_action",
+          "implementation": "planned"
+        }
+      ],
+      "recovery": "Reconcile return reference before repeating",
+      "evidence": [
+        "Scoped source observations",
+        "Exact material action and applicable authority",
+        "Provider-confirmed operation outcome",
+        "Canonical receipt for executed protected actions"
+      ],
+      "maturity": {
+        "implementation": "planned",
+        "local": "not_verified",
+        "deployed": "not_verified",
+        "provider": "not_verified",
+        "acceptanceJourney": null
+      }
+    },
+    {
+      "id": "subscriptions",
+      "version": "1.0.0",
+      "name": "Subscription cancellation",
+      "owner": {
+        "kind": "individual",
+        "binding": "authenticated_principal"
+      },
+      "audience": "consumer",
+      "family": "personal_assistant",
+      "category": "shopping-commerce",
+      "example": "Cancel this subscription.",
+      "inputs": {
+        "required": [
+          "subscription ID",
+          "account owner"
+        ],
+        "accepted": [],
+        "planned": [
+          "text",
+          "link"
+        ]
+      },
+      "agentRoles": [
+        {
+          "role": "personal_assistant",
+          "permittedTools": []
+        }
+      ],
+      "providers": [
+        "subscription_provider"
+      ],
+      "resources": [
+        "subscription",
+        "renewal date",
+        "termination fees",
+        "effective date"
+      ],
+      "consent": "Approve exact subscription and cancellation terms",
+      "composition": [],
+      "authority": {
+        "mode": "canonical_signed_intent",
+        "approval": "policy_required",
+        "runtime": "/v1/runtime/evaluations",
+        "delegation": "monotonic_signed_child_intents",
+        "executionBoundary": "protected_destination"
+      },
+      "operations": [
+        {
+          "id": "prepare",
+          "effect": "read_only",
+          "implementation": "planned"
+        },
+        {
+          "id": "execute",
+          "effect": "protected_action",
+          "implementation": "planned"
+        }
+      ],
+      "recovery": "Read provider subscription state before retrying",
+      "evidence": [
+        "Scoped source observations",
+        "Exact material action and applicable authority",
+        "Provider-confirmed operation outcome",
+        "Canonical receipt for executed protected actions"
+      ],
+      "maturity": {
+        "implementation": "planned",
+        "local": "not_verified",
+        "deployed": "not_verified",
+        "provider": "not_verified",
+        "acceptanceJourney": null
+      }
+    },
+    {
+      "id": "groceries",
+      "version": "1.0.0",
+      "name": "Grocery and household order",
+      "owner": {
+        "kind": "individual",
+        "binding": "authenticated_principal"
+      },
+      "audience": "consumer",
+      "family": "personal_assistant",
+      "category": "shopping-commerce",
+      "example": "Prepare my weekly groceries under $120.",
+      "inputs": {
+        "required": [
+          "items",
+          "dietary restrictions",
+          "budget",
+          "delivery window"
+        ],
+        "accepted": [],
+        "planned": [
+          "text",
+          "link"
+        ]
+      },
+      "agentRoles": [
+        {
+          "role": "personal_assistant",
+          "permittedTools": []
+        }
+      ],
+      "providers": [
+        "grocery_provider"
+      ],
+      "resources": [
+        "items",
+        "substitutions",
+        "allergens",
+        "quantities",
+        "delivery slot",
+        "final total"
+      ],
+      "consent": "Approve the final cart and substitutions",
+      "composition": [],
+      "authority": {
+        "mode": "canonical_signed_intent",
+        "approval": "policy_required",
+        "runtime": "/v1/runtime/evaluations",
+        "delegation": "monotonic_signed_child_intents",
+        "executionBoundary": "protected_destination"
+      },
+      "operations": [
+        {
+          "id": "prepare",
+          "effect": "read_only",
+          "implementation": "planned"
+        },
+        {
+          "id": "execute",
+          "effect": "protected_action",
+          "implementation": "planned"
+        }
+      ],
+      "recovery": "Reconcile original cart and delivery reservation",
+      "evidence": [
+        "Scoped source observations",
+        "Exact material action and applicable authority",
+        "Provider-confirmed operation outcome",
+        "Canonical receipt for executed protected actions"
+      ],
+      "maturity": {
+        "implementation": "planned",
+        "local": "not_verified",
+        "deployed": "not_verified",
+        "provider": "not_verified",
+        "acceptanceJourney": null
+      }
+    },
+    {
+      "id": "gifts",
+      "version": "1.0.0",
+      "name": "Gift shopping",
+      "owner": {
+        "kind": "individual",
+        "binding": "authenticated_principal"
+      },
+      "audience": "consumer",
+      "family": "personal_assistant",
+      "category": "shopping-commerce",
+      "example": "Find a birthday gift under $80.",
+      "inputs": {
+        "required": [
+          "recipient consent",
+          "item preferences",
+          "budget",
+          "delivery date"
+        ],
+        "accepted": [],
+        "planned": [
+          "text",
+          "link"
+        ]
+      },
+      "agentRoles": [
+        {
+          "role": "personal_assistant",
+          "permittedTools": []
+        }
+      ],
+      "providers": [
+        "merchant_orders"
+      ],
+      "resources": [
+        "item",
+        "recipient",
+        "delivery address",
+        "final total"
+      ],
+      "consent": "Approve item and exact recipient before sharing their details",
+      "composition": [],
+      "authority": {
+        "mode": "canonical_signed_intent",
+        "approval": "policy_required",
+        "runtime": "/v1/runtime/evaluations",
+        "delegation": "monotonic_signed_child_intents",
+        "executionBoundary": "protected_destination"
+      },
+      "operations": [
+        {
+          "id": "prepare",
+          "effect": "read_only",
+          "implementation": "planned"
+        },
+        {
+          "id": "execute",
+          "effect": "protected_action",
+          "implementation": "planned"
+        }
+      ],
+      "recovery": "Do not reorder if delivery or payment is uncertain",
+      "evidence": [
+        "Scoped source observations",
+        "Exact material action and applicable authority",
+        "Provider-confirmed operation outcome",
+        "Canonical receipt for executed protected actions"
+      ],
+      "maturity": {
+        "implementation": "planned",
+        "local": "not_verified",
+        "deployed": "not_verified",
+        "provider": "not_verified",
+        "acceptanceJourney": null
+      }
+    },
+    {
+      "id": "price-monitoring",
+      "version": "1.0.0",
+      "name": "Price monitoring",
+      "owner": {
+        "kind": "individual",
+        "binding": "authenticated_principal"
+      },
+      "audience": "consumer",
+      "family": "personal_assistant",
+      "category": "shopping-commerce",
+      "example": "Tell me when this laptop drops below $700.",
+      "inputs": {
+        "required": [
+          "product model",
+          "price threshold",
+          "notification consent"
+        ],
+        "accepted": [],
+        "planned": [
+          "text",
+          "link"
+        ]
+      },
+      "agentRoles": [
+        {
+          "role": "personal_assistant",
+          "permittedTools": []
+        }
+      ],
+      "providers": [
+        "product_search",
+        "notification_provider"
+      ],
+      "resources": [
+        "exact model",
+        "threshold",
+        "currency",
+        "notification destination"
+      ],
+      "consent": "Consent to alerts; a price alert never authorizes purchase",
+      "composition": [],
+      "authority": {
+        "mode": "canonical_signed_intent",
+        "approval": "policy_required",
+        "runtime": "/v1/runtime/evaluations",
+        "delegation": "monotonic_signed_child_intents",
+        "executionBoundary": "protected_destination"
+      },
+      "operations": [
+        {
+          "id": "prepare",
+          "effect": "read_only",
+          "implementation": "planned"
+        },
+        {
+          "id": "execute",
+          "effect": "protected_action",
+          "implementation": "planned"
+        }
+      ],
+      "recovery": "Deduplicate alerts; purchases need a separate permitted action",
+      "evidence": [
+        "Scoped source observations",
+        "Exact material action and applicable authority",
+        "Provider-confirmed operation outcome",
+        "Canonical receipt for executed protected actions"
+      ],
+      "maturity": {
+        "implementation": "planned",
+        "local": "not_verified",
+        "deployed": "not_verified",
+        "provider": "not_verified",
+        "acceptanceJourney": null
+      }
+    },
+    {
+      "id": "individual-travel",
+      "version": "1.0.0",
+      "name": "Individual travel planning",
+      "owner": {
+        "kind": "individual",
+        "binding": "authenticated_principal"
+      },
+      "audience": "consumer",
+      "family": "personal_assistant",
+      "category": "travel-events",
+      "example": "Find a morning flight to Florida within my budget.",
+      "inputs": {
+        "required": [
+          "departure",
+          "destination",
+          "absolute travel dates",
+          "traveler",
+          "budget"
+        ],
+        "accepted": [],
+        "planned": [
+          "text",
+          "link"
+        ]
+      },
+      "agentRoles": [
+        {
+          "role": "personal_assistant",
+          "permittedTools": []
+        }
+      ],
+      "providers": [
+        "flight_inventory"
+      ],
+      "resources": [
+        "passenger",
+        "segments",
+        "times",
+        "baggage",
+        "final price",
+        "cancellation terms"
+      ],
+      "consent": "Approve exact passenger and final itinerary",
+      "composition": [],
+      "authority": {
+        "mode": "canonical_signed_intent",
+        "approval": "policy_required",
+        "runtime": "/v1/runtime/evaluations",
+        "delegation": "monotonic_signed_child_intents",
+        "executionBoundary": "protected_destination"
+      },
+      "operations": [
+        {
+          "id": "prepare",
+          "effect": "read_only",
+          "implementation": "planned"
+        },
+        {
+          "id": "execute",
+          "effect": "protected_action",
+          "implementation": "planned"
+        }
+      ],
+      "recovery": "Read each reservation independently; do not assume all segments booked",
+      "evidence": [
+        "Scoped source observations",
+        "Exact material action and applicable authority",
+        "Provider-confirmed operation outcome",
+        "Canonical receipt for executed protected actions"
+      ],
+      "maturity": {
+        "implementation": "planned",
+        "local": "not_verified",
+        "deployed": "not_verified",
+        "provider": "not_verified",
+        "acceptanceJourney": null
+      }
+    },
+    {
+      "id": "hotels",
+      "version": "1.0.0",
+      "name": "Hotel booking",
+      "owner": {
+        "kind": "individual",
+        "binding": "authenticated_principal"
+      },
+      "audience": "consumer",
+      "family": "personal_assistant",
+      "category": "travel-events",
+      "example": "Find a hotel with a work desk.",
+      "inputs": {
+        "required": [
+          "destination",
+          "check-in",
+          "check-out",
+          "occupancy",
+          "budget"
+        ],
+        "accepted": [],
+        "planned": [
+          "text",
+          "link"
+        ]
+      },
+      "agentRoles": [
+        {
+          "role": "personal_assistant",
+          "permittedTools": []
+        }
+      ],
+      "providers": [
+        "lodging_inventory"
+      ],
+      "resources": [
+        "property",
+        "room",
+        "occupancy",
+        "amenities",
+        "dates",
+        "final price",
+        "cancellation terms"
+      ],
+      "consent": "Approve exact room, occupancy and cancellation terms",
+      "composition": [],
+      "authority": {
+        "mode": "canonical_signed_intent",
+        "approval": "policy_required",
+        "runtime": "/v1/runtime/evaluations",
+        "delegation": "monotonic_signed_child_intents",
+        "executionBoundary": "protected_destination"
+      },
+      "operations": [
+        {
+          "id": "prepare",
+          "effect": "read_only",
+          "implementation": "planned"
+        },
+        {
+          "id": "execute",
+          "effect": "protected_action",
+          "implementation": "planned"
+        }
+      ],
+      "recovery": "Reconcile property reservation before retrying",
+      "evidence": [
+        "Scoped source observations",
+        "Exact material action and applicable authority",
+        "Provider-confirmed operation outcome",
+        "Canonical receipt for executed protected actions"
+      ],
+      "maturity": {
+        "implementation": "planned",
+        "local": "not_verified",
+        "deployed": "not_verified",
+        "provider": "not_verified",
+        "acceptanceJourney": null
+      }
+    },
+    {
+      "id": "group-travel",
+      "version": "1.0.0",
+      "name": "Group travel",
+      "owner": {
+        "kind": "individual",
+        "binding": "authenticated_principal"
+      },
+      "audience": "consumer",
+      "family": "personal_assistant",
+      "category": "travel-events",
+      "example": "Plan a business trip for ten people.",
+      "inputs": {
+        "required": [
+          "named travelers",
+          "individual consents",
+          "dates",
+          "room allocations",
+          "budget"
+        ],
+        "accepted": [],
+        "planned": [
+          "text",
+          "link"
+        ]
+      },
+      "agentRoles": [
+        {
+          "role": "personal_assistant",
+          "permittedTools": []
+        }
+      ],
+      "providers": [
+        "flight_inventory",
+        "lodging_inventory"
+      ],
+      "resources": [
+        "each passenger",
+        "seat",
+        "room occupancy",
+        "segment",
+        "final price",
+        "partial failures"
+      ],
+      "consent": "Approve all travelers and each independent booking",
+      "composition": [],
+      "authority": {
+        "mode": "canonical_signed_intent",
+        "approval": "policy_required",
+        "runtime": "/v1/runtime/evaluations",
+        "delegation": "monotonic_signed_child_intents",
+        "executionBoundary": "protected_destination"
+      },
+      "operations": [
+        {
+          "id": "prepare",
+          "effect": "read_only",
+          "implementation": "planned"
+        },
+        {
+          "id": "execute",
+          "effect": "protected_action",
+          "implementation": "planned"
+        }
+      ],
+      "recovery": "Reconcile each segment and use explicitly approved compensation",
+      "evidence": [
+        "Scoped source observations",
+        "Exact material action and applicable authority",
+        "Provider-confirmed operation outcome",
+        "Canonical receipt for executed protected actions"
+      ],
+      "maturity": {
+        "implementation": "planned",
+        "local": "not_verified",
+        "deployed": "not_verified",
+        "provider": "not_verified",
+        "acceptanceJourney": null
+      }
+    },
+    {
+      "id": "group-events",
+      "version": "1.0.0",
+      "name": "Group events and meetings",
+      "owner": {
+        "kind": "individual",
+        "binding": "authenticated_principal"
+      },
+      "audience": "consumer",
+      "family": "personal_assistant",
+      "category": "travel-events",
+      "example": "Organize a meeting and lunch for ten people.",
+      "inputs": {
+        "required": [
+          "attendees",
+          "preferences",
+          "date",
+          "location",
+          "budget"
+        ],
+        "accepted": [],
+        "planned": [
+          "text",
+          "link"
+        ]
+      },
+      "agentRoles": [
+        {
+          "role": "personal_assistant",
+          "permittedTools": []
+        }
+      ],
+      "providers": [
+        "venue_provider",
+        "catering_provider",
+        "calendar"
+      ],
+      "resources": [
+        "attendees",
+        "venue capacity",
+        "menu",
+        "allergens",
+        "independent bookings"
+      ],
+      "consent": "Approve each booking and invitation disclosure",
+      "composition": [],
+      "authority": {
+        "mode": "canonical_signed_intent",
+        "approval": "policy_required",
+        "runtime": "/v1/runtime/evaluations",
+        "delegation": "monotonic_signed_child_intents",
+        "executionBoundary": "protected_destination"
+      },
+      "operations": [
+        {
+          "id": "prepare",
+          "effect": "read_only",
+          "implementation": "planned"
+        },
+        {
+          "id": "execute",
+          "effect": "protected_action",
+          "implementation": "planned"
+        }
+      ],
+      "recovery": "Track venue, catering and invitations separately",
+      "evidence": [
+        "Scoped source observations",
+        "Exact material action and applicable authority",
+        "Provider-confirmed operation outcome",
+        "Canonical receipt for executed protected actions"
+      ],
+      "maturity": {
+        "implementation": "planned",
+        "local": "not_verified",
+        "deployed": "not_verified",
+        "provider": "not_verified",
+        "acceptanceJourney": null
+      }
+    },
+    {
+      "id": "restaurants",
+      "version": "1.0.0",
+      "name": "Restaurant reservations",
+      "owner": {
+        "kind": "individual",
+        "binding": "authenticated_principal"
+      },
+      "audience": "consumer",
+      "family": "personal_assistant",
+      "category": "travel-events",
+      "example": "Book dinner for four tomorrow.",
+      "inputs": {
+        "required": [
+          "restaurant or area",
+          "absolute date",
+          "time",
+          "party size"
+        ],
+        "accepted": [],
+        "planned": [
+          "text",
+          "link"
+        ]
+      },
+      "agentRoles": [
+        {
+          "role": "personal_assistant",
+          "permittedTools": []
+        }
+      ],
+      "providers": [
+        "restaurant_provider"
+      ],
+      "resources": [
+        "restaurant",
+        "date",
+        "time",
+        "party",
+        "deposit",
+        "cancellation terms"
+      ],
+      "consent": "Approve booking and deposit terms",
+      "composition": [],
+      "authority": {
+        "mode": "canonical_signed_intent",
+        "approval": "policy_required",
+        "runtime": "/v1/runtime/evaluations",
+        "delegation": "monotonic_signed_child_intents",
+        "executionBoundary": "protected_destination"
+      },
+      "operations": [
+        {
+          "id": "prepare",
+          "effect": "read_only",
+          "implementation": "planned"
+        },
+        {
+          "id": "execute",
+          "effect": "protected_action",
+          "implementation": "planned"
+        }
+      ],
+      "recovery": "Read the original reservation before another booking",
+      "evidence": [
+        "Scoped source observations",
+        "Exact material action and applicable authority",
+        "Provider-confirmed operation outcome",
+        "Canonical receipt for executed protected actions"
+      ],
+      "maturity": {
+        "implementation": "planned",
+        "local": "not_verified",
+        "deployed": "not_verified",
+        "provider": "not_verified",
+        "acceptanceJourney": null
+      }
+    },
+    {
+      "id": "entertainment",
+      "version": "1.0.0",
+      "name": "Entertainment tickets",
+      "owner": {
+        "kind": "individual",
+        "binding": "authenticated_principal"
+      },
+      "audience": "consumer",
+      "family": "personal_assistant",
+      "category": "travel-events",
+      "example": "Find ten tickets for this concert.",
+      "inputs": {
+        "required": [
+          "event",
+          "date",
+          "party size",
+          "budget"
+        ],
+        "accepted": [],
+        "planned": [
+          "text",
+          "link"
+        ]
+      },
+      "agentRoles": [
+        {
+          "role": "personal_assistant",
+          "permittedTools": []
+        }
+      ],
+      "providers": [
+        "ticket_provider"
+      ],
+      "resources": [
+        "event",
+        "seats",
+        "quantity",
+        "fees",
+        "transfer restrictions",
+        "final total"
+      ],
+      "consent": "Approve exact seats and ticket terms",
+      "composition": [],
+      "authority": {
+        "mode": "canonical_signed_intent",
+        "approval": "policy_required",
+        "runtime": "/v1/runtime/evaluations",
+        "delegation": "monotonic_signed_child_intents",
+        "executionBoundary": "protected_destination"
+      },
+      "operations": [
+        {
+          "id": "prepare",
+          "effect": "read_only",
+          "implementation": "planned"
+        },
+        {
+          "id": "execute",
+          "effect": "protected_action",
+          "implementation": "planned"
+        }
+      ],
+      "recovery": "Reconcile reservation, charge and ticket issuance separately",
+      "evidence": [
+        "Scoped source observations",
+        "Exact material action and applicable authority",
+        "Provider-confirmed operation outcome",
+        "Canonical receipt for executed protected actions"
+      ],
+      "maturity": {
+        "implementation": "planned",
+        "local": "not_verified",
+        "deployed": "not_verified",
+        "provider": "not_verified",
+        "acceptanceJourney": null
+      }
+    },
+    {
+      "id": "family-event",
+      "version": "1.0.0",
+      "name": "Family event planning",
+      "owner": {
+        "kind": "individual",
+        "binding": "authenticated_principal"
+      },
+      "audience": "consumer",
+      "family": "personal_assistant",
+      "category": "travel-events",
+      "example": "Organize a birthday party for twelve.",
+      "inputs": {
+        "required": [
+          "attendees",
+          "date",
+          "location",
+          "preferences",
+          "budget"
+        ],
+        "accepted": [],
+        "planned": [
+          "text",
+          "link"
+        ]
+      },
+      "agentRoles": [
+        {
+          "role": "personal_assistant",
+          "permittedTools": []
+        }
+      ],
+      "providers": [
+        "venue_provider",
+        "catering_provider"
+      ],
+      "resources": [
+        "party size",
+        "services",
+        "independent quotes",
+        "final costs"
+      ],
+      "consent": "Approve each independent service reservation",
+      "composition": [],
+      "authority": {
+        "mode": "canonical_signed_intent",
+        "approval": "policy_required",
+        "runtime": "/v1/runtime/evaluations",
+        "delegation": "monotonic_signed_child_intents",
+        "executionBoundary": "protected_destination"
+      },
+      "operations": [
+        {
+          "id": "prepare",
+          "effect": "read_only",
+          "implementation": "planned"
+        },
+        {
+          "id": "execute",
+          "effect": "protected_action",
+          "implementation": "planned"
+        }
+      ],
+      "recovery": "Do not mark the event complete from one successful service",
+      "evidence": [
+        "Scoped source observations",
+        "Exact material action and applicable authority",
+        "Provider-confirmed operation outcome",
+        "Canonical receipt for executed protected actions"
+      ],
+      "maturity": {
+        "implementation": "planned",
+        "local": "not_verified",
+        "deployed": "not_verified",
+        "provider": "not_verified",
+        "acceptanceJourney": null
+      }
+    },
+    {
+      "id": "home-services",
+      "version": "1.0.0",
+      "name": "Home services",
+      "owner": {
+        "kind": "individual",
+        "binding": "authenticated_principal"
+      },
+      "audience": "consumer",
+      "family": "personal_assistant",
+      "category": "personal-productivity",
+      "example": "Find someone to repair my sink tomorrow.",
+      "inputs": {
+        "required": [
+          "service area",
+          "problem",
+          "availability",
+          "budget"
+        ],
+        "accepted": [],
+        "planned": [
+          "text",
+          "link"
+        ]
+      },
+      "agentRoles": [
+        {
+          "role": "personal_assistant",
+          "permittedTools": []
+        }
+      ],
+      "providers": [
+        "home_services_provider"
+      ],
+      "resources": [
+        "provider",
+        "quote",
+        "scope",
+        "appointment",
+        "deposit"
+      ],
+      "consent": "Approve exact provider, appointment and quote",
+      "composition": [],
+      "authority": {
+        "mode": "canonical_signed_intent",
+        "approval": "policy_required",
+        "runtime": "/v1/runtime/evaluations",
+        "delegation": "monotonic_signed_child_intents",
+        "executionBoundary": "protected_destination"
+      },
+      "operations": [
+        {
+          "id": "prepare",
+          "effect": "read_only",
+          "implementation": "planned"
+        },
+        {
+          "id": "execute",
+          "effect": "protected_action",
+          "implementation": "planned"
+        }
+      ],
+      "recovery": "Reconcile booking and any deposit before resubmission",
+      "evidence": [
+        "Scoped source observations",
+        "Exact material action and applicable authority",
+        "Provider-confirmed operation outcome",
+        "Canonical receipt for executed protected actions"
+      ],
+      "maturity": {
+        "implementation": "planned",
+        "local": "not_verified",
+        "deployed": "not_verified",
+        "provider": "not_verified",
+        "acceptanceJourney": null
+      }
+    },
+    {
+      "id": "car-services",
+      "version": "1.0.0",
+      "name": "Car service appointments",
+      "owner": {
+        "kind": "individual",
+        "binding": "authenticated_principal"
+      },
+      "audience": "consumer",
+      "family": "personal_assistant",
+      "category": "personal-productivity",
+      "example": "Book a service appointment for my car.",
+      "inputs": {
+        "required": [
+          "vehicle",
+          "service",
+          "location",
+          "availability"
+        ],
+        "accepted": [],
+        "planned": [
+          "text",
+          "link"
+        ]
+      },
+      "agentRoles": [
+        {
+          "role": "personal_assistant",
+          "permittedTools": []
+        }
+      ],
+      "providers": [
+        "car_service_provider"
+      ],
+      "resources": [
+        "vehicle",
+        "provider",
+        "service scope",
+        "quote",
+        "time"
+      ],
+      "consent": "Approve appointment and service quote",
+      "composition": [],
+      "authority": {
+        "mode": "canonical_signed_intent",
+        "approval": "policy_required",
+        "runtime": "/v1/runtime/evaluations",
+        "delegation": "monotonic_signed_child_intents",
+        "executionBoundary": "protected_destination"
+      },
+      "operations": [
+        {
+          "id": "prepare",
+          "effect": "read_only",
+          "implementation": "planned"
+        },
+        {
+          "id": "execute",
+          "effect": "protected_action",
+          "implementation": "planned"
+        }
+      ],
+      "recovery": "Read appointment state; never approve unquoted repairs",
+      "evidence": [
+        "Scoped source observations",
+        "Exact material action and applicable authority",
+        "Provider-confirmed operation outcome",
+        "Canonical receipt for executed protected actions"
+      ],
+      "maturity": {
+        "implementation": "planned",
+        "local": "not_verified",
+        "deployed": "not_verified",
+        "provider": "not_verified",
+        "acceptanceJourney": null
+      }
+    },
+    {
+      "id": "learning",
+      "version": "1.0.0",
+      "name": "Learning and courses",
+      "owner": {
+        "kind": "individual",
+        "binding": "authenticated_principal"
+      },
+      "audience": "consumer",
+      "family": "personal_assistant",
+      "category": "personal-productivity",
+      "example": "Find a coding course under $200.",
+      "inputs": {
+        "required": [
+          "subject",
+          "level",
+          "format",
+          "budget"
+        ],
+        "accepted": [],
+        "planned": [
+          "text",
+          "link"
+        ]
+      },
+      "agentRoles": [
+        {
+          "role": "personal_assistant",
+          "permittedTools": []
+        }
+      ],
+      "providers": [
+        "course_provider"
+      ],
+      "resources": [
+        "course",
+        "provider",
+        "dates",
+        "fees",
+        "refund terms"
+      ],
+      "consent": "Research is read-only; approve enrollment and fees separately",
+      "composition": [],
+      "authority": {
+        "mode": "canonical_signed_intent",
+        "approval": "policy_required",
+        "runtime": "/v1/runtime/evaluations",
+        "delegation": "monotonic_signed_child_intents",
+        "executionBoundary": "protected_destination"
+      },
+      "operations": [
+        {
+          "id": "prepare",
+          "effect": "read_only",
+          "implementation": "planned"
+        },
+        {
+          "id": "execute",
+          "effect": "protected_action",
+          "implementation": "planned"
+        }
+      ],
+      "recovery": "Reconcile enrollment before retrying",
+      "evidence": [
+        "Scoped source observations",
+        "Exact material action and applicable authority",
+        "Provider-confirmed operation outcome",
+        "Canonical receipt for executed protected actions"
+      ],
+      "maturity": {
+        "implementation": "planned",
+        "local": "not_verified",
+        "deployed": "not_verified",
+        "provider": "not_verified",
+        "acceptanceJourney": null
+      }
+    },
+    {
+      "id": "personal-scheduling",
+      "version": "1.0.0",
+      "name": "Personal scheduling",
+      "owner": {
+        "kind": "individual",
+        "binding": "authenticated_principal"
+      },
+      "audience": "consumer",
+      "family": "personal_assistant",
+      "category": "personal-productivity",
+      "example": "Arrange a meeting with my team.",
+      "inputs": {
+        "required": [
+          "attendees",
+          "consents",
+          "time windows",
+          "resources"
+        ],
+        "accepted": [],
+        "planned": [
+          "text",
+          "link"
+        ]
+      },
+      "agentRoles": [
+        {
+          "role": "personal_assistant",
+          "permittedTools": []
+        }
+      ],
+      "providers": [
+        "calendar"
+      ],
+      "resources": [
+        "calendar",
+        "attendees",
+        "times",
+        "rooms",
+        "disclosed content"
+      ],
+      "consent": "Check invitation and attendee policy before publishing",
+      "composition": [],
+      "authority": {
+        "mode": "canonical_signed_intent",
+        "approval": "policy_required",
+        "runtime": "/v1/runtime/evaluations",
+        "delegation": "monotonic_signed_child_intents",
+        "executionBoundary": "protected_destination"
+      },
+      "operations": [
+        {
+          "id": "prepare",
+          "effect": "read_only",
+          "implementation": "planned"
+        },
+        {
+          "id": "execute",
+          "effect": "protected_action",
+          "implementation": "planned"
+        }
+      ],
+      "recovery": "Reconcile event ID; avoid duplicate invitations",
+      "evidence": [
+        "Scoped source observations",
+        "Exact material action and applicable authority",
+        "Provider-confirmed operation outcome",
+        "Canonical receipt for executed protected actions"
+      ],
+      "maturity": {
+        "implementation": "planned",
+        "local": "not_verified",
+        "deployed": "not_verified",
+        "provider": "not_verified",
+        "acceptanceJourney": null
+      }
+    },
+    {
+      "id": "bills",
+      "version": "1.0.0",
+      "name": "Bill payment",
+      "owner": {
+        "kind": "individual",
+        "binding": "authenticated_principal"
+      },
+      "audience": "consumer",
+      "family": "personal_assistant",
+      "category": "financial-operations",
+      "example": "Pay my internet bill before it is due.",
+      "inputs": {
+        "required": [
+          "bill ID",
+          "biller",
+          "due date",
+          "owner"
+        ],
+        "accepted": [],
+        "planned": [
+          "text",
+          "link"
+        ]
+      },
+      "agentRoles": [
+        {
+          "role": "personal_assistant",
+          "permittedTools": []
+        }
+      ],
+      "providers": [
+        "biller_provider",
+        "payment_provider"
+      ],
+      "resources": [
+        "bill",
+        "biller",
+        "owner",
+        "amount",
+        "currency",
+        "payment method",
+        "due date"
+      ],
+      "consent": "Approve exact bill or use a matching signed standing authority",
+      "composition": [],
+      "authority": {
+        "mode": "canonical_signed_intent",
+        "approval": "policy_required",
+        "runtime": "/v1/runtime/evaluations",
+        "delegation": "monotonic_signed_child_intents",
+        "executionBoundary": "protected_destination"
+      },
+      "operations": [
+        {
+          "id": "prepare",
+          "effect": "read_only",
+          "implementation": "planned"
+        },
+        {
+          "id": "execute",
+          "effect": "protected_action",
+          "implementation": "planned"
+        }
+      ],
+      "recovery": "Read bill and payment state; never pay again from a timeout",
+      "evidence": [
+        "Scoped source observations",
+        "Exact material action and applicable authority",
+        "Provider-confirmed operation outcome",
+        "Canonical receipt for executed protected actions"
+      ],
+      "maturity": {
+        "implementation": "planned",
+        "local": "not_verified",
+        "deployed": "not_verified",
+        "provider": "not_verified",
+        "acceptanceJourney": null
+      }
+    },
+    {
+      "id": "relocation",
+      "version": "1.0.0",
+      "name": "Relocation quotes",
+      "owner": {
+        "kind": "individual",
+        "binding": "authenticated_principal"
+      },
+      "audience": "consumer",
+      "family": "personal_assistant",
+      "category": "personal-productivity",
+      "example": "Compare movers and request quotes.",
+      "inputs": {
+        "required": [
+          "move dates",
+          "locations",
+          "inventory",
+          "contact consent"
+        ],
+        "accepted": [],
+        "planned": [
+          "text",
+          "link"
+        ]
+      },
+      "agentRoles": [
+        {
+          "role": "personal_assistant",
+          "permittedTools": []
+        }
+      ],
+      "providers": [
+        "moving_provider"
+      ],
+      "resources": [
+        "provider",
+        "quote scope",
+        "disclosed details",
+        "recipient"
+      ],
+      "consent": "Research is read-only; consent to exact quote requests",
+      "composition": [],
+      "authority": {
+        "mode": "canonical_signed_intent",
+        "approval": "policy_required",
+        "runtime": "/v1/runtime/evaluations",
+        "delegation": "monotonic_signed_child_intents",
+        "executionBoundary": "protected_destination"
+      },
+      "operations": [
+        {
+          "id": "prepare",
+          "effect": "read_only",
+          "implementation": "planned"
+        },
+        {
+          "id": "execute",
+          "effect": "protected_action",
+          "implementation": "planned"
+        }
+      ],
+      "recovery": "Reconcile sent requests and redact personal information",
+      "evidence": [
+        "Scoped source observations",
+        "Exact material action and applicable authority",
+        "Provider-confirmed operation outcome",
+        "Canonical receipt for executed protected actions"
+      ],
+      "maturity": {
+        "implementation": "planned",
+        "local": "not_verified",
+        "deployed": "not_verified",
+        "provider": "not_verified",
+        "acceptanceJourney": null
+      }
+    },
+    {
+      "id": "agentpay-purchase-authorization",
+      "version": "1.0.0",
+      "name": "Purchase authorization",
+      "owner": {
+        "kind": "tenant",
+        "binding": "authenticated_principal"
+      },
+      "audience": "enterprise",
+      "family": "agentpay",
+      "category": "financial-operations",
+      "example": "Purchase authorization",
+      "inputs": {
+        "required": [
+          "tenant",
+          "registered agent",
+          "signed intent",
+          "exact operation"
+        ],
+        "accepted": [
+          "api"
+        ],
+        "planned": [
+          "event"
+        ]
+      },
+      "agentRoles": [
+        {
+          "role": "agentpay",
+          "permittedTools": []
+        }
+      ],
+      "providers": [
+        "payment_provider"
+      ],
+      "resources": [
+        "exact purchase",
+        "merchant",
+        "owner",
+        "amount",
+        "currency",
+        "version"
+      ],
+      "consent": "Canonical intent and exact final-order approval",
+      "composition": [],
+      "authority": {
+        "mode": "canonical_signed_intent",
+        "approval": "policy_required",
+        "runtime": "/v1/runtime/evaluations",
+        "delegation": "monotonic_signed_child_intents",
+        "executionBoundary": "protected_destination"
+      },
+      "operations": [
+        {
+          "id": "prepare",
+          "effect": "read_only",
+          "implementation": "local_reference"
+        },
+        {
+          "id": "execute",
+          "effect": "protected_action",
+          "implementation": "local_reference"
+        }
+      ],
+      "recovery": "Reconcile the original provider operation before retrying an uncertain effect; compensation requires separate authority.",
+      "evidence": [
+        "Scoped source observations",
+        "Exact material action and applicable authority",
+        "Provider-confirmed operation outcome",
+        "Canonical receipt for executed protected actions"
+      ],
+      "maturity": {
+        "implementation": "local_reference",
+        "local": "tested",
+        "deployed": "not_verified",
+        "provider": "not_verified",
+        "acceptanceJourney": "agentpay-capture"
+      }
+    },
+    {
+      "id": "agentpay-supplier-payment",
+      "version": "1.0.0",
+      "name": "Supplier payment",
+      "owner": {
+        "kind": "tenant",
+        "binding": "authenticated_principal"
+      },
+      "audience": "enterprise",
+      "family": "agentpay",
+      "category": "financial-operations",
+      "example": "Supplier payment",
+      "inputs": {
+        "required": [
+          "tenant",
+          "registered agent",
+          "signed intent",
+          "exact operation"
+        ],
+        "accepted": [],
+        "planned": [
+          "api",
+          "event"
+        ]
+      },
+      "agentRoles": [
+        {
+          "role": "agentpay",
+          "permittedTools": []
+        }
+      ],
+      "providers": [
+        "payment_provider"
+      ],
+      "resources": [
+        "supplier",
+        "invoice",
+        "amount",
+        "currency",
+        "destination"
+      ],
+      "consent": "Canonical intent and payment policy",
+      "composition": [],
+      "authority": {
+        "mode": "canonical_signed_intent",
+        "approval": "policy_required",
+        "runtime": "/v1/runtime/evaluations",
+        "delegation": "monotonic_signed_child_intents",
+        "executionBoundary": "protected_destination"
+      },
+      "operations": [
+        {
+          "id": "prepare",
+          "effect": "read_only",
+          "implementation": "planned"
+        },
+        {
+          "id": "execute",
+          "effect": "protected_action",
+          "implementation": "planned"
+        }
+      ],
+      "recovery": "Reconcile the original provider operation before retrying an uncertain effect; compensation requires separate authority.",
+      "evidence": [
+        "Scoped source observations",
+        "Exact material action and applicable authority",
+        "Provider-confirmed operation outcome",
+        "Canonical receipt for executed protected actions"
+      ],
+      "maturity": {
+        "implementation": "planned",
+        "local": "not_verified",
+        "deployed": "not_verified",
+        "provider": "not_verified",
+        "acceptanceJourney": null
+      }
+    },
+    {
+      "id": "agentpay-recurring-purchases",
+      "version": "1.0.0",
+      "name": "Recurring authorized purchases",
+      "owner": {
+        "kind": "tenant",
+        "binding": "authenticated_principal"
+      },
+      "audience": "enterprise",
+      "family": "agentpay",
+      "category": "financial-operations",
+      "example": "Recurring authorized purchases",
+      "inputs": {
+        "required": [
+          "tenant",
+          "registered agent",
+          "signed intent",
+          "exact operation"
+        ],
+        "accepted": [],
+        "planned": [
+          "api",
+          "event"
+        ]
+      },
+      "agentRoles": [
+        {
+          "role": "agentpay",
+          "permittedTools": []
+        }
+      ],
+      "providers": [
+        "merchant_orders",
+        "payment_provider"
+      ],
+      "resources": [
+        "merchant",
+        "items",
+        "per-action and cumulative limits",
+        "expiry"
+      ],
+      "consent": "Explicit signed standing authority; approval for deviations",
+      "composition": [],
+      "authority": {
+        "mode": "canonical_signed_intent",
+        "approval": "policy_required",
+        "runtime": "/v1/runtime/evaluations",
+        "delegation": "monotonic_signed_child_intents",
+        "executionBoundary": "protected_destination"
+      },
+      "operations": [
+        {
+          "id": "prepare",
+          "effect": "read_only",
+          "implementation": "planned"
+        },
+        {
+          "id": "execute",
+          "effect": "protected_action",
+          "implementation": "planned"
+        }
+      ],
+      "recovery": "Reconcile the original provider operation before retrying an uncertain effect; compensation requires separate authority.",
+      "evidence": [
+        "Scoped source observations",
+        "Exact material action and applicable authority",
+        "Provider-confirmed operation outcome",
+        "Canonical receipt for executed protected actions"
+      ],
+      "maturity": {
+        "implementation": "planned",
+        "local": "not_verified",
+        "deployed": "not_verified",
+        "provider": "not_verified",
+        "acceptanceJourney": null
+      }
+    },
+    {
+      "id": "agentpay-refund",
+      "version": "1.0.0",
+      "name": "Refund request",
+      "owner": {
+        "kind": "tenant",
+        "binding": "authenticated_principal"
+      },
+      "audience": "enterprise",
+      "family": "agentpay",
+      "category": "financial-operations",
+      "example": "Refund request",
+      "inputs": {
+        "required": [
+          "tenant",
+          "registered agent",
+          "signed intent",
+          "exact operation"
+        ],
+        "accepted": [],
+        "planned": [
+          "api",
+          "event"
+        ]
+      },
+      "agentRoles": [
+        {
+          "role": "agentpay",
+          "permittedTools": []
+        }
+      ],
+      "providers": [
+        "payment_provider"
+      ],
+      "resources": [
+        "original payment",
+        "refund owner",
+        "amount",
+        "currency"
+      ],
+      "consent": "Canonical intent and refund policy",
+      "composition": [],
+      "authority": {
+        "mode": "canonical_signed_intent",
+        "approval": "policy_required",
+        "runtime": "/v1/runtime/evaluations",
+        "delegation": "monotonic_signed_child_intents",
+        "executionBoundary": "protected_destination"
+      },
+      "operations": [
+        {
+          "id": "prepare",
+          "effect": "read_only",
+          "implementation": "planned"
+        },
+        {
+          "id": "execute",
+          "effect": "protected_action",
+          "implementation": "planned"
+        }
+      ],
+      "recovery": "Reconcile the original provider operation before retrying an uncertain effect; compensation requires separate authority.",
+      "evidence": [
+        "Scoped source observations",
+        "Exact material action and applicable authority",
+        "Provider-confirmed operation outcome",
+        "Canonical receipt for executed protected actions"
+      ],
+      "maturity": {
+        "implementation": "planned",
+        "local": "not_verified",
+        "deployed": "not_verified",
+        "provider": "not_verified",
+        "acceptanceJourney": null
+      }
+    },
+    {
+      "id": "agentpay-payment-reconciliation",
+      "version": "1.0.0",
+      "name": "Payment reconciliation",
+      "owner": {
+        "kind": "tenant",
+        "binding": "authenticated_principal"
+      },
+      "audience": "enterprise",
+      "family": "agentpay",
+      "category": "financial-operations",
+      "example": "Payment reconciliation",
+      "inputs": {
+        "required": [
+          "tenant",
+          "registered agent",
+          "signed intent",
+          "exact operation"
+        ],
+        "accepted": [],
+        "planned": [
+          "api",
+          "event"
+        ]
+      },
+      "agentRoles": [
+        {
+          "role": "agentpay",
+          "permittedTools": []
+        }
+      ],
+      "providers": [
+        "payment_provider"
+      ],
+      "resources": [
+        "original order",
+        "attempt",
+        "provider observation",
+        "receipt"
+      ],
+      "consent": "Read-only reconciliation; no second capture",
+      "composition": [],
+      "authority": {
+        "mode": "canonical_signed_intent",
+        "approval": "policy_required",
+        "runtime": "/v1/runtime/evaluations",
+        "delegation": "monotonic_signed_child_intents",
+        "executionBoundary": "protected_destination"
+      },
+      "operations": [
+        {
+          "id": "prepare",
+          "effect": "read_only",
+          "implementation": "planned"
+        }
+      ],
+      "recovery": "Reconcile the original provider operation before retrying an uncertain effect; compensation requires separate authority.",
+      "evidence": [
+        "Scoped source observations",
+        "Exact material action and applicable authority",
+        "Provider-confirmed operation outcome",
+        "Canonical receipt for executed protected actions"
+      ],
+      "maturity": {
+        "implementation": "planned",
+        "local": "not_verified",
+        "deployed": "not_verified",
+        "provider": "not_verified",
+        "acceptanceJourney": null
+      }
+    },
+    {
+      "id": "finance-invoice-reconciliation",
+      "version": "1.0.0",
+      "name": "Invoice reconciliation",
+      "owner": {
+        "kind": "tenant",
+        "binding": "authenticated_principal"
+      },
+      "audience": "enterprise",
+      "family": "finance",
+      "category": "financial-operations",
+      "example": "Invoice reconciliation",
+      "inputs": {
+        "required": [
+          "tenant",
+          "registered agent",
+          "signed intent",
+          "exact operation"
+        ],
+        "accepted": [],
+        "planned": [
+          "api",
+          "event"
+        ]
+      },
+      "agentRoles": [
+        {
+          "role": "finance",
+          "permittedTools": []
+        }
+      ],
+      "providers": [
+        "accounting"
+      ],
+      "resources": [
+        "invoice",
+        "supplier",
+        "ledger records"
+      ],
+      "consent": "Read-only unless a separately authorized correction is proposed",
+      "composition": [],
+      "authority": {
+        "mode": "canonical_signed_intent",
+        "approval": "policy_required",
+        "runtime": "/v1/runtime/evaluations",
+        "delegation": "monotonic_signed_child_intents",
+        "executionBoundary": "protected_destination"
+      },
+      "operations": [
+        {
+          "id": "prepare",
+          "effect": "read_only",
+          "implementation": "planned"
+        }
+      ],
+      "recovery": "Reconcile the original provider operation before retrying an uncertain effect; compensation requires separate authority.",
+      "evidence": [
+        "Scoped source observations",
+        "Exact material action and applicable authority",
+        "Provider-confirmed operation outcome",
+        "Canonical receipt for executed protected actions"
+      ],
+      "maturity": {
+        "implementation": "planned",
+        "local": "not_verified",
+        "deployed": "not_verified",
+        "provider": "not_verified",
+        "acceptanceJourney": null
+      }
+    },
+    {
+      "id": "finance-accounts-payable",
+      "version": "1.0.0",
+      "name": "Accounts payable review",
+      "owner": {
+        "kind": "tenant",
+        "binding": "authenticated_principal"
+      },
+      "audience": "enterprise",
+      "family": "finance",
+      "category": "financial-operations",
+      "example": "Accounts payable review",
+      "inputs": {
+        "required": [
+          "tenant",
+          "registered agent",
+          "signed intent",
+          "exact operation"
+        ],
+        "accepted": [],
+        "planned": [
+          "api",
+          "event"
+        ]
+      },
+      "agentRoles": [
+        {
+          "role": "finance",
+          "permittedTools": []
+        }
+      ],
+      "providers": [
+        "accounting"
+      ],
+      "resources": [
+        "invoices",
+        "recipient",
+        "ledger scope"
+      ],
+      "consent": "Review only; payment is a separately authorized action",
+      "composition": [],
+      "authority": {
+        "mode": "canonical_signed_intent",
+        "approval": "policy_required",
+        "runtime": "/v1/runtime/evaluations",
+        "delegation": "monotonic_signed_child_intents",
+        "executionBoundary": "protected_destination"
+      },
+      "operations": [
+        {
+          "id": "prepare",
+          "effect": "read_only",
+          "implementation": "planned"
+        }
+      ],
+      "recovery": "Reconcile the original provider operation before retrying an uncertain effect; compensation requires separate authority.",
+      "evidence": [
+        "Scoped source observations",
+        "Exact material action and applicable authority",
+        "Provider-confirmed operation outcome",
+        "Canonical receipt for executed protected actions"
+      ],
+      "maturity": {
+        "implementation": "planned",
+        "local": "not_verified",
+        "deployed": "not_verified",
+        "provider": "not_verified",
+        "acceptanceJourney": null
+      }
+    },
+    {
+      "id": "finance-expense-policy",
+      "version": "1.0.0",
+      "name": "Expense policy checks",
+      "owner": {
+        "kind": "tenant",
+        "binding": "authenticated_principal"
+      },
+      "audience": "enterprise",
+      "family": "finance",
+      "category": "financial-operations",
+      "example": "Expense policy checks",
+      "inputs": {
+        "required": [
+          "tenant",
+          "registered agent",
+          "signed intent",
+          "exact operation"
+        ],
+        "accepted": [],
+        "planned": [
+          "api",
+          "event"
+        ]
+      },
+      "agentRoles": [
+        {
+          "role": "finance",
+          "permittedTools": []
+        }
+      ],
+      "providers": [
+        "expense_provider"
+      ],
+      "resources": [
+        "employee",
+        "expense",
+        "policy version",
+        "data scope"
+      ],
+      "consent": "Read-only analysis; policy owns authority",
+      "composition": [],
+      "authority": {
+        "mode": "canonical_signed_intent",
+        "approval": "policy_required",
+        "runtime": "/v1/runtime/evaluations",
+        "delegation": "monotonic_signed_child_intents",
+        "executionBoundary": "protected_destination"
+      },
+      "operations": [
+        {
+          "id": "prepare",
+          "effect": "read_only",
+          "implementation": "planned"
+        }
+      ],
+      "recovery": "Reconcile the original provider operation before retrying an uncertain effect; compensation requires separate authority.",
+      "evidence": [
+        "Scoped source observations",
+        "Exact material action and applicable authority",
+        "Provider-confirmed operation outcome",
+        "Canonical receipt for executed protected actions"
+      ],
+      "maturity": {
+        "implementation": "planned",
+        "local": "not_verified",
+        "deployed": "not_verified",
+        "provider": "not_verified",
+        "acceptanceJourney": null
+      }
+    },
+    {
+      "id": "finance-cash-forecast",
+      "version": "1.0.0",
+      "name": "Cash forecasting",
+      "owner": {
+        "kind": "tenant",
+        "binding": "authenticated_principal"
+      },
+      "audience": "enterprise",
+      "family": "finance",
+      "category": "financial-operations",
+      "example": "Cash forecasting",
+      "inputs": {
+        "required": [
+          "tenant",
+          "registered agent",
+          "signed intent",
+          "exact operation"
+        ],
+        "accepted": [],
+        "planned": [
+          "api",
+          "event"
+        ]
+      },
+      "agentRoles": [
+        {
+          "role": "finance",
+          "permittedTools": []
+        }
+      ],
+      "providers": [
+        "accounting"
+      ],
+      "resources": [
+        "accounts",
+        "period",
+        "classification",
+        "record limit"
+      ],
+      "consent": "Read-only; predictions are not payment authority",
+      "composition": [],
+      "authority": {
+        "mode": "canonical_signed_intent",
+        "approval": "policy_required",
+        "runtime": "/v1/runtime/evaluations",
+        "delegation": "monotonic_signed_child_intents",
+        "executionBoundary": "protected_destination"
+      },
+      "operations": [
+        {
+          "id": "prepare",
+          "effect": "read_only",
+          "implementation": "planned"
+        }
+      ],
+      "recovery": "Reconcile the original provider operation before retrying an uncertain effect; compensation requires separate authority.",
+      "evidence": [
+        "Scoped source observations",
+        "Exact material action and applicable authority",
+        "Provider-confirmed operation outcome",
+        "Canonical receipt for executed protected actions"
+      ],
+      "maturity": {
+        "implementation": "planned",
+        "local": "not_verified",
+        "deployed": "not_verified",
+        "provider": "not_verified",
+        "acceptanceJourney": null
+      }
+    },
+    {
+      "id": "finance-accounting-entry",
+      "version": "1.0.0",
+      "name": "Authorized accounting entries",
+      "owner": {
+        "kind": "tenant",
+        "binding": "authenticated_principal"
+      },
+      "audience": "enterprise",
+      "family": "finance",
+      "category": "financial-operations",
+      "example": "Authorized accounting entries",
+      "inputs": {
+        "required": [
+          "tenant",
+          "registered agent",
+          "signed intent",
+          "exact operation"
+        ],
+        "accepted": [],
+        "planned": [
+          "api",
+          "event"
+        ]
+      },
+      "agentRoles": [
+        {
+          "role": "finance",
+          "permittedTools": []
+        }
+      ],
+      "providers": [
+        "accounting"
+      ],
+      "resources": [
+        "balanced entry",
+        "accounts",
+        "period",
+        "amount",
+        "version"
+      ],
+      "consent": "Canonical intent and required posting approval",
+      "composition": [],
+      "authority": {
+        "mode": "canonical_signed_intent",
+        "approval": "policy_required",
+        "runtime": "/v1/runtime/evaluations",
+        "delegation": "monotonic_signed_child_intents",
+        "executionBoundary": "protected_destination"
+      },
+      "operations": [
+        {
+          "id": "prepare",
+          "effect": "read_only",
+          "implementation": "planned"
+        },
+        {
+          "id": "execute",
+          "effect": "protected_action",
+          "implementation": "planned"
+        }
+      ],
+      "recovery": "Reconcile the original provider operation before retrying an uncertain effect; compensation requires separate authority.",
+      "evidence": [
+        "Scoped source observations",
+        "Exact material action and applicable authority",
+        "Provider-confirmed operation outcome",
+        "Canonical receipt for executed protected actions"
+      ],
+      "maturity": {
+        "implementation": "planned",
+        "local": "not_verified",
+        "deployed": "not_verified",
+        "provider": "not_verified",
+        "acceptanceJourney": null
+      }
+    },
+    {
+      "id": "banking-customer-onboarding",
+      "version": "1.0.0",
+      "name": "Customer onboarding assistance",
+      "owner": {
+        "kind": "tenant",
+        "binding": "authenticated_principal"
+      },
+      "audience": "enterprise",
+      "family": "banking",
+      "category": "financial-operations",
+      "example": "Customer onboarding assistance",
+      "inputs": {
+        "required": [
+          "tenant",
+          "registered agent",
+          "signed intent",
+          "exact operation"
+        ],
+        "accepted": [],
+        "planned": [
+          "api",
+          "event"
+        ]
+      },
+      "agentRoles": [
+        {
+          "role": "banking",
+          "permittedTools": []
+        }
+      ],
+      "providers": [
+        "core_banking"
+      ],
+      "resources": [
+        "customer identity",
+        "consent",
+        "document scope"
+      ],
+      "consent": "No account activation from a model assessment",
+      "composition": [],
+      "authority": {
+        "mode": "canonical_signed_intent",
+        "approval": "policy_required",
+        "runtime": "/v1/runtime/evaluations",
+        "delegation": "monotonic_signed_child_intents",
+        "executionBoundary": "protected_destination"
+      },
+      "operations": [
+        {
+          "id": "prepare",
+          "effect": "read_only",
+          "implementation": "planned"
+        }
+      ],
+      "recovery": "Reconcile the original provider operation before retrying an uncertain effect; compensation requires separate authority.",
+      "evidence": [
+        "Scoped source observations",
+        "Exact material action and applicable authority",
+        "Provider-confirmed operation outcome",
+        "Canonical receipt for executed protected actions"
+      ],
+      "maturity": {
+        "implementation": "planned",
+        "local": "not_verified",
+        "deployed": "not_verified",
+        "provider": "not_verified",
+        "acceptanceJourney": null
+      }
+    },
+    {
+      "id": "banking-account-servicing",
+      "version": "1.0.0",
+      "name": "Account servicing",
+      "owner": {
+        "kind": "tenant",
+        "binding": "authenticated_principal"
+      },
+      "audience": "enterprise",
+      "family": "banking",
+      "category": "financial-operations",
+      "example": "Account servicing",
+      "inputs": {
+        "required": [
+          "tenant",
+          "registered agent",
+          "signed intent",
+          "exact operation"
+        ],
+        "accepted": [],
+        "planned": [
+          "api",
+          "event"
+        ]
+      },
+      "agentRoles": [
+        {
+          "role": "banking",
+          "permittedTools": []
+        }
+      ],
+      "providers": [
+        "core_banking"
+      ],
+      "resources": [
+        "customer",
+        "account",
+        "field",
+        "record version"
+      ],
+      "consent": "Canonical intent and required customer/operator approval",
+      "composition": [],
+      "authority": {
+        "mode": "canonical_signed_intent",
+        "approval": "policy_required",
+        "runtime": "/v1/runtime/evaluations",
+        "delegation": "monotonic_signed_child_intents",
+        "executionBoundary": "protected_destination"
+      },
+      "operations": [
+        {
+          "id": "prepare",
+          "effect": "read_only",
+          "implementation": "planned"
+        },
+        {
+          "id": "execute",
+          "effect": "protected_action",
+          "implementation": "planned"
+        }
+      ],
+      "recovery": "Reconcile the original provider operation before retrying an uncertain effect; compensation requires separate authority.",
+      "evidence": [
+        "Scoped source observations",
+        "Exact material action and applicable authority",
+        "Provider-confirmed operation outcome",
+        "Canonical receipt for executed protected actions"
+      ],
+      "maturity": {
+        "implementation": "planned",
+        "local": "not_verified",
+        "deployed": "not_verified",
+        "provider": "not_verified",
+        "acceptanceJourney": null
+      }
+    },
+    {
+      "id": "banking-loan-documents",
+      "version": "1.0.0",
+      "name": "Loan document processing",
+      "owner": {
+        "kind": "tenant",
+        "binding": "authenticated_principal"
+      },
+      "audience": "enterprise",
+      "family": "banking",
+      "category": "financial-operations",
+      "example": "Loan document processing",
+      "inputs": {
+        "required": [
+          "tenant",
+          "registered agent",
+          "signed intent",
+          "exact operation"
+        ],
+        "accepted": [],
+        "planned": [
+          "api",
+          "event"
+        ]
+      },
+      "agentRoles": [
+        {
+          "role": "banking",
+          "permittedTools": []
+        }
+      ],
+      "providers": [
+        "core_banking"
+      ],
+      "resources": [
+        "customer",
+        "document IDs",
+        "classification",
+        "disclosure boundary"
+      ],
+      "consent": "Read-only processing; no lending decision authority",
+      "composition": [],
+      "authority": {
+        "mode": "canonical_signed_intent",
+        "approval": "policy_required",
+        "runtime": "/v1/runtime/evaluations",
+        "delegation": "monotonic_signed_child_intents",
+        "executionBoundary": "protected_destination"
+      },
+      "operations": [
+        {
+          "id": "prepare",
+          "effect": "read_only",
+          "implementation": "planned"
+        }
+      ],
+      "recovery": "Reconcile the original provider operation before retrying an uncertain effect; compensation requires separate authority.",
+      "evidence": [
+        "Scoped source observations",
+        "Exact material action and applicable authority",
+        "Provider-confirmed operation outcome",
+        "Canonical receipt for executed protected actions"
+      ],
+      "maturity": {
+        "implementation": "planned",
+        "local": "not_verified",
+        "deployed": "not_verified",
+        "provider": "not_verified",
+        "acceptanceJourney": null
+      }
+    },
+    {
+      "id": "banking-payment-exception",
+      "version": "1.0.0",
+      "name": "Payment exception investigation",
+      "owner": {
+        "kind": "tenant",
+        "binding": "authenticated_principal"
+      },
+      "audience": "enterprise",
+      "family": "banking",
+      "category": "financial-operations",
+      "example": "Payment exception investigation",
+      "inputs": {
+        "required": [
+          "tenant",
+          "registered agent",
+          "signed intent",
+          "exact operation"
+        ],
+        "accepted": [],
+        "planned": [
+          "api",
+          "event"
+        ]
+      },
+      "agentRoles": [
+        {
+          "role": "banking",
+          "permittedTools": []
+        }
+      ],
+      "providers": [
+        "core_banking"
+      ],
+      "resources": [
+        "payment IDs",
+        "permitted records",
+        "case"
+      ],
+      "consent": "Read-only investigation; corrective payments separate",
+      "composition": [],
+      "authority": {
+        "mode": "canonical_signed_intent",
+        "approval": "policy_required",
+        "runtime": "/v1/runtime/evaluations",
+        "delegation": "monotonic_signed_child_intents",
+        "executionBoundary": "protected_destination"
+      },
+      "operations": [
+        {
+          "id": "prepare",
+          "effect": "read_only",
+          "implementation": "planned"
+        }
+      ],
+      "recovery": "Reconcile the original provider operation before retrying an uncertain effect; compensation requires separate authority.",
+      "evidence": [
+        "Scoped source observations",
+        "Exact material action and applicable authority",
+        "Provider-confirmed operation outcome",
+        "Canonical receipt for executed protected actions"
+      ],
+      "maturity": {
+        "implementation": "planned",
+        "local": "not_verified",
+        "deployed": "not_verified",
+        "provider": "not_verified",
+        "acceptanceJourney": null
+      }
+    },
+    {
+      "id": "banking-compliance-evidence",
+      "version": "1.0.0",
+      "name": "Compliance evidence preparation",
+      "owner": {
+        "kind": "tenant",
+        "binding": "authenticated_principal"
+      },
+      "audience": "enterprise",
+      "family": "banking",
+      "category": "financial-operations",
+      "example": "Compliance evidence preparation",
+      "inputs": {
+        "required": [
+          "tenant",
+          "registered agent",
+          "signed intent",
+          "exact operation"
+        ],
+        "accepted": [],
+        "planned": [
+          "api",
+          "event"
+        ]
+      },
+      "agentRoles": [
+        {
+          "role": "banking",
+          "permittedTools": []
+        }
+      ],
+      "providers": [
+        "core_banking"
+      ],
+      "resources": [
+        "case",
+        "source records",
+        "recipients",
+        "retention"
+      ],
+      "consent": "Read-only preparation; disclosure needs applicable approval",
+      "composition": [],
+      "authority": {
+        "mode": "canonical_signed_intent",
+        "approval": "policy_required",
+        "runtime": "/v1/runtime/evaluations",
+        "delegation": "monotonic_signed_child_intents",
+        "executionBoundary": "protected_destination"
+      },
+      "operations": [
+        {
+          "id": "prepare",
+          "effect": "read_only",
+          "implementation": "planned"
+        }
+      ],
+      "recovery": "Reconcile the original provider operation before retrying an uncertain effect; compensation requires separate authority.",
+      "evidence": [
+        "Scoped source observations",
+        "Exact material action and applicable authority",
+        "Provider-confirmed operation outcome",
+        "Canonical receipt for executed protected actions"
+      ],
+      "maturity": {
+        "implementation": "planned",
+        "local": "not_verified",
+        "deployed": "not_verified",
+        "provider": "not_verified",
+        "acceptanceJourney": null
+      }
+    },
+    {
+      "id": "procurement-vendor-quotes",
+      "version": "1.0.0",
+      "name": "Vendor quotations",
+      "owner": {
+        "kind": "tenant",
+        "binding": "authenticated_principal"
+      },
+      "audience": "enterprise",
+      "family": "procurement",
+      "category": "enterprise-automation",
+      "example": "Vendor quotations",
+      "inputs": {
+        "required": [
+          "tenant",
+          "registered agent",
+          "signed intent",
+          "exact operation"
+        ],
+        "accepted": [],
+        "planned": [
+          "api",
+          "event"
+        ]
+      },
+      "agentRoles": [
+        {
+          "role": "procurement",
+          "permittedTools": []
+        }
+      ],
+      "providers": [
+        "procurement_system"
+      ],
+      "resources": [
+        "vendor",
+        "quote scope",
+        "permitted disclosures"
+      ],
+      "consent": "Consent to exact quote requests",
+      "composition": [],
+      "authority": {
+        "mode": "canonical_signed_intent",
+        "approval": "policy_required",
+        "runtime": "/v1/runtime/evaluations",
+        "delegation": "monotonic_signed_child_intents",
+        "executionBoundary": "protected_destination"
+      },
+      "operations": [
+        {
+          "id": "prepare",
+          "effect": "read_only",
+          "implementation": "planned"
+        },
+        {
+          "id": "execute",
+          "effect": "protected_action",
+          "implementation": "planned"
+        }
+      ],
+      "recovery": "Reconcile the original provider operation before retrying an uncertain effect; compensation requires separate authority.",
+      "evidence": [
+        "Scoped source observations",
+        "Exact material action and applicable authority",
+        "Provider-confirmed operation outcome",
+        "Canonical receipt for executed protected actions"
+      ],
+      "maturity": {
+        "implementation": "planned",
+        "local": "not_verified",
+        "deployed": "not_verified",
+        "provider": "not_verified",
+        "acceptanceJourney": null
+      }
+    },
+    {
+      "id": "procurement-budget-validation",
+      "version": "1.0.0",
+      "name": "Budget validation",
+      "owner": {
+        "kind": "tenant",
+        "binding": "authenticated_principal"
+      },
+      "audience": "enterprise",
+      "family": "procurement",
+      "category": "enterprise-automation",
+      "example": "Budget validation",
+      "inputs": {
+        "required": [
+          "tenant",
+          "registered agent",
+          "signed intent",
+          "exact operation"
+        ],
+        "accepted": [],
+        "planned": [
+          "api",
+          "event"
+        ]
+      },
+      "agentRoles": [
+        {
+          "role": "procurement",
+          "permittedTools": []
+        }
+      ],
+      "providers": [
+        "procurement_system",
+        "accounting"
+      ],
+      "resources": [
+        "cost center",
+        "cumulative budget",
+        "quote version"
+      ],
+      "consent": "Read-only; unavailable accounting refuses execution",
+      "composition": [],
+      "authority": {
+        "mode": "canonical_signed_intent",
+        "approval": "policy_required",
+        "runtime": "/v1/runtime/evaluations",
+        "delegation": "monotonic_signed_child_intents",
+        "executionBoundary": "protected_destination"
+      },
+      "operations": [
+        {
+          "id": "prepare",
+          "effect": "read_only",
+          "implementation": "planned"
+        }
+      ],
+      "recovery": "Reconcile the original provider operation before retrying an uncertain effect; compensation requires separate authority.",
+      "evidence": [
+        "Scoped source observations",
+        "Exact material action and applicable authority",
+        "Provider-confirmed operation outcome",
+        "Canonical receipt for executed protected actions"
+      ],
+      "maturity": {
+        "implementation": "planned",
+        "local": "not_verified",
+        "deployed": "not_verified",
+        "provider": "not_verified",
+        "acceptanceJourney": null
+      }
+    },
+    {
+      "id": "procurement-purchase-order",
+      "version": "1.0.0",
+      "name": "Purchase-order approvals",
+      "owner": {
+        "kind": "tenant",
+        "binding": "authenticated_principal"
+      },
+      "audience": "enterprise",
+      "family": "procurement",
+      "category": "enterprise-automation",
+      "example": "Purchase-order approvals",
+      "inputs": {
+        "required": [
+          "tenant",
+          "registered agent",
+          "signed intent",
+          "exact operation"
+        ],
+        "accepted": [],
+        "planned": [
+          "api",
+          "event"
+        ]
+      },
+      "agentRoles": [
+        {
+          "role": "procurement",
+          "permittedTools": []
+        }
+      ],
+      "providers": [
+        "procurement_system"
+      ],
+      "resources": [
+        "supplier",
+        "items",
+        "quantity",
+        "budget",
+        "order version"
+      ],
+      "consent": "Canonical intent and purchase-order approval",
+      "composition": [],
+      "authority": {
+        "mode": "canonical_signed_intent",
+        "approval": "policy_required",
+        "runtime": "/v1/runtime/evaluations",
+        "delegation": "monotonic_signed_child_intents",
+        "executionBoundary": "protected_destination"
+      },
+      "operations": [
+        {
+          "id": "prepare",
+          "effect": "read_only",
+          "implementation": "planned"
+        },
+        {
+          "id": "execute",
+          "effect": "protected_action",
+          "implementation": "planned"
+        }
+      ],
+      "recovery": "Reconcile the original provider operation before retrying an uncertain effect; compensation requires separate authority.",
+      "evidence": [
+        "Scoped source observations",
+        "Exact material action and applicable authority",
+        "Provider-confirmed operation outcome",
+        "Canonical receipt for executed protected actions"
+      ],
+      "maturity": {
+        "implementation": "planned",
+        "local": "not_verified",
+        "deployed": "not_verified",
+        "provider": "not_verified",
+        "acceptanceJourney": null
+      }
+    },
+    {
+      "id": "procurement-contract-renewal",
+      "version": "1.0.0",
+      "name": "Contract renewal review",
+      "owner": {
+        "kind": "tenant",
+        "binding": "authenticated_principal"
+      },
+      "audience": "enterprise",
+      "family": "procurement",
+      "category": "enterprise-automation",
+      "example": "Contract renewal review",
+      "inputs": {
+        "required": [
+          "tenant",
+          "registered agent",
+          "signed intent",
+          "exact operation"
+        ],
+        "accepted": [],
+        "planned": [
+          "api",
+          "event"
+        ]
+      },
+      "agentRoles": [
+        {
+          "role": "procurement",
+          "permittedTools": []
+        }
+      ],
+      "providers": [
+        "procurement_system"
+      ],
+      "resources": [
+        "contract",
+        "version",
+        "renewal terms",
+        "fees"
+      ],
+      "consent": "Research only; renewal requires exact authorization",
+      "composition": [],
+      "authority": {
+        "mode": "canonical_signed_intent",
+        "approval": "policy_required",
+        "runtime": "/v1/runtime/evaluations",
+        "delegation": "monotonic_signed_child_intents",
+        "executionBoundary": "protected_destination"
+      },
+      "operations": [
+        {
+          "id": "prepare",
+          "effect": "read_only",
+          "implementation": "planned"
+        }
+      ],
+      "recovery": "Reconcile the original provider operation before retrying an uncertain effect; compensation requires separate authority.",
+      "evidence": [
+        "Scoped source observations",
+        "Exact material action and applicable authority",
+        "Provider-confirmed operation outcome",
+        "Canonical receipt for executed protected actions"
+      ],
+      "maturity": {
+        "implementation": "planned",
+        "local": "not_verified",
+        "deployed": "not_verified",
+        "provider": "not_verified",
+        "acceptanceJourney": null
+      }
+    },
+    {
+      "id": "procurement-supplier-onboarding",
+      "version": "1.0.0",
+      "name": "Supplier onboarding",
+      "owner": {
+        "kind": "tenant",
+        "binding": "authenticated_principal"
+      },
+      "audience": "enterprise",
+      "family": "procurement",
+      "category": "enterprise-automation",
+      "example": "Supplier onboarding",
+      "inputs": {
+        "required": [
+          "tenant",
+          "registered agent",
+          "signed intent",
+          "exact operation"
+        ],
+        "accepted": [],
+        "planned": [
+          "api",
+          "event"
+        ]
+      },
+      "agentRoles": [
+        {
+          "role": "procurement",
+          "permittedTools": []
+        }
+      ],
+      "providers": [
+        "procurement_system"
+      ],
+      "resources": [
+        "supplier",
+        "beneficiary details",
+        "verification scope"
+      ],
+      "consent": "Canonical intent and independent beneficiary verification",
+      "composition": [],
+      "authority": {
+        "mode": "canonical_signed_intent",
+        "approval": "policy_required",
+        "runtime": "/v1/runtime/evaluations",
+        "delegation": "monotonic_signed_child_intents",
+        "executionBoundary": "protected_destination"
+      },
+      "operations": [
+        {
+          "id": "prepare",
+          "effect": "read_only",
+          "implementation": "planned"
+        },
+        {
+          "id": "execute",
+          "effect": "protected_action",
+          "implementation": "planned"
+        }
+      ],
+      "recovery": "Reconcile the original provider operation before retrying an uncertain effect; compensation requires separate authority.",
+      "evidence": [
+        "Scoped source observations",
+        "Exact material action and applicable authority",
+        "Provider-confirmed operation outcome",
+        "Canonical receipt for executed protected actions"
+      ],
+      "maturity": {
+        "implementation": "planned",
+        "local": "not_verified",
+        "deployed": "not_verified",
+        "provider": "not_verified",
+        "acceptanceJourney": null
+      }
+    },
+    {
+      "id": "security-signin-investigation",
+      "version": "1.0.0",
+      "name": "Suspicious sign-in investigation",
+      "owner": {
+        "kind": "tenant",
+        "binding": "authenticated_principal"
+      },
+      "audience": "enterprise",
+      "family": "security",
+      "category": "security-it",
+      "example": "Suspicious sign-in investigation",
+      "inputs": {
+        "required": [
+          "tenant",
+          "registered agent",
+          "signed intent",
+          "exact operation"
+        ],
+        "accepted": [],
+        "planned": [
+          "api",
+          "event"
+        ]
+      },
+      "agentRoles": [
+        {
+          "role": "security",
+          "permittedTools": []
+        }
+      ],
+      "providers": [
+        "identity_provider"
+      ],
+      "resources": [
+        "tenant",
+        "session IDs",
+        "record scope"
+      ],
+      "consent": "Read-only; model score cannot grant access",
+      "composition": [],
+      "authority": {
+        "mode": "canonical_signed_intent",
+        "approval": "policy_required",
+        "runtime": "/v1/runtime/evaluations",
+        "delegation": "monotonic_signed_child_intents",
+        "executionBoundary": "protected_destination"
+      },
+      "operations": [
+        {
+          "id": "prepare",
+          "effect": "read_only",
+          "implementation": "planned"
+        }
+      ],
+      "recovery": "Reconcile the original provider operation before retrying an uncertain effect; compensation requires separate authority.",
+      "evidence": [
+        "Scoped source observations",
+        "Exact material action and applicable authority",
+        "Provider-confirmed operation outcome",
+        "Canonical receipt for executed protected actions"
+      ],
+      "maturity": {
+        "implementation": "planned",
+        "local": "not_verified",
+        "deployed": "not_verified",
+        "provider": "not_verified",
+        "acceptanceJourney": null
+      }
+    },
+    {
+      "id": "security-access-certification",
+      "version": "1.0.0",
+      "name": "Access certification",
+      "owner": {
+        "kind": "tenant",
+        "binding": "authenticated_principal"
+      },
+      "audience": "enterprise",
+      "family": "security",
+      "category": "security-it",
+      "example": "Access certification",
+      "inputs": {
+        "required": [
+          "tenant",
+          "registered agent",
+          "signed intent",
+          "exact operation"
+        ],
+        "accepted": [],
+        "planned": [
+          "api",
+          "event"
+        ]
+      },
+      "agentRoles": [
+        {
+          "role": "security",
+          "permittedTools": []
+        }
+      ],
+      "providers": [
+        "identity_provider"
+      ],
+      "resources": [
+        "principal",
+        "resource",
+        "entitlement version"
+      ],
+      "consent": "Read-only review; entitlement changes require policy",
+      "composition": [],
+      "authority": {
+        "mode": "canonical_signed_intent",
+        "approval": "policy_required",
+        "runtime": "/v1/runtime/evaluations",
+        "delegation": "monotonic_signed_child_intents",
+        "executionBoundary": "protected_destination"
+      },
+      "operations": [
+        {
+          "id": "prepare",
+          "effect": "read_only",
+          "implementation": "planned"
+        }
+      ],
+      "recovery": "Reconcile the original provider operation before retrying an uncertain effect; compensation requires separate authority.",
+      "evidence": [
+        "Scoped source observations",
+        "Exact material action and applicable authority",
+        "Provider-confirmed operation outcome",
+        "Canonical receipt for executed protected actions"
+      ],
+      "maturity": {
+        "implementation": "planned",
+        "local": "not_verified",
+        "deployed": "not_verified",
+        "provider": "not_verified",
+        "acceptanceJourney": null
+      }
+    },
+    {
+      "id": "security-agent-action-review",
+      "version": "1.0.0",
+      "name": "Unauthorized agent-action review",
+      "owner": {
+        "kind": "tenant",
+        "binding": "authenticated_principal"
+      },
+      "audience": "enterprise",
+      "family": "security",
+      "category": "security-it",
+      "example": "Unauthorized agent-action review",
+      "inputs": {
+        "required": [
+          "tenant",
+          "registered agent",
+          "signed intent",
+          "exact operation"
+        ],
+        "accepted": [],
+        "planned": [
+          "api",
+          "event"
+        ]
+      },
+      "agentRoles": [
+        {
+          "role": "security",
+          "permittedTools": []
+        }
+      ],
+      "providers": [
+        "runtime_evidence"
+      ],
+      "resources": [
+        "agent",
+        "decision",
+        "grant",
+        "receipt scope"
+      ],
+      "consent": "Read-only evidence; do not reinterpret a denial",
+      "composition": [],
+      "authority": {
+        "mode": "canonical_signed_intent",
+        "approval": "policy_required",
+        "runtime": "/v1/runtime/evaluations",
+        "delegation": "monotonic_signed_child_intents",
+        "executionBoundary": "protected_destination"
+      },
+      "operations": [
+        {
+          "id": "prepare",
+          "effect": "read_only",
+          "implementation": "planned"
+        }
+      ],
+      "recovery": "Reconcile the original provider operation before retrying an uncertain effect; compensation requires separate authority.",
+      "evidence": [
+        "Scoped source observations",
+        "Exact material action and applicable authority",
+        "Provider-confirmed operation outcome",
+        "Canonical receipt for executed protected actions"
+      ],
+      "maturity": {
+        "implementation": "planned",
+        "local": "not_verified",
+        "deployed": "not_verified",
+        "provider": "not_verified",
+        "acceptanceJourney": null
+      }
+    },
+    {
+      "id": "security-session-revocation",
+      "version": "1.0.0",
+      "name": "Scoped session revocation",
+      "owner": {
+        "kind": "tenant",
+        "binding": "authenticated_principal"
+      },
+      "audience": "enterprise",
+      "family": "security",
+      "category": "security-it",
+      "example": "Scoped session revocation",
+      "inputs": {
+        "required": [
+          "tenant",
+          "registered agent",
+          "signed intent",
+          "exact operation"
+        ],
+        "accepted": [],
+        "planned": [
+          "api",
+          "event"
+        ]
+      },
+      "agentRoles": [
+        {
+          "role": "security",
+          "permittedTools": []
+        }
+      ],
+      "providers": [
+        "identity_provider"
+      ],
+      "resources": [
+        "tenant",
+        "principal",
+        "specific session IDs"
+      ],
+      "consent": "Canonical intent and containment approval policy",
+      "composition": [],
+      "authority": {
+        "mode": "canonical_signed_intent",
+        "approval": "policy_required",
+        "runtime": "/v1/runtime/evaluations",
+        "delegation": "monotonic_signed_child_intents",
+        "executionBoundary": "protected_destination"
+      },
+      "operations": [
+        {
+          "id": "prepare",
+          "effect": "read_only",
+          "implementation": "planned"
+        },
+        {
+          "id": "execute",
+          "effect": "protected_action",
+          "implementation": "planned"
+        }
+      ],
+      "recovery": "Reconcile the original provider operation before retrying an uncertain effect; compensation requires separate authority.",
+      "evidence": [
+        "Scoped source observations",
+        "Exact material action and applicable authority",
+        "Provider-confirmed operation outcome",
+        "Canonical receipt for executed protected actions"
+      ],
+      "maturity": {
+        "implementation": "planned",
+        "local": "not_verified",
+        "deployed": "not_verified",
+        "provider": "not_verified",
+        "acceptanceJourney": null
+      }
+    },
+    {
+      "id": "security-incident-response",
+      "version": "1.0.0",
+      "name": "Incident response",
+      "owner": {
+        "kind": "tenant",
+        "binding": "authenticated_principal"
+      },
+      "audience": "enterprise",
+      "family": "security",
+      "category": "security-it",
+      "example": "Incident response",
+      "inputs": {
+        "required": [
+          "tenant",
+          "registered agent",
+          "signed intent",
+          "exact operation"
+        ],
+        "accepted": [],
+        "planned": [
+          "api",
+          "event"
+        ]
+      },
+      "agentRoles": [
+        {
+          "role": "security",
+          "permittedTools": []
+        }
+      ],
+      "providers": [
+        "identity_provider",
+        "security_tools"
+      ],
+      "resources": [
+        "incident",
+        "target resources",
+        "allowed containment actions"
+      ],
+      "consent": "Canonical intent; human signature when containment policy requires",
+      "composition": [],
+      "authority": {
+        "mode": "canonical_signed_intent",
+        "approval": "policy_required",
+        "runtime": "/v1/runtime/evaluations",
+        "delegation": "monotonic_signed_child_intents",
+        "executionBoundary": "protected_destination"
+      },
+      "operations": [
+        {
+          "id": "prepare",
+          "effect": "read_only",
+          "implementation": "planned"
+        },
+        {
+          "id": "execute",
+          "effect": "protected_action",
+          "implementation": "planned"
+        }
+      ],
+      "recovery": "Reconcile the original provider operation before retrying an uncertain effect; compensation requires separate authority.",
+      "evidence": [
+        "Scoped source observations",
+        "Exact material action and applicable authority",
+        "Provider-confirmed operation outcome",
+        "Canonical receipt for executed protected actions"
+      ],
+      "maturity": {
+        "implementation": "planned",
+        "local": "not_verified",
+        "deployed": "not_verified",
+        "provider": "not_verified",
+        "acceptanceJourney": null
+      }
+    },
+    {
+      "id": "it_operations-incident-triage",
+      "version": "1.0.0",
+      "name": "Incident triage",
+      "owner": {
+        "kind": "tenant",
+        "binding": "authenticated_principal"
+      },
+      "audience": "enterprise",
+      "family": "it_operations",
+      "category": "security-it",
+      "example": "Incident triage",
+      "inputs": {
+        "required": [
+          "tenant",
+          "registered agent",
+          "signed intent",
+          "exact operation"
+        ],
+        "accepted": [],
+        "planned": [
+          "api",
+          "event"
+        ]
+      },
+      "agentRoles": [
+        {
+          "role": "it_operations",
+          "permittedTools": []
+        }
+      ],
+      "providers": [
+        "observability"
+      ],
+      "resources": [
+        "incident",
+        "logs",
+        "classification",
+        "record count"
+      ],
+      "consent": "Read-only triage; modifications separate",
+      "composition": [],
+      "authority": {
+        "mode": "canonical_signed_intent",
+        "approval": "policy_required",
+        "runtime": "/v1/runtime/evaluations",
+        "delegation": "monotonic_signed_child_intents",
+        "executionBoundary": "protected_destination"
+      },
+      "operations": [
+        {
+          "id": "prepare",
+          "effect": "read_only",
+          "implementation": "planned"
+        }
+      ],
+      "recovery": "Reconcile the original provider operation before retrying an uncertain effect; compensation requires separate authority.",
+      "evidence": [
+        "Scoped source observations",
+        "Exact material action and applicable authority",
+        "Provider-confirmed operation outcome",
+        "Canonical receipt for executed protected actions"
+      ],
+      "maturity": {
+        "implementation": "planned",
+        "local": "not_verified",
+        "deployed": "not_verified",
+        "provider": "not_verified",
+        "acceptanceJourney": null
+      }
+    },
+    {
+      "id": "it_operations-deployment",
+      "version": "1.0.0",
+      "name": "Deployment approvals",
+      "owner": {
+        "kind": "tenant",
+        "binding": "authenticated_principal"
+      },
+      "audience": "enterprise",
+      "family": "it_operations",
+      "category": "security-it",
+      "example": "Deployment approvals",
+      "inputs": {
+        "required": [
+          "tenant",
+          "registered agent",
+          "signed intent",
+          "exact operation"
+        ],
+        "accepted": [],
+        "planned": [
+          "api",
+          "event"
+        ]
+      },
+      "agentRoles": [
+        {
+          "role": "it_operations",
+          "permittedTools": []
+        }
+      ],
+      "providers": [
+        "deployment_provider"
+      ],
+      "resources": [
+        "repository",
+        "commit",
+        "environment",
+        "artifact",
+        "version"
+      ],
+      "consent": "Canonical intent and exact deployment approval",
+      "composition": [],
+      "authority": {
+        "mode": "canonical_signed_intent",
+        "approval": "policy_required",
+        "runtime": "/v1/runtime/evaluations",
+        "delegation": "monotonic_signed_child_intents",
+        "executionBoundary": "protected_destination"
+      },
+      "operations": [
+        {
+          "id": "prepare",
+          "effect": "read_only",
+          "implementation": "planned"
+        },
+        {
+          "id": "execute",
+          "effect": "protected_action",
+          "implementation": "planned"
+        }
+      ],
+      "recovery": "Reconcile the original provider operation before retrying an uncertain effect; compensation requires separate authority.",
+      "evidence": [
+        "Scoped source observations",
+        "Exact material action and applicable authority",
+        "Provider-confirmed operation outcome",
+        "Canonical receipt for executed protected actions"
+      ],
+      "maturity": {
+        "implementation": "planned",
+        "local": "not_verified",
+        "deployed": "not_verified",
+        "provider": "not_verified",
+        "acceptanceJourney": null
+      }
+    },
+    {
+      "id": "it_operations-credential-rotation",
+      "version": "1.0.0",
+      "name": "Credential rotation",
+      "owner": {
+        "kind": "tenant",
+        "binding": "authenticated_principal"
+      },
+      "audience": "enterprise",
+      "family": "it_operations",
+      "category": "security-it",
+      "example": "Credential rotation",
+      "inputs": {
+        "required": [
+          "tenant",
+          "registered agent",
+          "signed intent",
+          "exact operation"
+        ],
+        "accepted": [
+          "api"
+        ],
+        "planned": [
+          "event"
+        ]
+      },
+      "agentRoles": [
+        {
+          "role": "it_operations",
+          "permittedTools": []
+        }
+      ],
+      "providers": [
+        "protected_credential_receiver"
+      ],
+      "resources": [
+        "resource",
+        "old and new version",
+        "region",
+        "record count"
+      ],
+      "consent": "Canonical signed intent and exact device approval",
+      "composition": [],
+      "authority": {
+        "mode": "canonical_signed_intent",
+        "approval": "policy_required",
+        "runtime": "/v1/runtime/evaluations",
+        "delegation": "monotonic_signed_child_intents",
+        "executionBoundary": "protected_destination"
+      },
+      "operations": [
+        {
+          "id": "prepare",
+          "effect": "read_only",
+          "implementation": "local_reference"
+        },
+        {
+          "id": "execute",
+          "effect": "protected_action",
+          "implementation": "local_reference"
+        }
+      ],
+      "recovery": "Reconcile the original provider operation before retrying an uncertain effect; compensation requires separate authority.",
+      "evidence": [
+        "Scoped source observations",
+        "Exact material action and applicable authority",
+        "Provider-confirmed operation outcome",
+        "Canonical receipt for executed protected actions"
+      ],
+      "maturity": {
+        "implementation": "local_reference",
+        "local": "tested",
+        "deployed": "not_verified",
+        "provider": "not_verified",
+        "acceptanceJourney": "it-credential-rotation"
+      }
+    },
+    {
+      "id": "it_operations-cloud-configuration",
+      "version": "1.0.0",
+      "name": "Cloud configuration changes",
+      "owner": {
+        "kind": "tenant",
+        "binding": "authenticated_principal"
+      },
+      "audience": "enterprise",
+      "family": "it_operations",
+      "category": "security-it",
+      "example": "Cloud configuration changes",
+      "inputs": {
+        "required": [
+          "tenant",
+          "registered agent",
+          "signed intent",
+          "exact operation"
+        ],
+        "accepted": [],
+        "planned": [
+          "api",
+          "event"
+        ]
+      },
+      "agentRoles": [
+        {
+          "role": "it_operations",
+          "permittedTools": []
+        }
+      ],
+      "providers": [
+        "cloud_provider"
+      ],
+      "resources": [
+        "account",
+        "resource",
+        "diff",
+        "region",
+        "version"
+      ],
+      "consent": "Canonical intent and change approval policy",
+      "composition": [],
+      "authority": {
+        "mode": "canonical_signed_intent",
+        "approval": "policy_required",
+        "runtime": "/v1/runtime/evaluations",
+        "delegation": "monotonic_signed_child_intents",
+        "executionBoundary": "protected_destination"
+      },
+      "operations": [
+        {
+          "id": "prepare",
+          "effect": "read_only",
+          "implementation": "planned"
+        },
+        {
+          "id": "execute",
+          "effect": "protected_action",
+          "implementation": "planned"
+        }
+      ],
+      "recovery": "Reconcile the original provider operation before retrying an uncertain effect; compensation requires separate authority.",
+      "evidence": [
+        "Scoped source observations",
+        "Exact material action and applicable authority",
+        "Provider-confirmed operation outcome",
+        "Canonical receipt for executed protected actions"
+      ],
+      "maturity": {
+        "implementation": "planned",
+        "local": "not_verified",
+        "deployed": "not_verified",
+        "provider": "not_verified",
+        "acceptanceJourney": null
+      }
+    },
+    {
+      "id": "it_operations-github-pr",
+      "version": "1.0.0",
+      "name": "GitHub pull-request workflows",
+      "owner": {
+        "kind": "tenant",
+        "binding": "authenticated_principal"
+      },
+      "audience": "enterprise",
+      "family": "it_operations",
+      "category": "security-it",
+      "example": "GitHub pull-request workflows",
+      "inputs": {
+        "required": [
+          "tenant",
+          "registered agent",
+          "signed intent",
+          "exact operation"
+        ],
+        "accepted": [],
+        "planned": [
+          "api",
+          "event"
+        ]
+      },
+      "agentRoles": [
+        {
+          "role": "it_operations",
+          "permittedTools": []
+        }
+      ],
+      "providers": [
+        "github"
+      ],
+      "resources": [
+        "repository",
+        "branch",
+        "commit",
+        "diff",
+        "recipient"
+      ],
+      "consent": "Draft is separate from publish, merge and deployment authority",
+      "composition": [],
+      "authority": {
+        "mode": "canonical_signed_intent",
+        "approval": "policy_required",
+        "runtime": "/v1/runtime/evaluations",
+        "delegation": "monotonic_signed_child_intents",
+        "executionBoundary": "protected_destination"
+      },
+      "operations": [
+        {
+          "id": "prepare",
+          "effect": "read_only",
+          "implementation": "planned"
+        },
+        {
+          "id": "execute",
+          "effect": "protected_action",
+          "implementation": "planned"
+        }
+      ],
+      "recovery": "Reconcile the original provider operation before retrying an uncertain effect; compensation requires separate authority.",
+      "evidence": [
+        "Scoped source observations",
+        "Exact material action and applicable authority",
+        "Provider-confirmed operation outcome",
+        "Canonical receipt for executed protected actions"
+      ],
+      "maturity": {
+        "implementation": "planned",
+        "local": "not_verified",
+        "deployed": "not_verified",
+        "provider": "not_verified",
+        "acceptanceJourney": null
+      }
+    },
+    {
+      "id": "sales_support-customer-inquiry",
+      "version": "1.0.0",
+      "name": "Customer inquiry handling",
+      "owner": {
+        "kind": "tenant",
+        "binding": "authenticated_principal"
+      },
+      "audience": "enterprise",
+      "family": "sales_support",
+      "category": "enterprise-automation",
+      "example": "Customer inquiry handling",
+      "inputs": {
+        "required": [
+          "tenant",
+          "registered agent",
+          "signed intent",
+          "exact operation"
+        ],
+        "accepted": [],
+        "planned": [
+          "api",
+          "event"
+        ]
+      },
+      "agentRoles": [
+        {
+          "role": "sales_support",
+          "permittedTools": []
+        }
+      ],
+      "providers": [
+        "support_system"
+      ],
+      "resources": [
+        "customer",
+        "case",
+        "records",
+        "permitted disclosures"
+      ],
+      "consent": "Read-only drafting; sending requires exact authority",
+      "composition": [],
+      "authority": {
+        "mode": "canonical_signed_intent",
+        "approval": "policy_required",
+        "runtime": "/v1/runtime/evaluations",
+        "delegation": "monotonic_signed_child_intents",
+        "executionBoundary": "protected_destination"
+      },
+      "operations": [
+        {
+          "id": "prepare",
+          "effect": "read_only",
+          "implementation": "planned"
+        },
+        {
+          "id": "execute",
+          "effect": "protected_action",
+          "implementation": "planned"
+        }
+      ],
+      "recovery": "Reconcile the original provider operation before retrying an uncertain effect; compensation requires separate authority.",
+      "evidence": [
+        "Scoped source observations",
+        "Exact material action and applicable authority",
+        "Provider-confirmed operation outcome",
+        "Canonical receipt for executed protected actions"
+      ],
+      "maturity": {
+        "implementation": "planned",
+        "local": "not_verified",
+        "deployed": "not_verified",
+        "provider": "not_verified",
+        "acceptanceJourney": null
+      }
+    },
+    {
+      "id": "sales_support-crm-update",
+      "version": "1.0.0",
+      "name": "CRM updates",
+      "owner": {
+        "kind": "tenant",
+        "binding": "authenticated_principal"
+      },
+      "audience": "enterprise",
+      "family": "sales_support",
+      "category": "enterprise-automation",
+      "example": "CRM updates",
+      "inputs": {
+        "required": [
+          "tenant",
+          "registered agent",
+          "signed intent",
+          "exact operation"
+        ],
+        "accepted": [],
+        "planned": [
+          "api",
+          "event"
+        ]
+      },
+      "agentRoles": [
+        {
+          "role": "sales_support",
+          "permittedTools": []
+        }
+      ],
+      "providers": [
+        "crm"
+      ],
+      "resources": [
+        "customer",
+        "fields",
+        "record version"
+      ],
+      "consent": "Canonical intent and data-change policy",
+      "composition": [],
+      "authority": {
+        "mode": "canonical_signed_intent",
+        "approval": "policy_required",
+        "runtime": "/v1/runtime/evaluations",
+        "delegation": "monotonic_signed_child_intents",
+        "executionBoundary": "protected_destination"
+      },
+      "operations": [
+        {
+          "id": "prepare",
+          "effect": "read_only",
+          "implementation": "planned"
+        },
+        {
+          "id": "execute",
+          "effect": "protected_action",
+          "implementation": "planned"
+        }
+      ],
+      "recovery": "Reconcile the original provider operation before retrying an uncertain effect; compensation requires separate authority.",
+      "evidence": [
+        "Scoped source observations",
+        "Exact material action and applicable authority",
+        "Provider-confirmed operation outcome",
+        "Canonical receipt for executed protected actions"
+      ],
+      "maturity": {
+        "implementation": "planned",
+        "local": "not_verified",
+        "deployed": "not_verified",
+        "provider": "not_verified",
+        "acceptanceJourney": null
+      }
+    },
+    {
+      "id": "sales_support-approved-email",
+      "version": "1.0.0",
+      "name": "Approved email and Slack responses",
+      "owner": {
+        "kind": "tenant",
+        "binding": "authenticated_principal"
+      },
+      "audience": "enterprise",
+      "family": "sales_support",
+      "category": "enterprise-automation",
+      "example": "Approved email and Slack responses",
+      "inputs": {
+        "required": [
+          "tenant",
+          "registered agent",
+          "signed intent",
+          "exact operation"
+        ],
+        "accepted": [
+          "api"
+        ],
+        "planned": [
+          "event"
+        ]
+      },
+      "agentRoles": [
+        {
+          "role": "sales_support",
+          "permittedTools": [
+            "gmail.email.send",
+            "slack.message.send"
+          ]
+        }
+      ],
+      "providers": [
+        "google",
+        "slack"
+      ],
+      "resources": [
+        "account",
+        "recipient or channel",
+        "exact content",
+        "draft digest"
+      ],
+      "consent": "Canonical signed intent and exact immutable-draft approval",
+      "composition": [],
+      "authority": {
+        "mode": "canonical_signed_intent",
+        "approval": "policy_required",
+        "runtime": "/v1/runtime/evaluations",
+        "delegation": "monotonic_signed_child_intents",
+        "executionBoundary": "protected_destination"
+      },
+      "operations": [
+        {
+          "id": "prepare",
+          "effect": "read_only",
+          "implementation": "local_reference"
+        },
+        {
+          "id": "execute",
+          "effect": "protected_action",
+          "implementation": "local_reference"
+        }
+      ],
+      "recovery": "Reconcile the original provider operation before retrying an uncertain effect; compensation requires separate authority.",
+      "evidence": [
+        "Scoped source observations",
+        "Exact material action and applicable authority",
+        "Provider-confirmed operation outcome",
+        "Canonical receipt for executed protected actions"
+      ],
+      "maturity": {
+        "implementation": "local_reference",
+        "local": "tested",
+        "deployed": "not_verified",
+        "provider": "not_verified",
+        "acceptanceJourney": "sales-support-message"
+      }
+    },
+    {
+      "id": "sales_support-ticket-routing",
+      "version": "1.0.0",
+      "name": "Support ticket routing",
+      "owner": {
+        "kind": "tenant",
+        "binding": "authenticated_principal"
+      },
+      "audience": "enterprise",
+      "family": "sales_support",
+      "category": "enterprise-automation",
+      "example": "Support ticket routing",
+      "inputs": {
+        "required": [
+          "tenant",
+          "registered agent",
+          "signed intent",
+          "exact operation"
+        ],
+        "accepted": [],
+        "planned": [
+          "api",
+          "event"
+        ]
+      },
+      "agentRoles": [
+        {
+          "role": "sales_support",
+          "permittedTools": []
+        }
+      ],
+      "providers": [
+        "support_system"
+      ],
+      "resources": [
+        "ticket",
+        "queue",
+        "owner",
+        "record version"
+      ],
+      "consent": "Canonical intent and routing policy",
+      "composition": [],
+      "authority": {
+        "mode": "canonical_signed_intent",
+        "approval": "policy_required",
+        "runtime": "/v1/runtime/evaluations",
+        "delegation": "monotonic_signed_child_intents",
+        "executionBoundary": "protected_destination"
+      },
+      "operations": [
+        {
+          "id": "prepare",
+          "effect": "read_only",
+          "implementation": "planned"
+        },
+        {
+          "id": "execute",
+          "effect": "protected_action",
+          "implementation": "planned"
+        }
+      ],
+      "recovery": "Reconcile the original provider operation before retrying an uncertain effect; compensation requires separate authority.",
+      "evidence": [
+        "Scoped source observations",
+        "Exact material action and applicable authority",
+        "Provider-confirmed operation outcome",
+        "Canonical receipt for executed protected actions"
+      ],
+      "maturity": {
+        "implementation": "planned",
+        "local": "not_verified",
+        "deployed": "not_verified",
+        "provider": "not_verified",
+        "acceptanceJourney": null
+      }
+    },
+    {
+      "id": "sales_support-support-refund",
+      "version": "1.0.0",
+      "name": "Policy-controlled support refunds",
+      "owner": {
+        "kind": "tenant",
+        "binding": "authenticated_principal"
+      },
+      "audience": "enterprise",
+      "family": "sales_support",
+      "category": "enterprise-automation",
+      "example": "Policy-controlled support refunds",
+      "inputs": {
+        "required": [
+          "tenant",
+          "registered agent",
+          "signed intent",
+          "exact operation"
+        ],
+        "accepted": [],
+        "planned": [
+          "api",
+          "event"
+        ]
+      },
+      "agentRoles": [
+        {
+          "role": "sales_support",
+          "permittedTools": []
+        }
+      ],
+      "providers": [
+        "support_system",
+        "payment_provider"
+      ],
+      "resources": [
+        "customer",
+        "order",
+        "original payment",
+        "amount",
+        "currency"
+      ],
+      "consent": "Canonical intent and exact refund approval when required",
+      "composition": [],
+      "authority": {
+        "mode": "canonical_signed_intent",
+        "approval": "policy_required",
+        "runtime": "/v1/runtime/evaluations",
+        "delegation": "monotonic_signed_child_intents",
+        "executionBoundary": "protected_destination"
+      },
+      "operations": [
+        {
+          "id": "prepare",
+          "effect": "read_only",
+          "implementation": "planned"
+        },
+        {
+          "id": "execute",
+          "effect": "protected_action",
+          "implementation": "planned"
+        }
+      ],
+      "recovery": "Reconcile the original provider operation before retrying an uncertain effect; compensation requires separate authority.",
+      "evidence": [
+        "Scoped source observations",
+        "Exact material action and applicable authority",
+        "Provider-confirmed operation outcome",
+        "Canonical receipt for executed protected actions"
+      ],
+      "maturity": {
+        "implementation": "planned",
+        "local": "not_verified",
+        "deployed": "not_verified",
+        "provider": "not_verified",
+        "acceptanceJourney": null
+      }
+    },
+    {
+      "id": "coordinated-business-trip",
+      "version": "1.0.0",
+      "name": "Business trip for ten employees",
+      "owner": {
+        "kind": "tenant",
+        "binding": "authenticated_principal"
+      },
+      "audience": "enterprise",
+      "family": "agentpay",
+      "category": "travel-events",
+      "example": "Business trip for ten employees",
+      "inputs": {
+        "required": [
+          "tenant",
+          "authenticated participants",
+          "resource plan",
+          "consents"
+        ],
+        "accepted": [],
+        "planned": [
+          "api",
+          "event"
+        ]
+      },
+      "agentRoles": [
+        {
+          "role": "travel",
+          "permittedTools": []
+        },
+        {
+          "role": "procurement",
+          "permittedTools": []
+        },
+        {
+          "role": "finance",
+          "permittedTools": []
+        },
+        {
+          "role": "agentpay",
+          "permittedTools": []
+        }
+      ],
+      "providers": [
+        "flight_inventory",
+        "lodging_inventory",
+        "procurement_system",
+        "accounting",
+        "payment_provider"
+      ],
+      "resources": [
+        "named travelers",
+        "each segment",
+        "room allocation",
+        "budget",
+        "cancellation terms"
+      ],
+      "consent": "Approval is operation-specific; a plan never grants collective authority.",
+      "composition": [
+        {
+          "id": "stage-1",
+          "role": "travel",
+          "requires": [],
+          "operation": "prepare",
+          "failurePolicy": "stop_and_reconcile"
+        },
+        {
+          "id": "stage-2",
+          "role": "procurement",
+          "requires": [
+            "stage-1"
+          ],
+          "operation": "prepare",
+          "failurePolicy": "stop_and_reconcile"
+        },
+        {
+          "id": "stage-3",
+          "role": "finance",
+          "requires": [
+            "stage-2"
+          ],
+          "operation": "prepare",
+          "failurePolicy": "stop_and_reconcile"
+        },
+        {
+          "id": "stage-4",
+          "role": "agentpay",
+          "requires": [
+            "stage-3"
+          ],
+          "operation": "protected_action",
+          "failurePolicy": "stop_and_reconcile"
+        },
+        {
+          "id": "reconcile",
+          "role": "agentpay",
+          "requires": [
+            "stage-4"
+          ],
+          "operation": "reconcile",
+          "failurePolicy": "stop_and_reconcile"
+        }
+      ],
+      "authority": {
+        "mode": "canonical_signed_intent",
+        "approval": "policy_required",
+        "runtime": "/v1/runtime/evaluations",
+        "delegation": "monotonic_signed_child_intents",
+        "executionBoundary": "protected_destination"
+      },
+      "operations": [
+        {
+          "id": "prepare",
+          "effect": "read_only",
+          "implementation": "planned"
+        },
+        {
+          "id": "execute",
+          "effect": "protected_action",
+          "implementation": "planned"
+        }
+      ],
+      "recovery": "Track each independent effect; read back each original operation. Any compensating mutation needs fresh matching authority.",
+      "evidence": [
+        "Scoped source observations",
+        "Exact material action and applicable authority",
+        "Provider-confirmed operation outcome",
+        "Canonical receipt for executed protected actions"
+      ],
+      "maturity": {
+        "implementation": "planned",
+        "local": "not_verified",
+        "deployed": "not_verified",
+        "provider": "not_verified",
+        "acceptanceJourney": null
+      }
+    },
+    {
+      "id": "coordinated-support-refund",
+      "version": "1.0.0",
+      "name": "Customer support and refund",
+      "owner": {
+        "kind": "tenant",
+        "binding": "authenticated_principal"
+      },
+      "audience": "enterprise",
+      "family": "sales_support",
+      "category": "enterprise-automation",
+      "example": "Customer support and refund",
+      "inputs": {
+        "required": [
+          "tenant",
+          "authenticated participants",
+          "resource plan",
+          "consents"
+        ],
+        "accepted": [],
+        "planned": [
+          "api",
+          "event"
+        ]
+      },
+      "agentRoles": [
+        {
+          "role": "sales_support",
+          "permittedTools": []
+        },
+        {
+          "role": "finance",
+          "permittedTools": []
+        },
+        {
+          "role": "agentpay",
+          "permittedTools": []
+        }
+      ],
+      "providers": [
+        "whatsapp_business",
+        "support_system",
+        "payment_provider"
+      ],
+      "resources": [
+        "customer",
+        "order",
+        "refund",
+        "exact reply",
+        "amount",
+        "currency"
+      ],
+      "consent": "Approval is operation-specific; a plan never grants collective authority.",
+      "composition": [
+        {
+          "id": "stage-1",
+          "role": "sales_support",
+          "requires": [],
+          "operation": "prepare",
+          "failurePolicy": "stop_and_reconcile"
+        },
+        {
+          "id": "stage-2",
+          "role": "finance",
+          "requires": [
+            "stage-1"
+          ],
+          "operation": "prepare",
+          "failurePolicy": "stop_and_reconcile"
+        },
+        {
+          "id": "stage-3",
+          "role": "agentpay",
+          "requires": [
+            "stage-2"
+          ],
+          "operation": "protected_action",
+          "failurePolicy": "stop_and_reconcile"
+        },
+        {
+          "id": "reconcile",
+          "role": "agentpay",
+          "requires": [
+            "stage-3"
+          ],
+          "operation": "reconcile",
+          "failurePolicy": "stop_and_reconcile"
+        }
+      ],
+      "authority": {
+        "mode": "canonical_signed_intent",
+        "approval": "policy_required",
+        "runtime": "/v1/runtime/evaluations",
+        "delegation": "monotonic_signed_child_intents",
+        "executionBoundary": "protected_destination"
+      },
+      "operations": [
+        {
+          "id": "prepare",
+          "effect": "read_only",
+          "implementation": "planned"
+        },
+        {
+          "id": "execute",
+          "effect": "protected_action",
+          "implementation": "planned"
+        }
+      ],
+      "recovery": "Track each independent effect; read back each original operation. Any compensating mutation needs fresh matching authority.",
+      "evidence": [
+        "Scoped source observations",
+        "Exact material action and applicable authority",
+        "Provider-confirmed operation outcome",
+        "Canonical receipt for executed protected actions"
+      ],
+      "maturity": {
+        "implementation": "planned",
+        "local": "not_verified",
+        "deployed": "not_verified",
+        "provider": "not_verified",
+        "acceptanceJourney": null
+      }
+    },
+    {
+      "id": "coordinated-incident-containment",
+      "version": "1.0.0",
+      "name": "Security incident containment",
+      "owner": {
+        "kind": "tenant",
+        "binding": "authenticated_principal"
+      },
+      "audience": "enterprise",
+      "family": "security",
+      "category": "security-it",
+      "example": "Security incident containment",
+      "inputs": {
+        "required": [
+          "tenant",
+          "authenticated participants",
+          "resource plan",
+          "consents"
+        ],
+        "accepted": [],
+        "planned": [
+          "api",
+          "event"
+        ]
+      },
+      "agentRoles": [
+        {
+          "role": "security",
+          "permittedTools": []
+        },
+        {
+          "role": "it_operations",
+          "permittedTools": []
+        }
+      ],
+      "providers": [
+        "identity_provider",
+        "security_tools"
+      ],
+      "resources": [
+        "incident",
+        "tenant",
+        "specific session",
+        "unrelated-session control"
+      ],
+      "consent": "Approval is operation-specific; a plan never grants collective authority.",
+      "composition": [
+        {
+          "id": "stage-1",
+          "role": "security",
+          "requires": [],
+          "operation": "prepare",
+          "failurePolicy": "stop_and_reconcile"
+        },
+        {
+          "id": "stage-2",
+          "role": "it_operations",
+          "requires": [
+            "stage-1"
+          ],
+          "operation": "protected_action",
+          "failurePolicy": "stop_and_reconcile"
+        },
+        {
+          "id": "reconcile",
+          "role": "it_operations",
+          "requires": [
+            "stage-2"
+          ],
+          "operation": "reconcile",
+          "failurePolicy": "stop_and_reconcile"
+        }
+      ],
+      "authority": {
+        "mode": "canonical_signed_intent",
+        "approval": "policy_required",
+        "runtime": "/v1/runtime/evaluations",
+        "delegation": "monotonic_signed_child_intents",
+        "executionBoundary": "protected_destination"
+      },
+      "operations": [
+        {
+          "id": "prepare",
+          "effect": "read_only",
+          "implementation": "planned"
+        },
+        {
+          "id": "execute",
+          "effect": "protected_action",
+          "implementation": "planned"
+        }
+      ],
+      "recovery": "Track each independent effect; read back each original operation. Any compensating mutation needs fresh matching authority.",
+      "evidence": [
+        "Scoped source observations",
+        "Exact material action and applicable authority",
+        "Provider-confirmed operation outcome",
+        "Canonical receipt for executed protected actions"
+      ],
+      "maturity": {
+        "implementation": "planned",
+        "local": "not_verified",
+        "deployed": "not_verified",
+        "provider": "not_verified",
+        "acceptanceJourney": null
+      }
+    }
+  ]
+}

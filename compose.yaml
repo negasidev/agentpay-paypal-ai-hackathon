@@ -1,0 +1,46 @@
+services:
+  database:
+    image: postgres:17-alpine
+    environment:
+      POSTGRES_USER: agentpay
+      POSTGRES_PASSWORD: local-demo-only
+      POSTGRES_DB: agentpay_hackathon_judges
+    volumes:
+      - judge-data:/var/lib/postgresql/data
+    healthcheck:
+      test: [CMD-SHELL, pg_isready -U agentpay -d agentpay_hackathon_judges]
+      interval: 2s
+      timeout: 3s
+      retries: 30
+    mem_limit: 512m
+  app:
+    build: .
+    env_file: .env.local
+    environment: &judge-environment
+      DATABASE_URL: postgresql://agentpay:local-demo-only@database:5432/agentpay_hackathon_judges
+      APP_ORIGIN: http://localhost:3006
+      AGENTPAY_CANONICAL_REQUIRED: 'false'
+      AGENTPAY_CANONICAL_LOGIN_ENABLED: 'false'
+      AGENTPAY_SESSION_API_URL: ''
+      AGENTPAY_SANDBOX_CHECKOUT_ENABLED: 'true'
+      AGENTPAY_PROTECTED_CAPTURE_ENABLED: 'false'
+    ports:
+      - 127.0.0.1:3006:3006
+    depends_on:
+      database:
+        condition: service_healthy
+    mem_limit: 1g
+    cpus: 2
+  tools:
+    profiles: [tools]
+    build:
+      context: .
+      target: build
+    env_file: .env.local
+    environment: *judge-environment
+    depends_on:
+      database:
+        condition: service_healthy
+    command: [node, scripts/migrate.mjs]
+volumes:
+  judge-data:

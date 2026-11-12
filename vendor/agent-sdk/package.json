@@ -1,0 +1,31 @@
+{
+  "name": "@verid/agent-sdk",
+  "version": "0.1.0",
+  "type": "module",
+  "description": "Public JavaScript SDK for Verid deterministic agent authorization and tool-side grant verification.",
+  "exports": {
+    ".": {
+      "types": "./src/index.d.ts",
+      "import": "./src/index.js"
+    },
+    "./experience": {
+      "types": "./src/experience.d.ts",
+      "import": "./src/experience.js"
+    }
+  },
+  "types": "./src/index.d.ts",
+  "files": [
+    "src",
+    "README.md"
+  ],
+  "sideEffects": false,
+  "engines": {
+    "node": ">=20"
+  },
+  "scripts": {
+    "test": "node --test --test-concurrency=1",
+    "pack:check": "npm pack --dry-run"
+  },
+  "private": true,
+  "license": "Apache-2.0"
+}
