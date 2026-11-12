@@ -21,6 +21,7 @@ contain the deployed application changes.
 | Judge abuse paths | Foreign ownership, writes, model requests, approval challenges, workspace escalation and cross-origin mutations refused |
 | Changed terms | Stateless inspection returned 409 without payment dispatch |
 | Browser approval | Automated software-key signature accepted for the acceptance owner; no human-presence or hardware-attestation proof |
+| Post-approval tampering | Altered amount and merchant requests specifically refused with no provider dispatch; test approval revoked |
 | Buyer consent, capture and linked receipt | Not established; capture remains disabled |
 
 The previous transaction 404 came from an approver-membership check inside owned
@@ -38,6 +39,12 @@ closed gate cannot masquerade as proof of parameter binding.
 Repeated local runs exhausted the disposable database's email quota. A fresh
 database restored a clean regression run; no rate-limit control was weakened.
 Numbers describe this dated cycle and require new evidence after changes.
+
+The revised public problem framing passed 18 staged judge API checks and 13
+public browser checks, including consistent headlines, signup continuation,
+owned evidence, both post-approval tampering requests and mobile layout. The
+publication scan checked 434 source inputs without findings. The prepared
+[submission text and video script](submission-package.md) preserve these limits.
 
 See [self-service boundaries](self-service-boundaries.md),
 [official rule review](hackathon-rule-review.md), and the
