@@ -1,6 +1,6 @@
 # AgentPay - PayPal AI Hackathon Edition
 
-**AI proposes. You decide.**
+**An AI draft is not an approval.**
 
 [Live demo](https://hackathon.agentpay.twoaye.com/hackathon) | [94-second video](https://youtu.be/MG2dcnJwfhY)
 
@@ -8,7 +8,7 @@ Judges: the evaluation login is in the private Devpost testing instructions. Sta
 
 For small-business buyers, the prototype compares a clearly labelled evaluation catalog, preserves the reviewed terms and makes the actual provider outcome visible. It does not search a live marketplace.
 
-AI proposes a useful purchase. A human reviews the exact terms. The backend checks a real PayPal Sandbox order and refuses payment when authority is missing.
+Small-business owners and office managers want AI to recommend supplies without unrestricted spending power. A malicious listing, an invented merchant or a changed price can turn a useful recommendation into the wrong purchase. AgentPay binds approval to exact terms and keeps model output outside payment authority.
 
 ## What you can run
 
@@ -16,9 +16,27 @@ Find a wireless keyboard within a $150 budget, inspect the AI recommendation, re
 
 **Scope:** this demonstration prepares and verifies sandbox orders. It does not demonstrate a completed payment. Human review, signed authorization, PayPal buyer consent and capture are separate steps; capture stays disabled. No real goods or live payments are supported.
 
-**Current hosted limitation:** the 12 November check found transaction evidence
-returning 404 for an existing owned purchase. Local regression passes; the hosted
-journey remains blocked. See [verification status](docs/verification-status.md).
+**Hosted verification:** owned transaction evidence now works. Self-service email
+verification, isolated workspace creation, real AI recommendation, fresh PayPal
+order readback, software-key approval, post-approval altered-amount refusal and
+revocation passed. Genuine PayPal buyer consent, capture and reconciled receipt
+remain unverified. See [verification status](docs/verification-status.md).
+
+## Tools and their roles
+
+- **Claude through the Vercel AI SDK:** read-only catalog tools and strict structured
+  output propose a purchase. Server-side catalog and budget checks validate it.
+- **PayPal Orders v2:** creates the real Sandbox order, reads its exact terms, and
+  supports the separately gated capture and provider reconciliation path.
+- **PayPal JavaScript checkout:** opens the actual Sandbox buyer consent flow.
+  AgentPay email verification cannot substitute for PayPal buyer consent.
+- **Next.js and PostgreSQL:** authenticated UI/API, scoped purchases, approval
+  statements, atomic execution reservations and durable evidence.
+
+Start at the [hosted demo](https://hackathon.agentpay.twoaye.com/hackathon).
+The linked 94-second video records the earlier order/refusal workflow; it does
+not show completed capture. [Submission copy and recording script](docs/submission-package.md)
+distinguish verified results from the remaining payment acceptance.
 
 ## Quick start
 
