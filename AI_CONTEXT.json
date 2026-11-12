@@ -63,18 +63,18 @@
       "rejectionTestsPassed": 4,
       "date": "2026-11-12"
     },
-    "localRegressionTestsPassed": 150,
+    "localRegressionTestsPassed": 151,
     "sdkTestsPassed": 66,
     "buyerConsent": "genuine_provider_verified",
     "purchaseApproval": "automated_software_key",
     "productionPaymentVerified": false,
-    "privateReceiptBrowserHydrationVerified": false,
+    "privateReceiptBrowserHydrationVerified": true,
     "remainingDelivery": [
-      "Final private receipt page browser check",
       "Updated completed-payment video recording and upload",
       "Devpost submission",
       "Git publication remains on hold"
-    ]
+    ],
+    "browserReplayControlVerified": true
   },
   "releaseBoundary": {
     "sourceDependencies": "repository-local-or-public-registry",

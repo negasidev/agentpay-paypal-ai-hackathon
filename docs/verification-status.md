@@ -8,7 +8,7 @@ contain the deployed application changes.
 
 | Scope | Observed result |
 | --- | --- |
-| Local regression | 150 PostgreSQL tests passed, zero failed or skipped on a fresh disposable database |
+| Local regression | 151 PostgreSQL tests passed, zero failed or skipped on a fresh disposable database |
 | Bundled SDK | 66 tests passed, zero failed or skipped |
 | Publication rejection controls | Four tests passed |
 | Lint, typecheck and production build | Passed |
@@ -49,3 +49,14 @@ publication scan checked 438 source inputs without findings. The prepared
 See [self-service boundaries](self-service-boundaries.md),
 [official rule review](hackathon-rule-review.md), and the
 [machine-readable index](../AI_CONTEXT.json). See [completed Sandbox acceptance](completed-sandbox-acceptance.md) for the later payment result. No production-payment, physical approval or customer-adoption claim follows from these results.
+
+A native owner-login check displayed the completed private receipt. It exposed a
+repeat-protection control with no historical approval ID after a new login. The
+status response now retains the consumed approval as history; regression proves
+that the new session still cannot dispatch another capture.
+
+The final native Chrome check passed: owner sign-in, private receipt hydration,
+consumed approval after reload, verified buyer consent, confirmed 119.00 USD
+Sandbox capture and visible repeat-payment refusal. No password-manager save or
+replacement was accepted. Browser-review delivery is complete; the new video,
+Devpost submission and Git publication have not been performed.
