@@ -12,7 +12,9 @@ export async function verifyRecordedOrder(pool,actor,id,merchantId,provider){
  const order=(await pool.query('SELECT * FROM ap_orders WHERE purchase_id=$1 AND tenant_id=$2 AND user_id=$3',values)).rows[0];
  if(!order)throw new ProviderError('RECORDED_PROVIDER_ORDER_REQUIRED');
  if(order.purchase_version!==purchase.version||order.amount!==purchase.amount||order.currency!==purchase.currency||order.merchant_id!==purchase.merchant_id||purchase.merchant_id!==merchantId)throw new ProviderError('INTENT_CHANGED');
- const actual=await provider.getOrder(order.provider_order_id);
+ let actual;
+ try{actual=await provider.getOrder(order.provider_order_id);}
+ catch(error){if(error.code==='PROVIDER_REJECTED'&&error.status===404)throw new ProviderError('RECORDED_PROVIDER_ORDER_UNAVAILABLE');throw error;}
  verifySandboxOrder(actual,order.provider_order_id,{amount:purchase.amount,currency:purchase.currency,merchantId});
  // This read must never create an order, record buyer consent or reserve an
  // execution. Read-only evaluators can inspect terms without spending rights.

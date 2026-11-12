@@ -1,7 +1,7 @@
 # Problem demonstration
 
-Entry: `/demo` or `/assistant`, with authentication required. `/judge` provides
-judge entry instructions. A saved proposal is labeled and reused; generating a
+Entry: `/demo` or `/assistant`, with authentication required. `/judge` redirects
+to `/demo`. A saved proposal is labeled and reused; generating a
 fresh proposal is an explicit model request, never a page-load action. Check
 [verification status](verification-status.md) before describing the hosted flow.
 

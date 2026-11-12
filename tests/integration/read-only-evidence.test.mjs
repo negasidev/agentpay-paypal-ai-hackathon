@@ -73,6 +73,8 @@ test('read-only provider verification and term inspection cannot create orders, 
   assert.equal((await pool.query('SELECT count(*)::int AS count FROM ap_audit WHERE user_id=$1',[s.actor.user_id])).rows[0].count,before);
   for(const table of ['ap_trust_replay_probes','ap_attempts','ap_browser_sandbox_approvals','ap_browser_sandbox_executions'])assert.equal((await pool.query(`SELECT count(*)::int AS count FROM ${table} WHERE user_id=$1`,[s.actor.user_id])).rows[0].count,0);
   assert.equal(writes,0);
+  await assert.rejects(verifyRecordedOrder(pool,s.actor,purchase.id,purchase.merchant_id,{getOrder:async()=>{throw {code:'PROVIDER_REJECTED',status:404};},createOrder:provider.createOrder}),/RECORDED_PROVIDER_ORDER_UNAVAILABLE/);
+  assert.equal(writes,0);
   actual.purchase_units[0].amount.value='1190.00';
   await assert.rejects(verifyRecordedOrder(pool,s.actor,purchase.id,purchase.merchant_id,provider),/PROVIDER_BINDING_MISMATCH/);
   await pool.query("UPDATE ap_purchases SET version=version+1 WHERE id=$1",[purchase.id]);

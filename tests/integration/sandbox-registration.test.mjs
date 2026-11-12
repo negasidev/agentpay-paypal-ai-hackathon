@@ -41,7 +41,7 @@ test('registration requires explicit Sandbox setup, closed inputs and durable re
 });
 test('approval notification targets verified owner, never approves, records failure and refuses foreign purchases',async()=>{
  const pool=createPool();try{const a=await verified(pool),b=await verified(pool);await createSandboxWorkspace(pool,a.actor,{env});const purchase=await createPurchase(pool,a.actor,'keyboard');await transition(pool,a.actor,purchase.id,'review');await transition(pool,a.actor,purchase.id,'submit');let sent=0;
- const options={env,send:async(to,subject,text)=>{sent++;assert.equal(to,a.email);assert(text.includes('/sign-in?next=/approvals'));assert(!text.includes('/capture'));return {state:'SUBMITTED',providerId:'FIXTURE-MAIL'};}};
+ const options={env,send:async(to,subject,text)=>{sent++;assert.equal(to,a.email);assert(text.includes(`/sign-in?next=/transactions/${purchase.id}`));assert(!text.includes('/capture'));return {state:'SUBMITTED',providerId:'FIXTURE-MAIL'};}};
  await assert.rejects(notifySandboxApprover(pool,b.actor,purchase.id,options),/NOT_FOUND/);
  const notice=await notifySandboxApprover(pool,a.actor,purchase.id,options);assert.equal(notice.approvalGranted,false);assert.equal(notice.paymentExecuted,false);assert.equal(notice.deliveryState,'SUBMITTED');
  await notifySandboxApprover(pool,a.actor,purchase.id,options);assert.equal(sent,1);assert.equal((await pool.query('SELECT 1 FROM ap_browser_sandbox_approvals WHERE purchase_id=$1',[purchase.id])).rowCount,0);

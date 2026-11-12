@@ -13,8 +13,8 @@ export async function GET(request:Request,context:{params:Promise<{purchaseId:st
   return Response.json(result,{headers:{'Cache-Control':'no-store'}});
  }catch(error:any){
   const code=error.code??error.message;
-  const exposed=['NOT_FOUND','UNAUTHENTICATED','RECORDED_PROVIDER_ORDER_REQUIRED','INTENT_CHANGED','PROVIDER_BINDING_MISMATCH'];
-  return Response.json({error:exposed.includes(code)?code:'SANDBOX_UNAVAILABLE'},{status:code==='UNAUTHENTICATED'?401:code==='NOT_FOUND'?404:['RECORDED_PROVIDER_ORDER_REQUIRED','INTENT_CHANGED','PROVIDER_BINDING_MISMATCH'].includes(code)?409:503,headers:{'Cache-Control':'no-store'}});
+  const exposed=['NOT_FOUND','UNAUTHENTICATED','RECORDED_PROVIDER_ORDER_REQUIRED','RECORDED_PROVIDER_ORDER_UNAVAILABLE','INTENT_CHANGED','PROVIDER_BINDING_MISMATCH'];
+  return Response.json({error:exposed.includes(code)?code:'SANDBOX_UNAVAILABLE'},{status:code==='UNAUTHENTICATED'?401:code==='NOT_FOUND'?404:['RECORDED_PROVIDER_ORDER_REQUIRED','RECORDED_PROVIDER_ORDER_UNAVAILABLE','INTENT_CHANGED','PROVIDER_BINDING_MISMATCH'].includes(code)?409:503,headers:{'Cache-Control':'no-store'}});
  }
 }
 export async function POST(request:Request,context:{params:Promise<{purchaseId:string;action:string}>}){
