@@ -59,15 +59,22 @@
     "paymentExecutedInSanityCheck": true,
     "details": "docs/verification-status.md",
     "publicationGuard": {
-      "sourceInputs": 434,
+      "sourceInputs": 438,
       "rejectionTestsPassed": 4,
       "date": "2026-11-12"
     },
-    "localRegressionTestsPassed": 148,
+    "localRegressionTestsPassed": 150,
     "sdkTestsPassed": 66,
     "buyerConsent": "genuine_provider_verified",
     "purchaseApproval": "automated_software_key",
-    "productionPaymentVerified": false
+    "productionPaymentVerified": false,
+    "privateReceiptBrowserHydrationVerified": false,
+    "remainingDelivery": [
+      "Final private receipt page browser check",
+      "Updated completed-payment video recording and upload",
+      "Devpost submission",
+      "Git publication remains on hold"
+    ]
   },
   "releaseBoundary": {
     "sourceDependencies": "repository-local-or-public-registry",
@@ -76,5 +83,7 @@
     "independentSourceDownload": true,
     "privateCheckoutRequired": false
   },
-  "supportedScopeBoundary": "One exact Sandbox capture verified with genuine buyer consent and automated software-key approval; no human-presence, hardware or production assurance"
+  "supportedScopeBoundary": "One exact Sandbox capture verified with genuine buyer consent and automated software-key approval; no human-presence, hardware or production assurance",
+  "hostedBrowserSandboxCaptureEnabled": true,
+  "sourceDownloadCaptureDefault": false
 }

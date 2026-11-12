@@ -29,7 +29,7 @@ external authorization interfaces are not needed for AI generation, sandbox
 order verification, persistence or refusal tests.
 
 The complete signed-device/buyer-approved capture path has not been accepted.
-Capture remains disabled. This edition does not claim independent hardware
+The isolated browser software-approval flow has separate [completed Sandbox acceptance](completed-sandbox-acceptance.md). Canonical protected capture remains disabled. This edition does not claim independent hardware
 attestation, signed receiver conformance, real goods or production payment support.
 
 The application retains backend modules needed for schema and security

@@ -8,7 +8,7 @@ contain the deployed application changes.
 
 | Scope | Observed result |
 | --- | --- |
-| Local regression | 148 PostgreSQL tests passed, zero failed or skipped on a fresh disposable database |
+| Local regression | 150 PostgreSQL tests passed, zero failed or skipped on a fresh disposable database |
 | Bundled SDK | 66 tests passed, zero failed or skipped |
 | Publication rejection controls | Four tests passed |
 | Lint, typecheck and production build | Passed |
@@ -43,7 +43,7 @@ Numbers describe this dated cycle and require new evidence after changes.
 The revised public problem framing passed 18 staged judge API checks and 13
 public browser checks, including consistent headlines, signup continuation,
 owned evidence, both post-approval tampering requests and mobile layout. The
-publication scan checked 434 source inputs without findings. The prepared
+publication scan checked 438 source inputs without findings. The prepared
 [submission text and video script](submission-package.md) preserve these limits.
 
 See [self-service boundaries](self-service-boundaries.md),

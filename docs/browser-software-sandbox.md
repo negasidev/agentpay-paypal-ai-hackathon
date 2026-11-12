@@ -1,6 +1,6 @@
 # Self-service Sandbox approval
 
-This acceptance candidate is separate from the published order/refusal demonstration. It is not production 2AYE authorization. No completed payment or inbox delivery is established by fixture tests.
+The hosted flow now has [completed Sandbox acceptance](completed-sandbox-acceptance.md) with genuine buyer consent and an automated software-key purchase approval. It is not production external authorization. Fixture tests alone do not establish payment completion, human presence or inbox delivery.
 
 ## User journey
 
@@ -53,4 +53,4 @@ AGENTPAY_EMAIL_ALLOWED_RECIPIENTS=<optional exact addresses during acceptance>
 
 The deployed origin must be the isolated hackathon host. Loopback is allowed only in development/test; a production standalone build correctly refuses it. SMTP transport is pinned to Hostinger STARTTLS on port 587. Keep secrets outside public source, browser bundles and build context. Reusing an existing sender requires operator authorization; no existing production mail settings are changed automatically.
 
-The repository requires only its included source, migrations, dependencies and configured providers. Independent real-email receipt, genuine user approval, PayPal buyer consent, exact capture and subsequent replay refusal remain release acceptance gates. Do not merge or deploy this candidate before those gates and explicit approval.
+The repository requires only its included source, migrations, dependencies and configured providers. Independent real-email receipt, genuine user approval, PayPal buyer consent, exact capture and subsequent replay refusal remain release acceptance gates. Keep each release claim scoped to its actual evidence and obtain explicit release authorization. The completed acceptance above does not establish human-presence or hardware assurance.

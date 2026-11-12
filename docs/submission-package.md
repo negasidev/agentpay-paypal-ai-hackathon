@@ -97,7 +97,7 @@ file. Keep access available through judging. Do not publish API secrets.
 | 2:10-2:30 | Open genuine PayPal Sandbox checkout and transaction evidence. Show the completed 119.00 USD capture, matching software receipt and repeat-payment refusal. Explain that the acceptance software approval was automated; do not imply hardware or independent human-presence proof. |
 | 2:30-2:50 | Show Claude + catalog tools, strict server validation, PayPal Orders v2, and durable approval/evidence. "The recommendation can change. Payment authority cannot silently change with it." |
 
-## Replacement only after completed payment acceptance
+## Recording and publication requirements
 
 Do not publish completed-payment language before observing real buyer consent,
 one exact capture, current PayPal readback, matching receipt and repeat-payment
@@ -105,7 +105,7 @@ refusal. Keep the canonical protected-capture flag off for this isolated edition
 its browser software approval has a separate Sandbox execution gate. A flag is
 not approval. Never bypass a missing consent, session or exact-term check.
 
-After those checks pass, replace the 1:15-2:30 sequence with the exact approval,
+Those checks passed in the automated software-approval acceptance. Record the 1:15-2:30 sequence with the exact approval,
 altered-amount refusal, genuine PayPal buyer checkout, successful original-amount
 capture, reconciled receipt and replay refusal. Show a PayPal dashboard capture
 only if it was actually observed. Record under three minutes and remove secrets,
