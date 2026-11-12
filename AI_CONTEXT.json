@@ -10,7 +10,9 @@
     "security": "SECURITY.md",
     "developerGuide": "docs/developer-guide.md",
     "releasePolicy": "docs/release-policy.md",
-    "verificationStatus": "docs/verification-status.md"
+    "verificationStatus": "docs/verification-status.md",
+    "selfService": "docs/self-service-boundaries.md",
+    "hackathonRules": "docs/hackathon-rule-review.md"
   },
   "runtime": {
     "node": "24.x",
@@ -50,16 +52,18 @@
   "verification": {
     "asOf": "2026-11-12",
     "localRegression": "passed",
-    "hostedJourney": "blocked",
-    "blocker": "Owned transaction detail returned HTTP 404 despite an existing purchase",
-    "providerReadbackAfterBlocker": "not_run",
+    "hostedJourney": "partial",
+    "blocker": "PayPal buyer consent, capture and provider-verified receipt are not established",
+    "providerReadbackAfterBlocker": "passed_for_fresh_owned_sandbox_order",
     "paymentExecutedInSanityCheck": false,
     "details": "docs/verification-status.md",
     "publicationGuard": {
-      "sourceInputs": 406,
+      "sourceInputs": 433,
       "rejectionTestsPassed": 4,
       "date": "2026-11-12"
-    }
+    },
+    "localRegressionTestsPassed": 148,
+    "sdkTestsPassed": 66
   },
   "releaseBoundary": {
     "sourceDependencies": "repository-local-or-public-registry",
@@ -68,5 +72,5 @@
     "independentSourceDownload": true,
     "privateCheckoutRequired": false
   },
-  "supportedScopeBoundary": "Implemented application scope; hosted transaction evidence is currently blocked"
+  "supportedScopeBoundary": "Standalone Sandbox recommendation, order, self-service signup and owned evidence; completed payment remains unverified"
 }

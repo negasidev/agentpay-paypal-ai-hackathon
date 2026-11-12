@@ -1,36 +1,45 @@
-# Verification status - 12 November 2026
+﻿# Verification status - 12 November 2026
 
-**Hosted end-to-end status: blocked at transaction evidence.**
+**Hosted status: signup, workspace, owned evidence and fresh Sandbox order readback verified; completed payment remains unverified.**
 
-This is a sanitized development handoff, not an operational log. It contains no
-account identifiers, workstation paths, deployment IDs or credentials.
+This sanitized handoff contains no operational credentials or account identities.
+Changes are held locally pending deployed acceptance; public main does not yet
+contain the deployed application changes.
 
 | Scope | Observed result |
 | --- | --- |
-| Local public application regression | 122 PostgreSQL integration tests passed, zero failed or skipped |
-| Bundled protocol SDK | 66 tests passed, zero failed or skipped |
-| Publication guard after documentation handoff | 406 source inputs checked with no findings; four rejection tests passed |
-| Build and hosted CI for the checked source | Passed in the preceding verification cycle |
-| Hosted login, saved proposals and purchase list | Passed in the latest browser/API check |
-| Hosted owned transaction detail | HTTP 404 for an existing owned purchase |
-| Read-only database reproduction | The matching purchase and stored order exist; the checked source returned detail with capture disabled |
-| Fresh provider readback and later steps in that check | Not run after the transaction-detail failure |
-| Completed authorized payment | Not established |
+| Local regression | 148 PostgreSQL tests passed, zero failed or skipped on a fresh disposable database |
+| Bundled SDK | 66 tests passed, zero failed or skipped |
+| Publication rejection controls | Four tests passed |
+| Lint, typecheck and production build | Passed |
+| Registration email | Actual delivery to an application-owned acceptance inbox verified |
+| Email verification | Accepted once; replay refused |
+| Verified login and workspace | Passed without administrator intervention |
+| Fresh recommendation and PayPal order | Real model request, Sandbox creation and exact provider readback passed |
+| Purchase review email | Delivery and exact purchase sign-in link verified |
+| Judge owned transaction | HTTP 200 with explicit read-only approval status |
+| Judge abuse paths | Foreign ownership, writes, model requests, approval challenges, workspace escalation and cross-origin mutations refused |
+| Changed terms | Stateless inspection returned 409 without payment dispatch |
+| Browser approval | Automated software-key signature accepted for the acceptance owner; no human-presence or hardware-attestation proof |
+| Buyer consent, capture and linked receipt | Not established; capture remains disabled |
 
-The numbers above describe that dated run, not a permanent current total. New
-changes require a new result. A passing CI run does not supersede the live failure.
+The previous transaction 404 came from an approver-membership check inside owned
+read-only evidence retrieval. The repair preserves ownership and write guards.
+Service failures return generic 503 responses rather than missing-item responses.
 
-The transaction endpoint currently returns a generic 404 when its catch block
-handles unexpected service errors. The underlying deployed exception was not
-established by the available runtime logs. Diagnose it with sanitized internal
-error categories while preserving actor isolation and generic public responses.
-Do not remove a guard or fabricate a transaction result to bypass the failure.
+PayPal returns 404 for the historical judge orders. The application explains their
+unavailability and never silently creates replacements. Fresh purchases belong
+in the user's own Sandbox workspace.
 
-Capture remains disabled in the published evaluation scope. Real transaction-bound
-approval, independent buyer consent, capture and a provider-reverified linked
-receipt have not passed together. No production-payment or hardware-assurance
-claim follows from fixture tests or a saved sandbox order.
+Browser acceptance found and repaired the post-login return to workspace setup.
+Unexpected capture terms are validated before the disabled execution gate, so a
+closed gate cannot masquerade as proof of parameter binding.
 
-Update this file and the [machine-readable index](../AI_CONTEXT.json) when a new
-dated run resolves or changes these findings. Keep raw diagnostics and usable
-evaluation credentials outside the public repository.
+Repeated local runs exhausted the disposable database's email quota. A fresh
+database restored a clean regression run; no rate-limit control was weakened.
+Numbers describe this dated cycle and require new evidence after changes.
+
+See [self-service boundaries](self-service-boundaries.md),
+[official rule review](hackathon-rule-review.md), and the
+[machine-readable index](../AI_CONTEXT.json). No production-payment, physical
+approval, completed capture or customer-adoption claim follows from these results.

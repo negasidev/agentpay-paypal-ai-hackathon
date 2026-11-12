@@ -3,8 +3,10 @@
 Read README.md, AI_CONTEXT.json, docs/developer-guide.md, docs/architecture.md,
 docs/release-policy.md and docs/verification-status.md before editing.
 
-Current acceptance boundary: the latest hosted check is blocked at transaction
-evidence. Do not describe the deployed journey as passing because local tests pass.
+Current acceptance boundary: hosted self-service signup, owned transaction
+evidence and fresh Sandbox order readback are verified. Buyer consent, capture
+and a provider-verified receipt remain unverified. See the dated status document;
+do not describe a completed payment because local tests pass.
 
 ## Boundaries
 
