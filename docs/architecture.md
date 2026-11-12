@@ -19,7 +19,11 @@ The supported independent path is:
    retrieves the same stored order. An uncertain creation is not blindly repeated.
 6. The optional canonical authority adapter requires an explicitly configured
    evaluation tenant, principal, agent, intent and scoped credential. Absence or
-   failure refuses execution. Environment flags alone cannot create a grant.
+   failure refuses canonical protected execution. The separate browser Sandbox
+   flow verifies a password-confirmed purchase signature, current session and
+   approver permission, expiry, exact terms and PayPal buyer consent before
+   atomically consuming approval and reserving one capture. Environment flags
+   alone grant no authority in either path.
 7. The UI shows stored audit events and actual provider order states. CREATED,
    buyer approval, canonical authorization and capture are distinct facts.
 
@@ -46,8 +50,8 @@ application. Access tokens are server-only configuration supplied by the operato
 No dependency, import, build step or test may read another checkout.
 
 The public demo has its own sessions and database. It cannot reuse another
-application's browser session or database. Missing authority keeps execution
-blocked. The local sandbox workflow is runnable independently; connecting an
+application's browser session or database. Missing approval in the selected
+authorization path keeps execution blocked. The local sandbox workflow is runnable independently; connecting an
 external authorization service requires separately provisioned sandbox access.
 
 Run `npm run check:public`, `npm run test:boundary` and `npm run test:sdk` before

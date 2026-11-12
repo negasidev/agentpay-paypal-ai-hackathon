@@ -188,3 +188,42 @@ Unreviewed photographs and the unrelated hosted lab/browser-extension bundles ar
 | yocto-queue | 0.1.0 | MIT |
 | zod | 4.6.7 | MIT |
 | nodemailer | 10.3.1 | MIT-0 |
+
+## Added lint tooling
+
+These build-time packages are pinned by the lockfile. They do not add payment
+capabilities. Available license notices are retained in `third-party-licenses/`.
+
+| Package | Version | Declared license |
+| --- | --- | --- |
+| @babel/code-frame | 8.0.6 | MIT |
+| @babel/compat-data | 8.1.2 | MIT |
+| @babel/core | 8.1.2 | MIT |
+| @babel/eslint-parser | 8.1.2 | MIT |
+| @babel/generator | 8.1.2 | MIT |
+| @babel/helper-compilation-targets | 8.0.7 | MIT |
+| @babel/helper-globals | 8.0.6 | MIT |
+| @babel/helper-string-parser | 8.1.2 | MIT |
+| @babel/helper-validator-identifier | 8.0.6 | MIT |
+| @babel/helper-validator-option | 8.0.0 | MIT |
+| @babel/helpers | 8.1.2 | MIT |
+| @babel/parser | 8.1.2 | MIT |
+| @babel/template | 8.1.2 | MIT |
+| @babel/traverse | 8.1.2 | MIT |
+| @babel/types | 8.1.2 | MIT |
+| @jridgewell/gen-mapping | 0.4.0-beta.0 | MIT |
+| @types/esrecurse | 4.3.1 | MIT |
+| @types/gensync | 1.0.5 | MIT |
+| @types/jsesc | 2.5.1 | MIT |
+| convert-source-map | 2.0.0 | MIT |
+| empathic | 2.1.0 | MIT |
+| eslint-scope | 9.1.2 | BSD-2-Clause |
+| eslint-visitor-keys | 5.0.1 | Apache-2.0 |
+| flru | 1.0.2 | MIT |
+| gensync | 1.0.0-beta.2 | MIT |
+| import-meta-resolve | 4.2.0 | MIT |
+| js-tokens | 10.0.0 | MIT |
+| jsesc | 3.1.0 | MIT |
+| json5 | 2.2.3 | MIT |
+| obug | 3.0.0 | MIT |
+| verkit | 0.5.0 | MIT |

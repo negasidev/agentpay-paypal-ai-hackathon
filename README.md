@@ -1,6 +1,8 @@
 # AgentPay - PayPal AI Hackathon Edition
 
-**An AI draft is not an approval.**
+**Your AI shops. You decide.**
+
+PayPal Sandbox only. No live payments.
 
 [Live demo](https://hackathon.agentpay.twoaye.com/hackathon) | [94-second video](https://youtu.be/MG2dcnJwfhY)
 
@@ -12,7 +14,17 @@ Small-business owners and office managers want AI to recommend supplies without 
 
 ## What you can run
 
-Find a wireless keyboard within a $150 budget, inspect the AI recommendation, review its merchant and price, and create or retrieve a matching PayPal Sandbox order. Then change the amount and observe the backend reject it. Transaction evidence shows what actually happened.
+1. Ask Claude for a wireless keyboard within a $150 budget.
+2. Review the recommended purchase, merchant and exact total.
+3. Prepare its PayPal Sandbox order and approve that exact purchase.
+4. Test a changed amount: it must be refused without payment dispatch.
+5. Give separate consent through PayPal Sandbox, then pay the approved amount.
+6. Inspect the provider-matched receipt and verify repeat-payment refusal.
+
+The shared judge login supports saved-result inspection only. For a fresh payment,
+use your own verified workspace and a separate PayPal Sandbox Personal buyer
+account. [Judge setup](docs/judge-setup.md) and
+[the approval guide](docs/browser-software-sandbox.md) explain the prerequisites.
 
 **Scope:** one 119.00 USD Sandbox payment completed with genuine provider-verified buyer consent and an automated session-bound software approval. Altered amount and merchant requests were refused, PayPal readback confirmed exactly one capture, and repeat payment was refused. This does not prove human presence or hardware attestation. No real goods or live payments are supported.
 
@@ -36,7 +48,7 @@ receipt and replay refusal also passed. See [completed acceptance](docs/complete
 Start at the [hosted demo](https://hackathon.agentpay.twoaye.com/hackathon).
 The linked 94-second video records the earlier order/refusal workflow; it does
 not show completed capture. [Submission copy and recording script](docs/submission-package.md)
-distinguish verified results from the remaining payment acceptance.
+distinguish verified results from the earlier video and remaining delivery work.
 
 ## Quick start
 
@@ -72,7 +84,9 @@ See [setup and troubleshooting](docs/judge-setup.md) for native Node 24/PostgreS
 Start with the [developer guide](docs/developer-guide.md), [architecture](docs/architecture.md),
 [release policy](docs/release-policy.md), [AGENTS.md](AGENTS.md) and [AI_CONTEXT.json](AI_CONTEXT.json).
 The optional authorization integration is not required for the proposal/order/refusal
-demonstration. Missing authorization must prevent capture.
+demonstration. Canonical protected capture requires its configured external
+authorization service. The hosted browser Sandbox flow instead requires its own
+verified purchase approval plus PayPal buyer consent; the two paths are distinct.
 
 ## Development checks
 
@@ -97,4 +111,6 @@ This edition adds the catalog-backed AI purchase proposal, exact-term review, Pa
 
 Owned application and bundled SDK code use [Apache-2.0](LICENSE). Dependencies retain their own licenses; see [third-party notices](THIRD_PARTY_NOTICES.md) and [image provenance](docs/image-provenance.md). Product names do not imply endorsement. See [contributing](CONTRIBUTING.md) and [security](SECURITY.md).
 
-The isolated self-service approval candidate is documented in [Self-service Sandbox approval](docs/browser-software-sandbox.md). Registration and capture are disabled by default; fixture evidence does not establish a real approved payment.
+The isolated self-service approval flow is documented in [Self-service Sandbox approval](docs/browser-software-sandbox.md). Source-download registration and capture default off until explicitly configured.
+The hosted flow has separate, dated real-provider acceptance; fixture tests alone
+do not establish a completed payment.

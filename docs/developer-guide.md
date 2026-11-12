@@ -38,7 +38,10 @@ The model returns an untrusted proposal. The server validates catalog membership
 quantity, decimal amount and budget before persisting a draft. Human review
 applies to the stored purchase. Order preparation binds amount, currency, merchant,
 purchase version and provider identity. Optional external authorization remains
-a separate configured API boundary. Its absence must block capture.
+a separate configured API boundary whose absence blocks canonical protected
+capture. The isolated browser Sandbox path uses purchase-specific software
+approval plus separately verified PayPal consent; it does not claim canonical
+external authority.
 
 ## Change owners
 
@@ -69,6 +72,10 @@ a separate configured API boundary. Its absence must block capture.
   verified receipt in both API responses and UI copy.
 - Record source revision, test target, failures, skips and acceptance limits.
   Passing fixtures or a build does not establish a working hosted payment flow.
+- Lint covers JavaScript, TypeScript and TSX source. CI runs the complete checks
+  both from the repository checkout and an exact committed source download, each
+  with its own disposable PostgreSQL service. Third-party CI actions are pinned
+  to immutable revisions.
 
 These are engineering requirements, not a claim of certification, audited
 enterprise readiness or production payment acceptance.

@@ -7,9 +7,9 @@ The hosted flow now has [completed Sandbox acceptance](completed-sandbox-accepta
 1. A tester enters their own full name, email and password at `/register`.
 2. A one-time verification email goes to that address. The account is created only after successful verification. Email verification grants no workspace or payment authority.
 3. The tester signs in and explicitly creates an isolated Sandbox workspace. The verified owner becomes its initial approver, limited to that workspace and its own purchases. No predetermined human email or name is required.
-4. The AI proposes a catalog purchase. The user reviews the purchase, merchant, exact amount and currency. When the approval view opens, a notification is submitted to that workspace's designated owner.
+4. The AI proposes a catalog purchase. The user reviews the purchase, merchant, exact amount and currency. The owner can explicitly send a review notification from the approval view; opening a page sends no notification.
 5. The notification opens sign-in and review. Opening an email never approves or pays. The approver confirms their password, reviews server-created terms and explicitly approves.
-6. PayPal buyer consent is independently verified. Capture requires the current software approval, unchanged terms and buyer consent. Capture remains separately disabled until acceptance enables it.
+6. PayPal buyer consent is independently verified. Capture requires the current software approval, unchanged terms and buyer consent. Source downloads keep capture separately disabled; the hosted accepted Sandbox release enables it within the documented limits.
 7. A provider-confirmed result and matching software approval produce readable evidence. Unknown outcomes require read-only reconciliation, never another capture dispatch.
 
 The shared judge account remains read-only in self-service mode. It cannot create a workspace, spend model quota, create an order, approve or capture. Separate-approver invitations and enterprise role administration are deferred; the initial owner is the designated approver for this scoped demonstration.
