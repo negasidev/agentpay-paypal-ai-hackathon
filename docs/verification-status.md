@@ -62,3 +62,17 @@ Sandbox capture and visible repeat-payment refusal. No password-manager save or
 replacement was accepted. Browser-review delivery is complete; the new video,
 Devpost submission has not been performed. Source publication and deployment
 were subsequently authorized for this release.
+
+## Signed-in journey follow-up
+
+The approval, checkout and evidence pages now retain a selected purchase in their
+links. A foreign or missing selection shows no substitute purchase. Read-only
+accounts are directed to saved results and receive no editing controls. Order
+verification refreshes checkout and approval availability; PayPal consent refreshes
+the payment controls. Completed purchases retain their receipt and repeat-payment
+check. Opening approval controls no longer sends a notification automatically;
+email is an explicit action. These interface changes do not alter server-side
+purchase ownership, approval verification or single-use capture enforcement.
+
+The original payment acceptance above remains dated evidence. Fresh release
+checks must distinguish recovered completed receipts from newly captured payments.

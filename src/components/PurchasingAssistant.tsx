@@ -24,7 +24,7 @@ export default function PurchasingAssistant({onCreated}:{onCreated:()=>void}){
  <button disabled={busy||!access.ready||!access.canWrite||!!requestId&&!!proposal} type="submit">{busy?'Finding a recommendation…':'Ask AI for a recommendation'}</button></form>
  <p role="status" aria-live="polite">{message}</p>
  {proposal&&<article className="proposal-ready space-y-3 rounded-xl border border-slate-200 p-5"><h3 className="text-xl font-semibold">{proposal.product.name}</h3><p>{proposal.quantity} × {proposal.product.amount} {proposal.product.currency} · Total {proposal.total} USD</p><p>AI explanation: {proposal.reason}</p><dl className="grid grid-cols-1 gap-3 sm:grid-cols-3"><div><dt>Budget</dt><dd>{proposal.budget} USD</dd></div><div><dt>Trusted total</dt><dd>{proposal.total} USD</dd></div><div><dt>Remaining</dt><dd>{proposal.remaining} USD</dd></div></dl>
- <p className="text-sm">Model: {proposal.provenance.model} · DRAFT · Payment not authorized</p>
+ <p className="text-sm">Model: {proposal.provenance.model} · Saved recommendation · Open the purchase for its current status</p>
  {proposal.alternatives.length>0&&<div><h4 className="font-semibold">Alternatives</h4><ul>{proposal.alternatives.map(product=><li key={product.id}>{product.name} · {product.amount} {product.currency} per item</li>)}</ul></div>}
  <Link className="inline-block underline" href={`/review?purchase=${proposal.purchaseId}`}>Review purchase</Link></article>}
  </section>;
