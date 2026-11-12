@@ -20,7 +20,7 @@ export async function POST(request:Request){
   for(;;){const {done,value}=await reader.read();if(done)break;size+=value.length;if(size>8192){await reader.cancel();return new Response(null,{status:413,headers});}chunks.push(value);}
   let body;try{body=JSON.parse(Buffer.concat(chunks).toString('utf8'));}catch{return Response.json({error:'INVALID_SHOPPING_REQUEST'},{status:400,headers});}
   return Response.json(await shoppingRequest(pool,actor,body),{headers});
- }catch(error:any){const allowed=['UNAUTHENTICATED','INVALID_SHOPPING_REQUEST','INVALID_BUDGET','AI_NOT_CONFIGURED','AI_RATE_LIMIT','AI_BUSY','AI_REQUEST_CONFLICT','AI_REQUEST_UNCERTAIN','AI_REQUEST_FAILED','AI_TIMEOUT'];
+ }catch(error:any){const allowed=['UNAUTHENTICATED','READ_ONLY_EVALUATION_ACCOUNT','INVALID_SHOPPING_REQUEST','INVALID_BUDGET','AI_NOT_CONFIGURED','AI_RATE_LIMIT','AI_BUSY','AI_REQUEST_CONFLICT','AI_REQUEST_UNCERTAIN','AI_REQUEST_FAILED','AI_TIMEOUT'];
   const code=allowed.includes(error.message)?error.message:'SHOPPING_UNAVAILABLE';
   return Response.json({error:code},{status:error.status??(code==='UNAUTHENTICATED'?401:503),headers});}
 }

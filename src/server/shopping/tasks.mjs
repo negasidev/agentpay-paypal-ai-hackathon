@@ -1,3 +1,4 @@
+import {requireSandboxWriter} from '../sandbox-membership.mjs';
 import {createHash,randomUUID,timingSafeEqual} from 'node:crypto';
 import {z} from 'zod';
 import {transaction} from '../persistence/db.mjs';
@@ -88,6 +89,7 @@ function selectionDigest(actor,row,selection){
 }
 
 export async function taskAction(pool,actor,id,input,options={}){
+ await requireSandboxWriter(pool,actor);
  if(!uuid.safeParse(id).success)throw new AIError('TASK_NOT_FOUND',404);
  const parsed=command.safeParse(input);if(!parsed.success)throw new AIError('INVALID_TASK_ACTION',400);
  const action=parsed.data;

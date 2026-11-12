@@ -1,3 +1,4 @@
+import {requireSandboxWriter} from '../sandbox-membership.mjs';
 import {randomUUID} from 'node:crypto';
 import {AIError,aiConfiguration} from '../ai/agent.mjs';
 import {aiLimits,admitAiRequest} from '../ai/limits.mjs';
@@ -7,6 +8,7 @@ import {referenceDiscovery} from './reference-merchant.mjs';
 import {ensureTask,findTask,publicTask,shoppingInputHash,equalDigest} from './tasks.mjs';
 
 export async function shoppingRequest(pool,actor,input,{configuration=aiConfiguration,discovery=discover}={}){
+ await requireSandboxWriter(pool,actor);
  const parsed=shoppingInput.safeParse(input);
  if(!parsed.success||(parsed.data.sourceUrl&&!publicLink(parsed.data.sourceUrl)))throw new AIError('INVALID_SHOPPING_REQUEST',400);
  const body=parsed.data;const digest=shoppingInputHash(body);

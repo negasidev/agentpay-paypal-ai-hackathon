@@ -14,7 +14,7 @@ async function handle(request:Request,context:{params:Promise<{taskId:string}>})
   for(;;){const {done,value}=await reader.read();if(done)break;size+=value.length;if(size>2048){await reader.cancel();return new Response(null,{status:413,headers});}chunks.push(value);}
   let body;try{body=JSON.parse(Buffer.concat(chunks).toString('utf8'));}catch{return Response.json({error:'INVALID_TASK_ACTION'},{status:400,headers});}
   return Response.json(await taskAction(pool,actor,taskId,body),{headers});
- }catch(error:any){const allowed=['UNAUTHENTICATED','TASK_NOT_FOUND','INVALID_TASK_ACTION','INVALID_TASK_SELECTION','TASK_VERSION_CONFLICT','TASK_CANCELED','TASK_EXPIRED','HANDOFF_ALREADY_PREPARED','INVALID_TASK_STATE','REVIEW_MISMATCH','REFERENCE_MERCHANT_NOT_CONFIGURED','QUOTE_MISMATCH'];
+ }catch(error:any){const allowed=['UNAUTHENTICATED','READ_ONLY_EVALUATION_ACCOUNT','TASK_NOT_FOUND','INVALID_TASK_ACTION','INVALID_TASK_SELECTION','TASK_VERSION_CONFLICT','TASK_CANCELED','TASK_EXPIRED','HANDOFF_ALREADY_PREPARED','INVALID_TASK_STATE','REVIEW_MISMATCH','REFERENCE_MERCHANT_NOT_CONFIGURED','QUOTE_MISMATCH'];
   const code=allowed.includes(error.message)?error.message:'SHOPPING_UNAVAILABLE';
   return Response.json({error:code},{status:error.status??(code==='UNAUTHENTICATED'?401:503),headers});}
 }

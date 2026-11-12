@@ -11,7 +11,7 @@ async function handle(request:Request){
  const chunks:Uint8Array[]=[];let length=0;for(;;){const {done,value}=await reader.read();if(done)break;length+=value.length;if(length>8192){await reader.cancel();return new Response(null,{status:413});}chunks.push(value);}
  let body;try{body=JSON.parse(Buffer.concat(chunks).toString('utf8'));}catch{return Response.json({error:'INVALID_AI_REQUEST'},{status:400});}
  return Response.json(await proposePurchase(pool,actor,body),{status:201,headers:{'Cache-Control':'no-store'}});
- }catch(error:any){const allowed=['UNAUTHENTICATED','INVALID_AI_REQUEST','INVALID_BUDGET','AI_NOT_CONFIGURED','AI_RATE_LIMIT','AI_BUSY','AI_REQUEST_CONFLICT','AI_REQUEST_UNCERTAIN','AI_REQUEST_FAILED','INVALID_AI_PROPOSAL','UNKNOWN_ITEM','OVER_BUDGET','AI_TIMEOUT'];
+ }catch(error:any){const allowed=['UNAUTHENTICATED','READ_ONLY_EVALUATION_ACCOUNT','INVALID_AI_REQUEST','INVALID_BUDGET','AI_NOT_CONFIGURED','AI_RATE_LIMIT','AI_BUSY','AI_REQUEST_CONFLICT','AI_REQUEST_UNCERTAIN','AI_REQUEST_FAILED','INVALID_AI_PROPOSAL','UNKNOWN_ITEM','OVER_BUDGET','AI_TIMEOUT'];
  return Response.json({error:allowed.includes(error.message)?error.message:'AI_PROVIDER_UNAVAILABLE'},{status:error.status??(error.message==='UNAUTHENTICATED'?401:503),headers:{'Cache-Control':'no-store'}});}
 }
 export const GET=handle;export const POST=handle;

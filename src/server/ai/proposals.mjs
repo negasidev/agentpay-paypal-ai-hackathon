@@ -1,3 +1,4 @@
+import {requireSandboxWriter} from '../sandbox-membership.mjs';
 import {createHash,randomUUID} from 'node:crypto';
 import {createDraft} from '../workflow.mjs';
 import {generateProposal,aiConfiguration,proposalSchema,AIError} from './agent.mjs';
@@ -14,6 +15,7 @@ export function validateProposal(output,budget){
  return {...proposal,product,total:decimal(total),alternatives:proposal.alternatives.map(id=>productById(id))};
 }
 export async function proposePurchase(pool,actor,input,{generate=generateProposal,configuration=aiConfiguration,timeoutMs=30000}={}){
+ await requireSandboxWriter(pool,actor);
  if(!Number.isInteger(timeoutMs)||timeoutMs<1||timeoutMs>30000)throw new AIError('INVALID_AI_REQUEST',400);
  if(!input||Object.keys(input).some(key=>!['requestId','instruction','maximumBudget'].includes(key))||
  typeof input.instruction!=='string'||!input.instruction.trim()||input.instruction.length>1200||

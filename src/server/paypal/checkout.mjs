@@ -1,3 +1,4 @@
+import {requireSandboxWriter} from '../sandbox-membership.mjs';
 import {randomUUID} from 'node:crypto';
 import {transaction} from '../persistence/db.mjs';
 import {ProviderError,validatePurchase} from './client.mjs';
@@ -7,6 +8,7 @@ const scoped='SELECT * FROM ap_purchases WHERE id=$1 AND tenant_id=$2 AND user_i
 async function atomic(db,work){await db.query('BEGIN');try{const result=await work(db);await db.query('COMMIT');return result;}catch(error){await db.query('ROLLBACK');throw error;}}
 async function audit(db,a,id,event){await db.query('INSERT INTO ap_audit(tenant_id,user_id,purchase_id,event) VALUES($1,$2,$3,$4)',[a.tenant_id,a.user_id,id,event]);}
 export async function createCheckout(pool,actor,id,merchantId,provider){
+  await requireSandboxWriter(pool,actor);
   const db=await pool.connect();let locked=false;
   try{
     await db.query('SELECT pg_advisory_lock(hashtextextended($1,1))',[id]);locked=true;
@@ -42,6 +44,7 @@ export async function createCheckout(pool,actor,id,merchantId,provider){
   }finally{try{if(locked)await db.query('SELECT pg_advisory_unlock(hashtextextended($1,1))',[id]);}finally{db.release();}}
 }
 export async function checkoutOutcome(pool,actor,id,action,orderId,provider){
+  await requireSandboxWriter(pool,actor);
   const purchase=(await pool.query(scoped,[id,actor.tenant_id,actor.user_id])).rows[0];
   if(!purchase)throw new ProviderError('NOT_FOUND');
   const stored=(await pool.query('SELECT * FROM ap_orders WHERE purchase_id=$1',[id])).rows[0];

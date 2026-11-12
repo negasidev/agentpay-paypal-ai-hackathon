@@ -187,3 +187,4 @@ Unreviewed photographs and the unrelated hosted lab/browser-extension bundles ar
 | xtend | 4.0.2 | MIT |
 | yocto-queue | 0.1.0 | MIT |
 | zod | 4.6.7 | MIT |
+| nodemailer | 10.3.1 | MIT-0 |

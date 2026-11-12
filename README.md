@@ -78,3 +78,5 @@ This edition adds the catalog-backed AI purchase proposal, exact-term review, Pa
 ## License and contributions
 
 Owned application and bundled SDK code use [Apache-2.0](LICENSE). Dependencies retain their own licenses; see [third-party notices](THIRD_PARTY_NOTICES.md) and [image provenance](docs/image-provenance.md). Product names do not imply endorsement. See [contributing](CONTRIBUTING.md) and [security](SECURITY.md).
+
+The isolated self-service approval candidate is documented in [Self-service Sandbox approval](docs/browser-software-sandbox.md). Registration and capture are disabled by default; fixture evidence does not establish a real approved payment.

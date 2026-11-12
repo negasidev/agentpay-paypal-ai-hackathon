@@ -1,3 +1,4 @@
+import {requireSandboxWriter} from './sandbox-membership.mjs';
 import {createHash,timingSafeEqual} from 'node:crypto';
 import {transaction} from './persistence/db.mjs';
 export class ReplayError extends Error{constructor(code,status=409){super(code);this.status=status;}}
@@ -5,6 +6,7 @@ const hash=value=>createHash('sha256').update(JSON.stringify(value)).digest();
 const uuid=value=>typeof value==='string'&&/^[a-f0-9]{8}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{12}$/i.test(value);
 function terms(purchase,order){return {purchaseId:purchase.id,purchaseVersion:purchase.version,orderId:order.provider_order_id,merchantId:purchase.merchant_id,amount:purchase.amount,currency:purchase.currency};}
 export async function probeStoredBinding(pool,actor,purchaseId,input){
+ await requireSandboxWriter(pool,actor);
  if(!uuid(purchaseId)||!input||Array.isArray(input)||Object.keys(input).some(k=>!['requestId','amount','merchantId','currency','purchaseVersion'].includes(k))||!uuid(input.requestId)||!/^\d{1,7}\.\d{2}$/.test(input.amount??'')||!/^[A-Za-z0-9-]{1,64}$/.test(input.merchantId??'')||!/^[A-Z]{3}$/.test(input.currency??'')||!Number.isSafeInteger(input.purchaseVersion)||input.purchaseVersion<1)throw new ReplayError('INVALID_BINDING_PROBE',400);
  return transaction(pool,async db=>{
   const p=(await db.query('SELECT * FROM ap_purchases WHERE id=$1 AND tenant_id=$2 AND user_id=$3 FOR UPDATE',[purchaseId,actor.tenant_id,actor.user_id])).rows[0];if(!p)throw new ReplayError('NOT_FOUND',404);

@@ -27,6 +27,7 @@
     "@verid/agent-sdk": "file:./vendor/agent-sdk",
     "ai": "^7.0.133",
     "next": "16.4.3",
+    "nodemailer": "10.3.1",
     "pg": "^8.23.1",
     "react": "^19.3.0",
     "react-dom": "^19.3.0",

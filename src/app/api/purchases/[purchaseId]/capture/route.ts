@@ -14,5 +14,5 @@ export async function POST(request:Request,ctx:{params:Promise<{purchaseId:strin
   if(process.env.AGENTPAY_PROTECTED_CAPTURE_ENABLED!=='true')return Response.json({error:'VERIFIED_EXTERNAL_AUTHORITY_REQUIRED'},{status:503});
   const provider=new PayPalSandboxClient({clientId:process.env.PAYPAL_SANDBOX_CLIENT_ID,clientSecret:process.env.PAYPAL_SANDBOX_CLIENT_SECRET});
   return Response.json(await protectedCapture(pool,actor,id,provider),{headers:{'Cache-Control':'no-store'}});
- }catch(error:any){const code=['UNAUTHENTICATED','NOT_FOUND','INVALID_TRANSITION','INVALID_AUTHORITY_BINDING','VERIFIED_EXTERNAL_AUTHORITY_REQUIRED','QUOTE_EXPIRED','QUOTE_MISMATCH'].includes(error.message)?error.message:'SERVICE_UNAVAILABLE';return Response.json({error:code},{status:code==='UNAUTHENTICATED'?401:code==='NOT_FOUND'?404:error.status??409});}
+ }catch(error:any){const code=['UNAUTHENTICATED','READ_ONLY_EVALUATION_ACCOUNT','NOT_FOUND','INVALID_TRANSITION','INVALID_AUTHORITY_BINDING','VERIFIED_EXTERNAL_AUTHORITY_REQUIRED','QUOTE_EXPIRED','QUOTE_MISMATCH'].includes(error.message)?error.message:'SERVICE_UNAVAILABLE';return Response.json({error:code},{status:code==='UNAUTHENTICATED'?401:code==='NOT_FOUND'?404:error.status??409});}
 }

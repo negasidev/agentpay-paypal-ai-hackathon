@@ -25,7 +25,7 @@ export async function POST(request:Request,context:{params:Promise<{purchaseId:s
     const result=action==='order'?await createCheckout(pool,actor,purchaseId,process.env.PAYPAL_SANDBOX_MERCHANT_ID,provider):action==='status'?await checkoutStatus(pool,actor,purchaseId):await checkoutOutcome(pool,actor,purchaseId,action,orderId,provider);
     return Response.json(result,{headers:{'Cache-Control':'no-store'}});
   }catch(error:any){const code=error.code??error.message;
-    const allowed=['NOT_FOUND','UNAUTHENTICATED','SANDBOX_CHECKOUT_DISABLED','BUYER_APPROVAL_NOT_VERIFIED','ORDER_CREATION_UNKNOWN','PROVIDER_BINDING_MISMATCH','ORDER_ID_MISMATCH','INTENT_CHANGED','ALREADY_APPROVED','PROVIDER_STATUS_UNCERTAIN','QUOTE_EXPIRED','QUOTE_MISMATCH'];
+    const allowed=['NOT_FOUND','UNAUTHENTICATED','READ_ONLY_EVALUATION_ACCOUNT','SANDBOX_CHECKOUT_DISABLED','BUYER_APPROVAL_NOT_VERIFIED','ORDER_CREATION_UNKNOWN','PROVIDER_BINDING_MISMATCH','ORDER_ID_MISMATCH','INTENT_CHANGED','ALREADY_APPROVED','PROVIDER_STATUS_UNCERTAIN','QUOTE_EXPIRED','QUOTE_MISMATCH'];
     return Response.json({error:allowed.includes(code)?code:'SANDBOX_UNAVAILABLE'},{status:code==='NOT_FOUND'?404:code==='UNAUTHENTICATED'?401:['QUOTE_EXPIRED','QUOTE_MISMATCH'].includes(code)?409:503});
   }
 }

@@ -17,5 +17,5 @@ export async function POST(request:Request,ctx:{params:Promise<{purchaseId:strin
   let platformReceipt='PENDING';
   if(result.state==='COMPLETED')try{await recordPlatformReceipt(pool,actor,attempt.id);platformReceipt='RECORDED';}catch{}
   return Response.json({...result,platformReceipt},{headers:{'Cache-Control':'no-store'}});
- }catch(error:any){const code=['UNAUTHENTICATED','NOT_FOUND','INVALID_TRANSITION'].includes(error.message)?error.message:'RECONCILIATION_UNAVAILABLE';return Response.json({error:code},{status:code==='UNAUTHENTICATED'?401:code==='NOT_FOUND'?404:409});}
+ }catch(error:any){const code=['UNAUTHENTICATED','READ_ONLY_EVALUATION_ACCOUNT','NOT_FOUND','INVALID_TRANSITION'].includes(error.message)?error.message:'RECONCILIATION_UNAVAILABLE';return Response.json({error:code},{status:code==='UNAUTHENTICATED'?401:code==='NOT_FOUND'?404:409});}
 }
