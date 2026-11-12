@@ -29,8 +29,10 @@ checked on the server; a model response never grants spending authority.
 The hosted build demonstrates registration, actual verification-email delivery,
 isolated workspaces, real AI recommendations, PayPal order creation and readback,
 software-key approval, refusal and revocation. Buyer checkout opens PayPal's real
-Sandbox page. Genuine buyer consent, a single exact 119.00 USD capture, current provider readback, a matching software receipt and repeat-payment refusal subsequently passed. The acceptance purchase approval was automated; it does not independently prove human presence. No real goods or live money are
-supported. Software signatures do not independently prove human presence.
+Sandbox page. Genuine buyer consent, one exact 119.00 USD capture, current
+provider readback, a matching software receipt and repeat-payment refusal passed.
+The acceptance purchase approval was automated; it does not independently prove
+human presence. No real goods or live money are supported.
 
 ### How we built it
 
@@ -59,11 +61,42 @@ facts. Treating any one as the others creates misleading success claims. We
 fixed a real read-only evidence defect without granting the judge write access,
 and distinguish unavailable historical orders from new provider results.
 
-### Next steps
+### What's next
 
-Record the completed Sandbox flow and expand
-beyond the three-product evaluation catalog. We do not claim production readiness,
-customer adoption, AP2 compliance or protection against every prompt injection.
+AgentPay should become the approval layer an existing AI agent can call, rather
+than require people to use our shopping interface. Agents propose purchases;
+AgentPay checks their exact terms and authority before asking PayPal to capture.
+Our first audience is small-business owners and office managers delegating supply
+purchases. The three-product catalog is a controlled demonstration, not the
+intended product boundary.
+
+Our planned milestones, in order, are:
+
+1. A documented approval API, SDK and MCP tools for existing assistants and
+   business agents to request approval for a structured cart. External agent
+   output remains untrusted; integrations cannot create their own authority.
+2. Phone notifications with exact merchant, items, amount and currency, followed
+   by device-backed signing and biometric confirmation. This needs integration
+   and deployed verification; the current demo uses software keys.
+3. Human-authorized spending policies with per-agent budgets and merchant limits.
+   Deterministic policy can permit small purchases within that authority and
+   escalate larger purchases, reducing approval fatigue without allowing a model
+   to override a denial.
+4. Refund and dispute workflows that retain approval, provider and receipt
+   records to support investigation. A technical receipt is not a guarantee of
+   legal liability allocation or dispute resolution.
+5. Team roles, amount-based approver limits, spending reports and accounting
+   exports, followed by evaluated integrations such as QuickBooks or Xero.
+6. Simpler onboarding, including an evaluated PayPal sign-in integration and
+   agent connection flow. Ordinary users should configure neither databases nor
+   provider API keys; developers receive clear integration documentation.
+
+We will keep the service Sandbox-only while provider requirements, security and
+privacy review, retention, accessibility, recovery and responsibility terms are
+resolved. These are planned capabilities, not implemented integrations or partner
+endorsements. We do not claim production readiness, customer adoption, AP2
+compliance or protection against every prompt injection. See the
+[product roadmap](product-roadmap.md).
 
 ## Judge testing instructions
 
@@ -94,8 +127,9 @@ file. Keep access available through judging. Do not publish API secrets.
 | 0:50-1:15 | Review and submit; create/re-read the real PayPal Sandbox order. Explain that CREATED is not paid. |
 | 1:15-1:45 | In an owned verified workspace, confirm the password, review exact terms and approve. Explain browser software-key assurance briefly. |
 | 1:45-2:10 | Click Test approved amount protection. Show the altered $1,190 request, specific refusal, and no capture attempt. Call this a simulated compromised-client request; do not call it a live prompt-injection exploit. |
-| 2:10-2:30 | Open genuine PayPal Sandbox checkout and transaction evidence. Show the completed 119.00 USD capture, matching software receipt and repeat-payment refusal. Explain that the acceptance software approval was automated; do not imply hardware or independent human-presence proof. |
-| 2:30-2:50 | Show Claude + catalog tools, strict server validation, PayPal Orders v2, and durable approval/evidence. "The recommendation can change. Payment authority cannot silently change with it." |
+| 2:10-2:20 | Show the completed 119.00 USD capture, matching software receipt and repeat-payment refusal. Label the acceptance software approval as automated; do not imply hardware or independent human-presence proof. |
+| 2:20-2:30 | Show Claude + catalog tools, strict server validation, PayPal Orders v2, and durable approval/evidence. |
+| 2:30-2:50 | Label the screen "Planned roadmap." Say: "Next, connect the agents people already use. Add phone approvals with device-backed signing, spending rules for small purchases, and team workflows. Keep exact purchase approval and verifiable receipts at the center. AgentPay checks authority before it asks PayPal to capture." |
 
 ## Recording and publication requirements
 

@@ -14,7 +14,8 @@
     "selfService": "docs/self-service-boundaries.md",
     "hackathonRules": "docs/hackathon-rule-review.md",
     "submission": "docs/submission-package.md",
-    "completedSandboxAcceptance": "docs/completed-sandbox-acceptance.md"
+    "completedSandboxAcceptance": "docs/completed-sandbox-acceptance.md",
+    "productRoadmap": "docs/product-roadmap.md"
   },
   "runtime": {
     "node": "24.x",
@@ -59,7 +60,7 @@
     "paymentExecutedInSanityCheck": true,
     "details": "docs/verification-status.md",
     "publicationGuard": {
-      "sourceInputs": 438,
+      "sourceInputs": 439,
       "rejectionTestsPassed": 4,
       "date": "2026-11-12"
     },
