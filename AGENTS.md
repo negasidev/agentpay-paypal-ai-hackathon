@@ -4,9 +4,10 @@ Read README.md, AI_CONTEXT.json, docs/developer-guide.md, docs/architecture.md,
 docs/release-policy.md and docs/verification-status.md before editing.
 
 Current acceptance boundary: hosted self-service signup, owned transaction
-evidence and fresh Sandbox order readback are verified. Buyer consent, capture
-and a provider-verified receipt remain unverified. See the dated status document;
-do not describe a completed payment because local tests pass.
+evidence and fresh Sandbox order readback are verified. A 119.00 USD Sandbox capture and provider-verified software receipt now passed
+with genuine buyer consent and an automated software-key purchase approval. See
+the dated acceptance record; do not claim human presence, hardware assurance or
+production payment readiness from this test.
 
 ## Boundaries
 

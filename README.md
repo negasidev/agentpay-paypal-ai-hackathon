@@ -14,13 +14,13 @@ Small-business owners and office managers want AI to recommend supplies without 
 
 Find a wireless keyboard within a $150 budget, inspect the AI recommendation, review its merchant and price, and create or retrieve a matching PayPal Sandbox order. Then change the amount and observe the backend reject it. Transaction evidence shows what actually happened.
 
-**Scope:** this demonstration prepares and verifies sandbox orders. It does not demonstrate a completed payment. Human review, signed authorization, PayPal buyer consent and capture are separate steps; capture stays disabled. No real goods or live payments are supported.
+**Scope:** one 119.00 USD Sandbox payment completed with genuine provider-verified buyer consent and an automated session-bound software approval. Altered amount and merchant requests were refused, PayPal readback confirmed exactly one capture, and repeat payment was refused. This does not prove human presence or hardware attestation. No real goods or live payments are supported.
 
 **Hosted verification:** owned transaction evidence now works. Self-service email
 verification, isolated workspace creation, real AI recommendation, fresh PayPal
 order readback, software-key approval, post-approval altered-amount refusal and
-revocation passed. Genuine PayPal buyer consent, capture and reconciled receipt
-remain unverified. See [verification status](docs/verification-status.md).
+revocation passed. Genuine PayPal buyer consent, one exact Sandbox capture, reconciled software
+receipt and replay refusal also passed. See [completed acceptance](docs/completed-sandbox-acceptance.md). See [verification status](docs/verification-status.md).
 
 ## Tools and their roles
 

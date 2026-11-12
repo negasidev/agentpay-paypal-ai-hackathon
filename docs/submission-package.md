@@ -29,8 +29,7 @@ checked on the server; a model response never grants spending authority.
 The hosted build demonstrates registration, actual verification-email delivery,
 isolated workspaces, real AI recommendations, PayPal order creation and readback,
 software-key approval, refusal and revocation. Buyer checkout opens PayPal's real
-Sandbox page. Genuine buyer consent, capture and a reconciled receipt have not
-yet passed together; capture remains disabled. No real goods or live money are
+Sandbox page. Genuine buyer consent, a single exact 119.00 USD capture, current provider readback, a matching software receipt and repeat-payment refusal subsequently passed. The acceptance purchase approval was automated; it does not independently prove human presence. No real goods or live money are
 supported. Software signatures do not independently prove human presence.
 
 ### How we built it
@@ -62,8 +61,7 @@ and distinguish unavailable historical orders from new provider results.
 
 ### Next steps
 
-Complete genuine Sandbox buyer consent and capture acceptance, reconcile the
-receipt, and verify replay refusal against that completed payment. Then expand
+Record the completed Sandbox flow and expand
 beyond the three-product evaluation catalog. We do not claim production readiness,
 customer adoption, AP2 compliance or protection against every prompt injection.
 
@@ -82,8 +80,7 @@ customer adoption, AP2 compliance or protection against every prompt injection.
    statement and approve. Test the approved-amount protection, then revoke if you
    do not continue. The altered-amount request must be refused without dispatch.
 5. PayPal buyer checkout uses a separate Sandbox Personal buyer login. Never use
-   a real payment account. Capture remains disabled in the currently verified
-   release. Email verification and opening notifications do not approve payment.
+   a real payment account. The isolated browser Sandbox capture gate is enabled on the hosted release. Email verification and opening notifications do not approve payment.
 
 Supply actual judge credentials in the private submission field, not this public
 file. Keep access available through judging. Do not publish API secrets.
@@ -97,7 +94,7 @@ file. Keep access available through judging. Do not publish API secrets.
 | 0:50-1:15 | Review and submit; create/re-read the real PayPal Sandbox order. Explain that CREATED is not paid. |
 | 1:15-1:45 | In an owned verified workspace, confirm the password, review exact terms and approve. Explain browser software-key assurance briefly. |
 | 1:45-2:10 | Click Test approved amount protection. Show the altered $1,190 request, specific refusal, and no capture attempt. Call this a simulated compromised-client request; do not call it a live prompt-injection exploit. |
-| 2:10-2:30 | Open genuine PayPal Sandbox checkout and transaction evidence. State that buyer consent/capture remain unverified and capture is disabled. Revoke the test approval. |
+| 2:10-2:30 | Open genuine PayPal Sandbox checkout and transaction evidence. Show the completed 119.00 USD capture, matching software receipt and repeat-payment refusal. Explain that the acceptance software approval was automated; do not imply hardware or independent human-presence proof. |
 | 2:30-2:50 | Show Claude + catalog tools, strict server validation, PayPal Orders v2, and durable approval/evidence. "The recommendation can change. Payment authority cannot silently change with it." |
 
 ## Replacement only after completed payment acceptance

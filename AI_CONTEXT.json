@@ -13,7 +13,8 @@
     "verificationStatus": "docs/verification-status.md",
     "selfService": "docs/self-service-boundaries.md",
     "hackathonRules": "docs/hackathon-rule-review.md",
-    "submission": "docs/submission-package.md"
+    "submission": "docs/submission-package.md",
+    "completedSandboxAcceptance": "docs/completed-sandbox-acceptance.md"
   },
   "runtime": {
     "node": "24.x",
@@ -43,20 +44,19 @@
     "actor-scoped transaction evidence"
   ],
   "notEstablished": [
-    "completed payment",
     "physical-device approval",
     "hardware attestation",
     "production acceptance"
   ],
-  "captureEnabled": false,
+  "captureEnabled": true,
   "standalone": true,
   "verification": {
     "asOf": "2026-11-12",
     "localRegression": "passed",
-    "hostedJourney": "partial",
-    "blocker": "PayPal buyer consent, capture and provider-verified receipt are not established",
+    "hostedJourney": "sandbox_payment_verified_with_automated_software_approval",
+    "blocker": null,
     "providerReadbackAfterBlocker": "passed_for_fresh_owned_sandbox_order",
-    "paymentExecutedInSanityCheck": false,
+    "paymentExecutedInSanityCheck": true,
     "details": "docs/verification-status.md",
     "publicationGuard": {
       "sourceInputs": 434,
@@ -64,7 +64,10 @@
       "date": "2026-11-12"
     },
     "localRegressionTestsPassed": 148,
-    "sdkTestsPassed": 66
+    "sdkTestsPassed": 66,
+    "buyerConsent": "genuine_provider_verified",
+    "purchaseApproval": "automated_software_key",
+    "productionPaymentVerified": false
   },
   "releaseBoundary": {
     "sourceDependencies": "repository-local-or-public-registry",
@@ -73,5 +76,5 @@
     "independentSourceDownload": true,
     "privateCheckoutRequired": false
   },
-  "supportedScopeBoundary": "Standalone Sandbox recommendation, order, self-service signup and owned evidence; completed payment remains unverified"
+  "supportedScopeBoundary": "One exact Sandbox capture verified with genuine buyer consent and automated software-key approval; no human-presence, hardware or production assurance"
 }

@@ -1,6 +1,6 @@
 ﻿# Verification status - 12 November 2026
 
-**Hosted status: signup, workspace, owned evidence and fresh Sandbox order readback verified; completed payment remains unverified.**
+**Hosted status: signup, workspace, owned evidence and fresh Sandbox order readback verified; one exact Sandbox capture and reconciled software receipt verified.**
 
 This sanitized handoff contains no operational credentials or account identities.
 Changes are held locally pending deployed acceptance; public main does not yet
@@ -22,7 +22,7 @@ contain the deployed application changes.
 | Changed terms | Stateless inspection returned 409 without payment dispatch |
 | Browser approval | Automated software-key signature accepted for the acceptance owner; no human-presence or hardware-attestation proof |
 | Post-approval tampering | Altered amount and merchant requests specifically refused with no provider dispatch; test approval revoked |
-| Buyer consent, capture and linked receipt | Not established; capture remains disabled |
+| Buyer consent, capture and linked receipt | Genuine consent, one 119.00 USD capture, matching provider readback and software receipt verified; repeat payment refused |
 
 The previous transaction 404 came from an approver-membership check inside owned
 read-only evidence retrieval. The repair preserves ownership and write guards.
@@ -48,5 +48,4 @@ publication scan checked 434 source inputs without findings. The prepared
 
 See [self-service boundaries](self-service-boundaries.md),
 [official rule review](hackathon-rule-review.md), and the
-[machine-readable index](../AI_CONTEXT.json). No production-payment, physical
-approval, completed capture or customer-adoption claim follows from these results.
+[machine-readable index](../AI_CONTEXT.json). See [completed Sandbox acceptance](completed-sandbox-acceptance.md) for the later payment result. No production-payment, physical approval or customer-adoption claim follows from these results.
